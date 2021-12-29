@@ -1,50 +1,60 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
-  TextField,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Box,
-  Button,
+    TextField,
+    Select,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Button,
 } from "@mui/material";
 import styled from "@emotion/styled";
 
-import Theme from "../../constants/Styles";
-
 const SearchBar = () => {
-  const [filter, setFilter] = useState("Location");
-  const handleChange = (event: any) => {
-    setFilter(event.target.value);
-  };
-  return (
-    <SearchBarContainer>
+    const [filter, setFilter] = useState("Location");
+    const handleChange = (event: any) => {
+        setFilter(event.target.value);
+    };
 
-      <TextField id="standard-basic" label="Search" variant="standard" />
+    return (
+        <SearchBarContainer>
+            <ItemsContainer>
+                <StyledTextField id="standard-basic" label="Search"/>
+                <StyledFormControl>
+                    <InputLabel>Filter</InputLabel>
+                    <Select value={filter} label="Filter" onChange={handleChange}>
+                        <MenuItem value="Location">Location</MenuItem>
+                        <MenuItem value="??">??</MenuItem>
+                        <MenuItem value="???">???</MenuItem>
+                    </Select>
+                </StyledFormControl>
+            </ItemsContainer>
+            <Button variant="outlined">Add a new spot</Button>
+        </SearchBarContainer>
+    );
 
-      <FormControl>
-        <InputLabel>Filter</InputLabel>
-        <Select value={filter} label="Filter" onChange={handleChange}>
-          <MenuItem value="Location">Location</MenuItem>
-          <MenuItem value="??">??</MenuItem>
-          <MenuItem value="???">???</MenuItem>
-        </Select>
-      </FormControl>
-
-      <Button variant="outlined">Add a new spot</Button>
-
-    </SearchBarContainer>
-  );
-  
 };
+
+const StyledTextField = styled(TextField)`
+  min-width: 40vw;
+  margin-right: 4vw;
+  font-size: 12px;
+`
+
+const StyledFormControl = styled(FormControl)`
+  min-width: 24vw;
+  margin-right: 4vw;
+  font-size: 12px;
+`
+
 const SearchBarContainer = styled.div`
-width:35%;
-min-width:450px;
-display: flex;
-justify-content: space-between;
-margin-top: 2vw;
-margin-left: 1vw;
-margin-right: 1vw;
-  `;
+  width: 100%;
+  min-width: 450px;
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+`;
+
+const ItemsContainer = styled.div`
+`;
 
 export default SearchBar;
