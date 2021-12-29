@@ -34,7 +34,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     }
 
     @Override
-    public void updateParkingSlot(ParkingSlotRest parkingSlotRest) {}
+    public ParkingSlotRest updateParkingSlot(ParkingSlotRest parkingSlotRest) {return null;}
 
     @Override
     public void deleteParkingSlot(Long parkingSlotId) {}

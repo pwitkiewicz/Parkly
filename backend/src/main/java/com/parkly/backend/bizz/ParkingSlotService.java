@@ -12,7 +12,7 @@ public interface ParkingSlotService {
 
     ParkingSlotRest getParkingSlotById(Long parkingSlotId);
 
-    void updateParkingSlot(ParkingSlotRest parkingSlotRest);
+    ParkingSlotRest updateParkingSlot(ParkingSlotRest parkingSlotRest);
 
     void deleteParkingSlot(Long parkingSlotId);
 }
