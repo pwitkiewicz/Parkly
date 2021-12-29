@@ -1,9 +1,9 @@
 package com.parkly.backend.bizz;
 
 import com.parkly.backend.repo.ParkingSlotRepository;
+import com.parkly.backend.rest.domain.ParkingSlotRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.parkly.backend.bizz.domain.ParkingSlot;
 
 import java.util.Set;
 
@@ -19,22 +19,22 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     }
 
     @Override
-    public Set<ParkingSlot> getAllParkingSlots() {
+    public Set<ParkingSlotRest> getAllParkingSlots() {
         return null;
     }
 
     @Override
-    public void addParkingSlot(ParkingSlot parkingSlotRest) {
+    public void addParkingSlot(ParkingSlotRest parkingSlotRest) {
 
     }
 
     @Override
-    public ParkingSlot getParkingSlotById(Long parkingSlotId) {
+    public ParkingSlotRest getParkingSlotById(Long parkingSlotId) {
         return null;
     }
 
     @Override
-    public void updateParkingSlot(ParkingSlot parkingSlotRest) {}
+    public void updateParkingSlot(ParkingSlotRest parkingSlotRest) {}
 
     @Override
     public void deleteParkingSlot(Long parkingSlotId) {}

@@ -2,17 +2,24 @@ package com.parkly.backend.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonRootName("parkingSlot")
 public class ParkingSlotRest implements Serializable {
 
+    @EqualsAndHashCode.Include
     @JsonProperty("id")
     private long parkingSlotId;
 
+    @EqualsAndHashCode.Include
     @JsonProperty("name")
     private String name;
 
@@ -45,65 +52,4 @@ public class ParkingSlotRest implements Serializable {
 
     @JsonProperty("cost")
     private double cost;
-
-    public long getParkingSlotId() { return parkingSlotId; }
-
-    public void setParkingSlotId(long parkingSlotId) { this.parkingSlotId = parkingSlotId; }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public long getStartDate() { return startDate; }
-
-    public void setStartDate(long startDate) { this.startDate = startDate; }
-
-    public long getEndDate() { return endDate; }
-
-    public void setEndDate(long endDate) { this.endDate = endDate; }
-
-    public boolean isActive() { return isActive; }
-
-    public void setActive(boolean active) { isActive = active; }
-
-    public boolean isDisabled() { return isDisabled; }
-
-    public void setDisabled(boolean disabled) { isDisabled = disabled; }
-
-    public Set<PhotoRest> getPhotoRestSet() { return photoRestSet; }
-
-    public void setPhotoRestSet(Set<PhotoRest> photoRestSet) { this.photoRestSet = photoRestSet; }
-
-    public String getDescription() { return description; }
-
-    public void setDescription(String description) { this.description = description; }
-
-    public double getHeight() { return height; }
-
-    public void setHeight(double height) { this.height = height; }
-
-    public double getWidth() { return width; }
-
-    public void setWidth(double width) { this.width = width; }
-
-    public LocationRest getLocationRest() { return locationRest; }
-
-    public void setLocationRest(LocationRest locationRest) { this.locationRest = locationRest; }
-
-    public double getCost() { return cost; }
-
-    public void setCost(double cost) { this.cost = cost; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParkingSlotRest that = (ParkingSlotRest) o;
-        return parkingSlotId == that.parkingSlotId && Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(parkingSlotId, name);
-    }
 }

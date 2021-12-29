@@ -1,14 +1,20 @@
 package com.parkly.backend.repo.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "photo")
 public class PhotoDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "photoid")
     private long photoId;
 
     @Column(name = "path")
@@ -17,18 +23,6 @@ public class PhotoDTO {
     @ManyToMany
     @JoinColumn(name = "parkingslotid", nullable = false)
     private ParkingSlotDTO parkingSlot;
-
-    public long getPhotoId() { return photoId; }
-
-    public void setPhotoId(long photoId) { this.photoId = photoId; }
-
-    public String getPath() { return path; }
-
-    public void setPath(String path) { this.path = path; }
-
-    public ParkingSlotDTO getParkingSlot() { return parkingSlot; }
-
-    public void setParkingSlot(ParkingSlotDTO parkingSlot) { this.parkingSlot = parkingSlot; }
 
     @Override
     public boolean equals(Object o) {

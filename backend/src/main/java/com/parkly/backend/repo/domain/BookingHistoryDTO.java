@@ -9,6 +9,7 @@ public class BookingHistoryDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "bookingid")
     private long bookingid;
 
     @Column(name = "startdate")
@@ -23,26 +24,6 @@ public class BookingHistoryDTO {
     @ManyToMany
     @JoinColumn(name = "parkingslotid", nullable = false)
     private ParkingSlotDTO parkingSlot;
-
-    public long getBookingid() { return bookingid; }
-
-    public void setBookingid(long bookingid) { this.bookingid = bookingid; }
-
-    public long getStartDate() { return startDate; }
-
-    public void setStartDate(long startDate) { this.startDate = startDate; }
-
-    public int getIsActive() { return isActive; }
-
-    public void setIsActive(int isActive) { this.isActive = isActive; }
-
-    public long getOwnerId() { return ownerId; }
-
-    public void setOwnerId(long ownerId) { this.ownerId = ownerId; }
-
-    public ParkingSlotDTO getParkingSlot() { return parkingSlot; }
-
-    public void setParkingSlot(ParkingSlotDTO parkingSlot) { this.parkingSlot = parkingSlot; }
 
     @Override
     public boolean equals(Object o) {

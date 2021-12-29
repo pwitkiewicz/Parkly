@@ -1,18 +1,18 @@
 package com.parkly.backend.bizz;
 
-import com.parkly.backend.bizz.domain.ParkingSlot;
+import com.parkly.backend.rest.domain.ParkingSlotRest;
 
 import java.util.Set;
 
 public interface ParkingSlotService {
 
-    Set<ParkingSlot> getAllParkingSlots();
+    Set<ParkingSlotRest> getAllParkingSlots();
 
-    void addParkingSlot(ParkingSlot parkingSlotRest);
+    void addParkingSlot(ParkingSlotRest parkingSlotRest);
 
-    ParkingSlot getParkingSlotById(Long parkingSlotId);
+    ParkingSlotRest getParkingSlotById(Long parkingSlotId);
 
-    void updateParkingSlot(ParkingSlot parkingSlotRest);
+    void updateParkingSlot(ParkingSlotRest parkingSlotRest);
 
     void deleteParkingSlot(Long parkingSlotId);
 }
