@@ -1,15 +1,11 @@
-package com.parkly.backend.models;
+package com.parkly.backend.bizz.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Data
 @Entity
 @Table(name = "PLACEHOLDER")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ParkingSlot implements Serializable {
 
     @Id
