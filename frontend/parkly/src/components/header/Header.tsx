@@ -33,7 +33,7 @@ const Header = () => {
                     </Icon>
                     Settings
                 </StyledButton>
-                <StyledButton style={{ marginLeft: 'auto', marginRight: '4vw' }}>
+                <StyledButton style={{marginLeft: 'auto', marginRight: '4vw'}}>
                     <Icon>
                         <LogoutIcon/>
                     </Icon>
@@ -45,35 +45,35 @@ const Header = () => {
 }
 
 const HeaderBar = styled.div`
-    height: 6vh;
-    background-color: ${Theme.colors.header};
+  height: 60px;
+  background-color: ${Theme.colors.header};
 `;
 
 const HeaderContainer = styled.div`
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin-left: 8vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-left: 8vw;
 `;
 
 const Logo = styled.div`
-    font-size: 1em;
-    font-weight: bold;
-    color: white;
-    margin-right: 8vw;
+  font-size: 1em;
+  font-weight: bold;
+  color: white;
+  margin-right: 8vw;
 `;
 
 const StyledButton = styled(Button)`
-    margin-right: 2vw;
-    display: inline-flex;
-    align-items: center;
-    color: white;
+  margin-right: 2vw;
+  display: inline-flex;
+  align-items: center;
+  color: white;
 `
 
 const Icon = styled(SvgIcon)`
-    height: 3vh;
-    color: white;
-    margin-right: 0.5vw;
+  height: 3vh;
+  color: white;
+  margin-right: 0.5vw;
 `
 
 export default Header;
