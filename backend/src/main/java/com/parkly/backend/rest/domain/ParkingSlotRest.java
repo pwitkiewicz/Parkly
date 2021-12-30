@@ -1,19 +1,18 @@
 package com.parkly.backend.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import java.io.Serializable;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.Set;
-
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonRootName("parkingSlot")
 public class ParkingSlotRest implements Serializable {
+
+    public static final ParkingSlotRest EMPTY = new ParkingSlotRest();
 
     @EqualsAndHashCode.Include
     @JsonProperty("id")
@@ -33,7 +32,7 @@ public class ParkingSlotRest implements Serializable {
     private boolean isActive;
 
     @JsonProperty("isDisabledFriendly")
-    private boolean isDisabled;
+    private boolean isDisabledFriendly;
 
     @JsonProperty("photos")
     private Set<PhotoRest> photoRestSet;
