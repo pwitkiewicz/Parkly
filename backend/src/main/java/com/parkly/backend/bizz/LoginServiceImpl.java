@@ -1,22 +1,27 @@
 package com.parkly.backend.bizz;
 
 import com.parkly.backend.repo.UserRepository;
+import com.parkly.backend.repo.domain.UserDTO;
+import com.parkly.backend.rest.domain.LoginFormRest;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public LoginServiceImpl(final UserRepository userRepository)
-    {
-        this.userRepository=userRepository;
+    public LoginServiceImpl(final UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public String loginToSystem(String login, String password) {
-        return null;
+    public Optional<String> loginToSystem(final LoginFormRest loginForm) {
+        var userOptional = userRepository.findByLogin(loginForm.getLogin());
+
+        return userOptional.filter(s -> s.getPassword().equals(loginForm.getPassword()))
+            .map(UserDTO::getSecurityToken);
     }
 }

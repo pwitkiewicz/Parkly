@@ -1,6 +1,9 @@
 package com.parkly.backend.bizz;
 
+import com.parkly.backend.rest.domain.LoginFormRest;
+import java.util.Optional;
+
 public interface LoginService {
 
-    String loginToSystem(String login, String password);
+    Optional<String> loginToSystem(LoginFormRest loginForm);
 }
