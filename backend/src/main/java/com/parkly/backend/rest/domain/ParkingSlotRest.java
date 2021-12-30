@@ -12,7 +12,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ParkingSlotRest implements Serializable {
 
-    public static final ParkingSlotRest EMPTY = new ParkingSlotRest();
+    public static final ParkingSlotRest EMPTY_SLOT = new ParkingSlotRest();
 
     @EqualsAndHashCode.Include
     @JsonProperty("id")

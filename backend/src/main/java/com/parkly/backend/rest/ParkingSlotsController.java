@@ -1,6 +1,7 @@
 package com.parkly.backend.rest;
 
-import static java.util.stream.Collectors.joining;
+import static com.parkly.backend.utils.LogWriter.logException;
+import static com.parkly.backend.utils.LogWriter.logHeaders;
 
 import com.parkly.backend.bizz.ParkingSlotService;
 import com.parkly.backend.bizz.SecurityService;
@@ -51,12 +52,17 @@ public class ParkingSlotsController {
         logHeaders(headers);
 
         if (securityService.isAuthenticated(headers)) {
-            var filterType = Filter.valueOf(filter.toUpperCase(Locale.ROOT));
-            var sortType = Sort.valueOf(sort.toUpperCase(Locale.ROOT));
-            return ResponseEntity.ok(parkingSlotService.getAllParkingSlots(filterType, page, sortType));
+            try {
+                var filterType = Filter.valueOf(filter.toUpperCase(Locale.ROOT));
+                var sortType = Sort.valueOf(sort.toUpperCase(Locale.ROOT));
+                return ResponseEntity.ok(parkingSlotService.getAllParkingSlots(filterType, page, sortType));
+            }
+            catch (IllegalArgumentException e) {
+                logException(e);
+            }
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singleton(ParkingSlotRest.EMPTY));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singleton(ParkingSlotRest.EMPTY_SLOT));
     }
 
     @GetMapping("{parkingSlotId}")
@@ -67,12 +73,12 @@ public class ParkingSlotsController {
         if (securityService.isAuthenticated(headers)) {
             var foundParkingSlot = parkingSlotService.getParkingSlotById(parkingSlotId);
 
-            if(!foundParkingSlot.equals(ParkingSlotRest.EMPTY)) {
+            if(!foundParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
                 return ResponseEntity.ok(parkingSlotService.getParkingSlotById(parkingSlotId));
             }
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
     }
 
     @PostMapping("")
@@ -83,7 +89,7 @@ public class ParkingSlotsController {
         if(securityService.isAuthenticated(headers)) {
             var savedParkingSlot = parkingSlotService.addParkingSlot(newParkingSlot);
 
-            if(!savedParkingSlot.equals(ParkingSlotRest.EMPTY)) {
+            if(!savedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
                 URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/items/{parkingSlotId}")
                     .buildAndExpand(savedParkingSlot.getParkingSlotId())
@@ -93,7 +99,7 @@ public class ParkingSlotsController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
     }
 
     @PutMapping("{parkingSlotId}")
@@ -105,12 +111,12 @@ public class ParkingSlotsController {
         if(securityService.isAuthenticated(headers)) {
             var updatedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlotToUpdate);
 
-            if(!updatedParkingSlot.equals(ParkingSlotRest.EMPTY)) {
+            if(!updatedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
                 return ResponseEntity.ok(updatedParkingSlot);
             }
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
     }
 
     @DeleteMapping("{parkingSlotId}")
@@ -123,14 +129,5 @@ public class ParkingSlotsController {
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(JSONObject.quote("Unauthorized access"));
-    }
-
-    private void logHeaders(@RequestHeader HttpHeaders headers) {
-        log.debug("Controller request headers {}",
-            headers.entrySet()
-                .stream()
-                .map(entry -> String.format("%s->[%s]", entry.getKey(), String.join(",", entry.getValue())))
-                .collect(joining(","))
-        );
     }
 }

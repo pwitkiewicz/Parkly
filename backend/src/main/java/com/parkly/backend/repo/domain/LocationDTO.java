@@ -1,9 +1,14 @@
 package com.parkly.backend.repo.domain;
 
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "location")
@@ -29,12 +34,10 @@ public class LocationDTO {
     @Column(name = "zipcode")
     private String zipCode;
 
-    @NotNull
-    @Column(name = "latitude")
+    @Column(name = "latitude", nullable = false)
     private double latitude;
 
-    @NotNull
-    @Column(name = "longitude")
+    @Column(name = "longitude", nullable = false)
     private double longitude;
 
     @OneToOne(mappedBy = "location")

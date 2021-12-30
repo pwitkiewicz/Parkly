@@ -1,11 +1,16 @@
 package com.parkly.backend.repo.domain;
 
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,8 +23,7 @@ public class PhotoDTO {
     @Column(name = "photoid")
     private long photoId;
 
-    @NotNull
-    @Column(name = "path")
+    @Column(name = "path", nullable = false)
     private String path;
 
     @ManyToOne
