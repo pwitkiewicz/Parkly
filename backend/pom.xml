@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.parkly</groupId>
     <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>backend</name>
     <description>backend</description>
     <properties>
@@ -19,6 +19,10 @@
         <testcontainers.version>1.16.2</testcontainers.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>

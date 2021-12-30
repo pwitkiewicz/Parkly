@@ -5,5 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/items")
-public class ParkingSlotsController {
+public class ParkingSlotsController
+{
+
 }
