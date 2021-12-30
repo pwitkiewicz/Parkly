@@ -1,10 +1,14 @@
 package com.parkly.backend.repo.domain;
 
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,13 +27,13 @@ public class UserDTO {
     @Column(name = "lastname")
     private String lastName;
 
-    @Column(name = "login")
+    @Column(name = "login", nullable = false)
     private String login;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "securitytoken")
+    @Column(name = "securitytoken", nullable = false)
     private String securityToken;
 
     @Override

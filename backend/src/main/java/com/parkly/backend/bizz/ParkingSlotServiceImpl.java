@@ -2,40 +2,44 @@ package com.parkly.backend.bizz;
 
 import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
+import com.parkly.backend.utils.Filter;
+import com.parkly.backend.utils.Sort;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class ParkingSlotServiceImpl implements ParkingSlotService {
 
-    private final com.parkly.backend.repo.ParkingSlotRepository parkingSlotRepository;
+    private final ParkingSlotRepository parkingSlotRepository;
 
     @Autowired
-    public ParkingSlotServiceImpl(final ParkingSlotRepository parkingSlotRepository)
-    {
-        this.parkingSlotRepository=parkingSlotRepository;
+    public ParkingSlotServiceImpl(final ParkingSlotRepository parkingSlotRepository) {
+        this.parkingSlotRepository = parkingSlotRepository;
     }
 
     @Override
-    public Set<ParkingSlotRest> getAllParkingSlots() {
+    public Set<ParkingSlotRest> getAllParkingSlots(Filter filter, Integer page, Sort sort) {
         return null;
     }
 
     @Override
-    public void addParkingSlot(ParkingSlotRest parkingSlotRest) {
-
-    }
-
-    @Override
-    public ParkingSlotRest getParkingSlotById(Long parkingSlotId) {
+    public ParkingSlotRest addParkingSlot(final ParkingSlotRest parkingSlotRest) {
         return null;
     }
 
     @Override
-    public ParkingSlotRest updateParkingSlot(ParkingSlotRest parkingSlotRest) {return null;}
+    public ParkingSlotRest getParkingSlotById(final Long parkingSlotId) {
+        return null;
+    }
 
     @Override
-    public void deleteParkingSlot(Long parkingSlotId) {}
+    public ParkingSlotRest updateParkingSlot(final Long parkingSlotId, final ParkingSlotRest parkingSlotRest) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteParkingSlot(final Long parkingSlotId) {
+        return false;
+    }
 }

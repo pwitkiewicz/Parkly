@@ -14,7 +14,9 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="entityManagerFactory" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -151,5 +153,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:mysql:1.16.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:jdbc:1.16.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:database-commons:1.16.2" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20211205" level="project" />
   </component>
 </module>

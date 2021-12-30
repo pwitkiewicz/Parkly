@@ -21,7 +21,7 @@ public class BookingHistoryDTO {
     @Column(name = "ownerid")
     private long ownerId;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "parkingslotid", nullable = false)
     private ParkingSlotDTO parkingSlot;
 
