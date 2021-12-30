@@ -17,7 +17,6 @@ export const sendLoginRequest = async (loginInfo: LoginInformation) => {
 
 export const getAllParkingSpots = async () => {
     const response = await axios.get(`${server}/items`);
-    console.log(response.data);
     return response.data;
 }
 

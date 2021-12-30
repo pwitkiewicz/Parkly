@@ -6,8 +6,8 @@ export interface LoginInformation {
 export interface ParkingSpot {
     id: string;
     name: string;
-    startDateTime: number;
-    endDateTime: number;
+    startDateTime: Date;
+    endDateTime: Date;
     isActive: boolean;
     isDisabledFriendly: boolean;
     photos: PhotosList[];
