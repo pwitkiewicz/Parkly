@@ -45,8 +45,8 @@ public class ParkingSlotDTO {
     @Column(name = "isdisabled")
     private int isDisabled;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "locationid", referencedColumnName = "parkingslotid")
+    @OneToOne
+    @JoinColumn(name = "locationid")
     private LocationDTO location;
 
     @OneToMany(mappedBy = "parkingSlot")
