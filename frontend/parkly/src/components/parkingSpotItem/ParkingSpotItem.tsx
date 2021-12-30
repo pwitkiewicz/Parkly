@@ -8,7 +8,7 @@ import Theme from "../../constants/Styles";
 const ParkingSpotItem: FC<ParkingSpot> = ({name, description, location, cost, photos}) => {
     return (
         <StyledCard>
-            <CardMedia component="img" image={photos[0].path} alt="Parking spot image"/>
+            <CardMedia component="img" image={photos[0]?.path} alt="Parking spot image"/>
             <CardContent>
                 <Typography variant="h4">
                     {name}
