@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.parkly</groupId>
     <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>backend</name>
     <description>backend</description>
     <properties>
@@ -20,9 +20,13 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.0.6.RELEASE</version>
+            <version>5.3.14</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -103,6 +107,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${project.parent.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>

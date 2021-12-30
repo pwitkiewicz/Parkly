@@ -15,6 +15,4 @@ public class BookingsController {
     public BookingsController(final BookingService bookingService) {
         this.bookingService = bookingService;
     }
-
-
 }

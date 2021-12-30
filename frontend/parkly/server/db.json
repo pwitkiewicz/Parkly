@@ -1,0 +1,134 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "name": "Test 1",
+      "startDateTime": "1234",
+      "endDateTime": "12345",
+      "isActive": true,
+      "isDisabledFriendly": false,
+      "photos": [
+        {
+          "id": 1,
+          "path": "https://petinio.com/wp-content/uploads/2019/10/Pupreme-the-dog-face-red-dog.jpg"
+        }
+      ],
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "height": 1234,
+      "width": 123,
+      "location": {
+        "id": 1,
+        "city": "Warsaw",
+        "street": "xxx",
+        "number": 0,
+        "zipcode": "12-123",
+        "latitude": 2.12,
+        "longitude": 1.1441
+      },
+      "cost": 1234
+    },
+    {
+      "id": "1",
+      "name": "Test 1",
+      "startDateTime": "1234",
+      "endDateTime": "12345",
+      "isActive": true,
+      "isDisabledFriendly": false,
+      "photos": [
+        {
+          "id": 1,
+          "path": "https://petinio.com/wp-content/uploads/2019/10/Pupreme-the-dog-face-red-dog.jpg"
+        }
+      ],
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "height": 1234,
+      "width": 123,
+      "location": {
+        "id": 1,
+        "city": "Warsaw",
+        "street": "xxx",
+        "number": 0,
+        "zipcode": "12-123",
+        "latitude": 2.12,
+        "longitude": 1.1441
+      },
+      "cost": 1234
+    },
+    {
+      "id": "1",
+      "name": "Test 1",
+      "startDateTime": "1234",
+      "endDateTime": "12345",
+      "isActive": true,
+      "isDisabledFriendly": false,
+      "photos": [
+        {
+          "id": 1,
+          "path": "https://petinio.com/wp-content/uploads/2019/10/Pupreme-the-dog-face-red-dog.jpg"
+        }
+      ],
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "height": 1234,
+      "width": 123,
+      "location": {
+        "id": 1,
+        "city": "Warsaw",
+        "street": "xxx",
+        "number": 0,
+        "zipcode": "12-123",
+        "latitude": 2.12,
+        "longitude": 1.1441
+      },
+      "cost": 1234
+    },
+    {
+      "id": "1",
+      "name": "Test 1",
+      "startDateTime": "1234",
+      "endDateTime": "12345",
+      "isActive": true,
+      "isDisabledFriendly": false,
+      "photos": [
+        {
+          "id": 1,
+          "path": "https://petinio.com/wp-content/uploads/2019/10/Pupreme-the-dog-face-red-dog.jpg"
+        }
+      ],
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "height": 1234,
+      "width": 123,
+      "location": {
+        "id": 1,
+        "city": "Warsaw",
+        "street": "xxx",
+        "number": 0,
+        "zipcode": "12-123",
+        "latitude": 2.12,
+        "longitude": 1.1441
+      },
+      "cost": 1234
+    },
+    {
+      "id": "3YMJckn",
+      "name": "",
+      "startDateTime": "2021-12-30T16:16:55.354Z",
+      "endDateTime": "2021-12-30T16:16:55.354Z",
+      "isActive": false,
+      "isDisabledFriendly": false,
+      "photos": [],
+      "description": "",
+      "height": 0,
+      "width": 0,
+      "location": {
+        "id": 0,
+        "city": "",
+        "street": "",
+        "number": 0,
+        "zipcode": "",
+        "latitude": 0,
+        "longitude": 0
+      },
+      "cost": 0
+    }
+  ]
+}
