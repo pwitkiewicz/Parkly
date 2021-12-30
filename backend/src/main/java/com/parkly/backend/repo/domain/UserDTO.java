@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -23,12 +24,14 @@ public class UserDTO {
     @Column(name = "lastname")
     private String lastName;
 
+    @NotNull
     @Column(name = "login")
     private String login;
 
     @Column(name = "password")
     private String password;
 
+    @NotNull
     @Column(name = "securitytoken")
     private String securityToken;
 

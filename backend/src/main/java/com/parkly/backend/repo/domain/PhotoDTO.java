@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -17,10 +18,11 @@ public class PhotoDTO {
     @Column(name = "photoid")
     private long photoId;
 
+    @NotNull
     @Column(name = "path")
     private String path;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "parkingslotid", nullable = false)
     private ParkingSlotDTO parkingSlot;
 

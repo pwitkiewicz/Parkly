@@ -2,6 +2,7 @@ package com.parkly.backend.repo.domain;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -28,9 +29,11 @@ public class LocationDTO {
     @Column(name = "zipcode")
     private String zipCode;
 
+    @NotNull
     @Column(name = "latitude")
     private double latitude;
 
+    @NotNull
     @Column(name = "longitude")
     private double longitude;
 
