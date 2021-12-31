@@ -12,13 +12,13 @@ public class LocationMapper
         if(Objects.nonNull(locationRest))
         {
             final LocationDTO locationDTO = new LocationDTO();
-            locationDTO.setCountry(locationDTO.getCountry());
-            locationDTO.setCity(locationDTO.getCity());
-            locationDTO.setStreet(locationDTO.getStreet());
-            locationDTO.setStreetNumber(locationDTO.getStreetNumber());
-            locationDTO.setZipCode(locationDTO.getZipCode());
-            locationDTO.setLatitude(locationDTO.getLatitude());
-            locationDTO.setLongitude(locationDTO.getLongitude());
+            locationDTO.setCountry(locationRest.getCountry());
+            locationDTO.setCity(locationRest.getCity());
+            locationDTO.setStreet(locationRest.getStreet());
+            locationDTO.setStreetNumber(locationRest.getStreetNumber());
+            locationDTO.setZipCode(locationRest.getZipCode());
+            locationDTO.setLatitude(locationRest.getLatitude());
+            locationDTO.setLongitude(locationRest.getLongitude());
 
             return locationDTO;
         }

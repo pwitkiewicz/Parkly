@@ -33,6 +33,8 @@ public class ParkingSlotMapper {
             widthOpt.ifPresent(parkingSlotDTO::setWidth);
             heightOpt.ifPresent(parkingSlotDTO::setHeight);
             descOpt.ifPresent(parkingSlotDTO::setDescription);
+
+            return parkingSlotDTO;
         }
         return null;
     }
