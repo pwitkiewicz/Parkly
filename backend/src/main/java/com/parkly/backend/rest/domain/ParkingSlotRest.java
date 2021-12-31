@@ -1,5 +1,6 @@
 package com.parkly.backend.rest.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Set;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ParkingSlotRest implements Serializable {
 
     public static final ParkingSlotRest EMPTY_SLOT = new ParkingSlotRest();
@@ -43,7 +45,7 @@ public class ParkingSlotRest implements Serializable {
     @JsonProperty("height")
     private double height;
 
-    @JsonProperty("width")
+    @JsonProperty(value = "width")
     private double width;
 
     @JsonProperty("location")
