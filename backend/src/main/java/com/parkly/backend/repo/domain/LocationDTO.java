@@ -1,6 +1,9 @@
 package com.parkly.backend.repo.domain;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "location")
 public class LocationDTO {

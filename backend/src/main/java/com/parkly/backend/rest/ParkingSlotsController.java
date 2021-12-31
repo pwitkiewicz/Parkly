@@ -6,8 +6,8 @@ import static com.parkly.backend.utils.LogWriter.logHeaders;
 import com.parkly.backend.bizz.ParkingSlotService;
 import com.parkly.backend.bizz.SecurityService;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
-import com.parkly.backend.utils.Filter;
-import com.parkly.backend.utils.Sort;
+import com.parkly.backend.utils.domain.FilterEnum;
+import com.parkly.backend.utils.domain.SortEnum;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,8 +53,8 @@ public class ParkingSlotsController {
 
         if (securityService.isAuthenticated(headers)) {
             try {
-                var filterType = Filter.valueOf(filter.toUpperCase(Locale.ROOT));
-                var sortType = Sort.valueOf(sort.toUpperCase(Locale.ROOT));
+                var filterType = FilterEnum.valueOf(filter.toUpperCase(Locale.ROOT));
+                var sortType = SortEnum.valueOf(sort.toUpperCase(Locale.ROOT));
                 return ResponseEntity.ok(parkingSlotService.getAllParkingSlots(filterType, page, sortType));
             }
             catch (IllegalArgumentException e) {
