@@ -13,6 +13,7 @@ import {
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
 import styled from "@emotion/styled";
+
 import {addParkingSpot} from "../../../queries/queries";
 import { ParkingSpot } from '../../../models/models';
 
@@ -20,6 +21,7 @@ interface Props {
     visible: boolean;
     onCancel: () => void;
     parkingPlace: ParkingSpot;
+    editing?: boolean;
 }
 
 /* TODO: Add a way to upload photos and enter location
@@ -28,21 +30,21 @@ interface Props {
 
 // TODO 2: Fix date pickers warnings
 
-const EditParkingSpotModal: React.FC<Props> = (props) => {
+const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, editing}) => {
 
     const [editedParkingModal, setEditedParkingModal] = useState({
-        id: props.parkingPlace.id,
-        name: props.parkingPlace.name,
-        startDateTime: props.parkingPlace.startDateTime,
-        endDateTime: props.parkingPlace.endDateTime,
-        isActive: props.parkingPlace.isActive,
-        isDisabledFriendly: props.parkingPlace.isDisabledFriendly,
-        photos: props.parkingPlace.photos,
-        description: props.parkingPlace.description,
-        height: props.parkingPlace.height,
-        width: props.parkingPlace.width,
-        location: props.parkingPlace.location,
-        cost: props.parkingPlace.cost
+        id: parkingPlace.id,
+        name: parkingPlace.name,
+        startDateTime: parkingPlace.startDateTime,
+        endDateTime: parkingPlace.endDateTime,
+        isActive: parkingPlace.isActive,
+        isDisabledFriendly: parkingPlace.isDisabledFriendly,
+        photos: parkingPlace.photos,
+        description: parkingPlace.description,
+        height: parkingPlace.height,
+        width: parkingPlace.width,
+        location: parkingPlace.location,
+        cost: parkingPlace.cost
     })
 
     const handleChangeName: ChangeEventHandler<HTMLInputElement> = event => {
@@ -86,8 +88,8 @@ const EditParkingSpotModal: React.FC<Props> = (props) => {
     }, []);
 
     return (
-        <Dialog open={props.visible} onClose={props.onCancel}>
-            <DialogTitle>Edit parking spot details</DialogTitle>
+        <Dialog open={visible} onClose={onCancel}>
+            <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
             <DialogContent>
                 <TextField
                     margin="dense"
@@ -173,8 +175,8 @@ const EditParkingSpotModal: React.FC<Props> = (props) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onCancel}>Cancel</Button>
-                <Button onClick={handleSubmit}>Edit</Button>
+                <Button onClick={onCancel}>Cancel</Button>
+                <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
             </DialogActions>
         </Dialog>
     )
@@ -196,4 +198,4 @@ const CheckBoxesContainer = styled.div`
   flex-direction: column;
 `
 
-export default EditParkingSpotModal;
+export default ParkingSpotModal;
