@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import {getAllParkingSpots} from "../../queries/queries";
 import {ParkingSpot} from '../../models/models';
 import ParkingSpotItem from "../../components/parkingSpotItem/ParkingSpotItem";
-import AddParkingSpotModal from "./components/AddParkingSpotModal";
+import ParkingSpotModal from "./components/ParkingSpotModal";
 
 type ParkingSpotModel = {
     isVisible: boolean;
@@ -56,11 +56,32 @@ const ParkingSpotsPage = () => {
                 {isFetching &&
                     <CircularProgress/>
                 }
-                <AddParkingSpotModal visible={addParkingSpotState.isVisible} onCancel={() =>
+                <ParkingSpotModal visible={addParkingSpotState.isVisible} onCancel={() =>
                     setParkingSpotState({
                         isVisible: false,
                     })
-                }/>
+                } parkingPlace={{
+                    id: '',
+                    name: '',
+                    startDateTime: new Date(),
+                    endDateTime: new Date(),
+                    isActive: false,
+                    isDisabledFriendly: false,
+                    photos: [],
+                    description: '',
+                    height: 0,
+                    width: 0,
+                    location: {
+                        id: 0,
+                        city: '',
+                        street: '',
+                        number: 0,
+                        zipcode: '',
+                        latitude: 0,
+                        longitude: 0
+                    },
+                    cost: 0
+                }}/>
                 {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpot) => (
                     <ParkingSpotItem id={parkingSpot.id} name={parkingSpot.name}
                                      startDateTime={parkingSpot.startDateTime} endDateTime={parkingSpot.endDateTime}
