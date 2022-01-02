@@ -13,11 +13,15 @@ import {
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
 import styled from "@emotion/styled";
+
 import {addParkingSpot} from "../../../queries/queries";
+import { ParkingSpot } from '../../../models/models';
 
 interface Props {
     visible: boolean;
     onCancel: () => void;
+    parkingPlace: ParkingSpot;
+    editing?: boolean;
 }
 
 /* TODO: Add a way to upload photos and enter location
@@ -26,34 +30,23 @@ interface Props {
 
 // TODO 2: Fix date pickers warnings
 
-const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
+const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, editing}) => {
 
     const [editedParkingModal, setEditedParkingModal] = useState({
-        id: '',
-        name: '',
-        startDateTime: new Date(),
-        endDateTime: new Date(),
-        isActive: false,
-        isDisabledFriendly: false,
-        photos: [],
-        description: '',
-        height: 0,
-        width: 0,
-        location: {
-            id: 0,
-            city: '',
-            street: '',
-            number: 0,
-            zipcode: '',
-            latitude: 0,
-            longitude: 0
-        },
-        cost: 0
+        id: parkingPlace.id,
+        name: parkingPlace.name,
+        startDateTime: parkingPlace.startDateTime,
+        endDateTime: parkingPlace.endDateTime,
+        isActive: parkingPlace.isActive,
+        isDisabledFriendly: parkingPlace.isDisabledFriendly,
+        photos: parkingPlace.photos,
+        description: parkingPlace.description,
+        height: parkingPlace.height,
+        width: parkingPlace.width,
+        location: parkingPlace.location,
+        cost: parkingPlace.cost
     })
 
-    const handleChangeId: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, id: event.target.value}));
-    }
     const handleChangeName: ChangeEventHandler<HTMLInputElement> = event => {
         setEditedParkingModal(prev => ({...prev, name: event.target.value}));
     }
@@ -96,17 +89,8 @@ const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
 
     return (
         <Dialog open={visible} onClose={onCancel}>
-            <DialogTitle>Enter parking spot details</DialogTitle>
+            <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
             <DialogContent>
-                <TextField
-                    margin="dense"
-                    id="id"
-                    label="ID"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeId}
-                />
                 <TextField
                     margin="dense"
                     id="name"
@@ -115,6 +99,7 @@ const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
                     fullWidth
                     variant="standard"
                     onChange={handleChangeName}
+                    value={editedParkingModal.name}
                 />
                 <LocalizationProvider dateAdapter={DateAdapter}>
                     <DatePickerContainer>
@@ -137,9 +122,11 @@ const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
                     </DatePickerContainer>
                 </LocalizationProvider>
                 <CheckBoxesContainer>
-                    <FormControlLabel control={<Switch onChange={handleChangeIsActive}/>} label="Active"/>
+                    <FormControlLabel control={<Switch onChange={handleChangeIsActive}/>} label="Active"
+                                      checked={editedParkingModal.isActive}/>
                     <FormControlLabel control={<Switch onChange={handleChangeIsDisabledFriendly}/>}
-                                      label="Disabled friendly"/>
+                                      label="Disabled friendly"
+                                      checked={editedParkingModal.isDisabledFriendly}/>
                 </CheckBoxesContainer>
                 <TextField
                     margin="dense"
@@ -151,16 +138,18 @@ const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
                     multiline
                     rows={4}
                     onChange={handleChangeDescription}
+                    value={editedParkingModal.description}
                 />
                 <TextField
                     inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                     margin="dense"
-                    id="height"
-                    label="Height"
+                    id="length"
+                    label="Length"
                     type="text"
                     fullWidth
                     variant="standard"
                     onChange={handleChangeHeight}
+                    value={editedParkingModal.height}
                 />
                 <TextField
                     inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
@@ -171,6 +160,7 @@ const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
                     fullWidth
                     variant="standard"
                     onChange={handleChangeWidth}
+                    value={editedParkingModal.width}
                 />
                 <TextField
                     inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
@@ -181,11 +171,12 @@ const AddParkingSpotModal: React.FC<Props> = ({visible, onCancel}) => {
                     fullWidth
                     variant="standard"
                     onChange={handleChangeCost}
+                    value={editedParkingModal.cost}
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={onCancel}>Cancel</Button>
-                <Button onClick={handleSubmit}>Add</Button>
+                <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
             </DialogActions>
         </Dialog>
     )
@@ -207,4 +198,4 @@ const CheckBoxesContainer = styled.div`
   flex-direction: column;
 `
 
-export default AddParkingSpotModal;
+export default ParkingSpotModal;
