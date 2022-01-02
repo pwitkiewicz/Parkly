@@ -2,7 +2,7 @@ package com.parkly.backend.rest;
 
 import static com.parkly.backend.utils.LogWriter.logHeaders;
 
-import com.parkly.backend.bizz.LoginService;
+import com.parkly.backend.bizz.login.LoginService;
 import com.parkly.backend.rest.domain.LoginFormRest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
