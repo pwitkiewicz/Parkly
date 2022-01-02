@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<UserDTO, Long>
 {
-    Optional<UserDTO> findByLogin(String login);
+    Optional<UserDTO> findByLoginAndPassword(String login, String password);
 }

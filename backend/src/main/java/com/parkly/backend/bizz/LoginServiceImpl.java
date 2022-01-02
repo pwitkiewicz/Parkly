@@ -19,9 +19,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Optional<String> loginToSystem(final LoginFormRest loginForm) {
-        var userOptional = userRepository.findByLogin(loginForm.getLogin());
+        var userOptional = userRepository.findByLoginAndPassword(loginForm.getLogin(), loginForm.getPassword());
 
-        return userOptional.filter(s -> s.getPassword().equals(loginForm.getPassword()))
-            .map(UserDTO::getSecurityToken);
+        return userOptional.map(UserDTO::getSecurityToken);
     }
 }
