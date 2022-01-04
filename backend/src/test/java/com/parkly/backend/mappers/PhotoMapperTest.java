@@ -1,14 +1,14 @@
 package com.parkly.backend.mappers;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.parkly.backend.mapper.PhotoMapper;
-import com.parkly.backend.repo.PhotoRepository;
 import com.parkly.backend.repo.domain.PhotoDTO;
 import com.parkly.backend.rest.domain.PhotoRest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+
+import java.util.Optional;
 
 public class PhotoMapperTest extends AbstractJUnit4SpringContextTests
 {
@@ -25,17 +25,17 @@ public class PhotoMapperTest extends AbstractJUnit4SpringContextTests
     @Test
     public void mapToPhotoDTONonNullRest()
     {
-        final PhotoDTO retrievedPhoto = PhotoMapper.mapToPhotoDTO(mockPhotoRest);
+        final Optional<PhotoDTO> retrievedPhoto = PhotoMapper.mapToPhotoDTO(mockPhotoRest);
 
-        Assert.assertNotNull(retrievedPhoto);
-        Assert.assertEquals("Test Path", retrievedPhoto.getPath());
+        Assert.assertTrue(retrievedPhoto.isPresent());
+        Assert.assertEquals("Test Path", retrievedPhoto.get().getPath());
     }
 
     @Test
     public void mapToPhotoDTONullRest()
     {
-        final PhotoDTO retrievedPhoto = PhotoMapper.mapToPhotoDTO(null);
-        Assert.assertNull(retrievedPhoto);
+        final Optional<PhotoDTO> retrievedPhoto = PhotoMapper.mapToPhotoDTO(null);
+        Assert.assertFalse(retrievedPhoto.isPresent());
     }
 
 }

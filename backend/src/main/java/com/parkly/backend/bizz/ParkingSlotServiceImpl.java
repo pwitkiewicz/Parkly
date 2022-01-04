@@ -3,9 +3,7 @@ package com.parkly.backend.bizz;
 import com.parkly.backend.mapper.LocationMapper;
 import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.mapper.PhotoMapper;
-import com.parkly.backend.repo.LocationRepository;
 import com.parkly.backend.repo.ParkingSlotRepository;
-import com.parkly.backend.repo.PhotoRepository;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.repo.domain.PhotoDTO;
@@ -16,8 +14,6 @@ import com.parkly.backend.utils.domain.FilterEnum;
 import com.parkly.backend.utils.domain.LogTypeEnum;
 import com.parkly.backend.utils.domain.SortEnum;
 
-import java.util.Collections;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,17 +25,11 @@ import org.springframework.stereotype.Service;
 public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     private final ParkingSlotRepository parkingSlotRepository;
-    private final LocationRepository locationRepository;
-    private final PhotoRepository photoRepository;
 
     @Autowired
-    public ParkingSlotServiceImpl(final ParkingSlotRepository parkingSlotRepository,
-                                  final LocationRepository locationRepository,
-                                  final PhotoRepository photoRepository)
+    public ParkingSlotServiceImpl(final ParkingSlotRepository parkingSlotRepository)
     {
         this.parkingSlotRepository = parkingSlotRepository;
-        this.locationRepository = locationRepository;
-        this.photoRepository = photoRepository;
     }
 
     @Override
@@ -50,28 +40,21 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     @Override
     public ParkingSlotRest addParkingSlot(final ParkingSlotRest parkingSlotRest)
     {
-        final Optional<LocationDTO> locationOpt =
-                locationRepository.findByLatitudeAndLongitude(parkingSlotRest.getLocationRest().getLatitude(),
-                        parkingSlotRest.getLocationRest().getLongitude());
+        final Set<PhotoDTO> photoDTOSet = getPhotoSetFromPhotoRestSet(parkingSlotRest.getPhotoRestSet());
+        final Optional<LocationDTO> locationDTOOpt = LocationMapper.mapToLocationDTO(parkingSlotRest.getLocationRest());
 
-        if (locationOpt.isEmpty())
-        {
-            final Set<PhotoDTO> newPhotosSet = getNewPhotosForParkingSlot(parkingSlotRest);
-            newPhotosSet.forEach(photoRepository::save);
+        final LocationDTO locationDTO = locationDTOOpt.orElseGet(() -> {
+            LogWriter.logMessage("Location couldn't be saved in the database", LogTypeEnum.ERROR);
+            return null;
+        });
 
-            final LocationDTO newLocationDto = LocationMapper.mapToLocationDTO(parkingSlotRest.getLocationRest());
-            locationRepository.save(Objects.requireNonNull(newLocationDto));
+        final Optional<ParkingSlotDTO> newParkingSlotDto =
+                    ParkingSlotMapper.mapToParkingSlotDTO(parkingSlotRest, locationDTO, photoDTOSet);
+        newParkingSlotDto.ifPresentOrElse(parkingSlotRepository::save, () ->
+                LogWriter.logMessage("Parking slot couldn't be saved in the database", LogTypeEnum.ERROR)
+        );
 
-            final ParkingSlotDTO newParkingSlotDto =
-                    ParkingSlotMapper.mapToParkingSlotDTO(newLocationDto, newPhotosSet, parkingSlotRest);
-            parkingSlotRepository.save(Objects.requireNonNull(newParkingSlotDto));
-
-            return parkingSlotRest;
-        }
-
-        LogWriter.logMessage("There already exists a parking spot for the given location", LogTypeEnum.ERROR);
-        return ParkingSlotRest.EMPTY_SLOT;
-
+        return newParkingSlotDto.isPresent()? parkingSlotRest : ParkingSlotRest.EMPTY_SLOT;
     }
 
     @Override
@@ -89,15 +72,11 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
         return false;
     }
 
-    private Set<PhotoDTO> getNewPhotosForParkingSlot(final ParkingSlotRest parkingSlotRest)
+    private Set<PhotoDTO> getPhotoSetFromPhotoRestSet(final Set<PhotoRest> photoRestSet)
     {
-        if(Objects.nonNull(parkingSlotRest.getPhotoRestSet()))
-        {
-            return parkingSlotRest.getPhotoRestSet().stream()
-                        .map(PhotoMapper::mapToPhotoDTO)
-                        .filter(photoDTO -> Objects.nonNull(photoDTO) && Objects.isNull(photoRepository.findByPath(photoDTO.getPath())))
-                        .collect(Collectors.toSet());
-        }
-        return Collections.emptySet();
+        return photoRestSet.stream()
+                .map(PhotoMapper::mapToPhotoDTO)
+                .filter(Optional::isPresent)
+                .map(Optional::get).collect(Collectors.toSet());
     }
 }

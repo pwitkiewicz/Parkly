@@ -1,13 +1,10 @@
 package com.parkly.backend.mappers;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.repo.domain.PhotoDTO;
-import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
-import com.parkly.backend.rest.domain.PhotoRest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +34,12 @@ public class ParkingSlotTest extends AbstractJUnit4SpringContextTests
         mockParkingSlotRest.setHeight(15D);
         mockParkingSlotRest.setWidth(10D);
 
-        final ParkingSlotDTO retrievedParkingSlotDto =
-                ParkingSlotMapper.mapToParkingSlotDTO(mockLocationDto, mockPhotoDtoSet, mockParkingSlotRest);
+        final Optional<ParkingSlotDTO> retrievedParkingSlotDto =
+                ParkingSlotMapper.mapToParkingSlotDTO(mockParkingSlotRest, mockLocationDto, mockPhotoDtoSet);
 
-        Assert.assertNotNull(retrievedParkingSlotDto);
-        Assert.assertEquals("Test desc", retrievedParkingSlotDto.getDescription());
-        Assert.assertEquals(mockLocationDto, retrievedParkingSlotDto.getLocation());
+        Assert.assertTrue(retrievedParkingSlotDto.isPresent());
+        Assert.assertEquals("Test desc", retrievedParkingSlotDto.get().getDescription());
+        Assert.assertEquals(mockLocationDto, retrievedParkingSlotDto.get().getLocation());
     }
 
     @Test
@@ -51,32 +48,32 @@ public class ParkingSlotTest extends AbstractJUnit4SpringContextTests
         mockParkingSlotRest.setHeight(15D);
         mockParkingSlotRest.setWidth(10D);
 
-        final ParkingSlotDTO retrievedParkingSlotDto =
-                ParkingSlotMapper.mapToParkingSlotDTO(mockLocationDto, mockPhotoDtoSet, mockParkingSlotRest);
+        final Optional<ParkingSlotDTO> retrievedParkingSlotDto =
+                ParkingSlotMapper.mapToParkingSlotDTO(mockParkingSlotRest, mockLocationDto, mockPhotoDtoSet);
 
-        Assert.assertNotNull(retrievedParkingSlotDto);
-        Assert.assertNull(retrievedParkingSlotDto.getDescription());
-        Assert.assertEquals("Test Parking Slot", retrievedParkingSlotDto.getName());
+        Assert.assertTrue(retrievedParkingSlotDto.isPresent());
+        Assert.assertNull(retrievedParkingSlotDto.get().getDescription());
+        Assert.assertEquals("Test Parking Slot", retrievedParkingSlotDto.get().getName());
     }
 
     @Test
     public void mapToParkingSlotDTOEmptyPhotoSet()
     {
-        final ParkingSlotDTO retrievedParkingSlotDto =
-                ParkingSlotMapper.mapToParkingSlotDTO(mockLocationDto, Collections.emptySet(), mockParkingSlotRest);
+        final Optional<ParkingSlotDTO> retrievedParkingSlotDto =
+                ParkingSlotMapper.mapToParkingSlotDTO(mockParkingSlotRest, mockLocationDto, Collections.emptySet());
 
-        Assert.assertNotNull(retrievedParkingSlotDto);
-        Assert.assertEquals(0, retrievedParkingSlotDto.getPhotoSet().size());
-        Assert.assertEquals(1, retrievedParkingSlotDto.getIsDisabled());
+        Assert.assertTrue(retrievedParkingSlotDto.isPresent());
+        Assert.assertEquals(0, retrievedParkingSlotDto.get().getPhotoSet().size());
+        Assert.assertEquals(1, retrievedParkingSlotDto.get().getIsDisabled());
     }
 
     @Test
     public void mapToParkingSlotDTOLocationIsNull()
     {
-        final ParkingSlotDTO retrievedParkingSlotDto =
-                ParkingSlotMapper.mapToParkingSlotDTO(null, mockPhotoDtoSet, mockParkingSlotRest);
+        final Optional<ParkingSlotDTO> retrievedParkingSlotDto =
+                ParkingSlotMapper.mapToParkingSlotDTO(mockParkingSlotRest,null,  mockPhotoDtoSet);
 
-        Assert.assertNull(retrievedParkingSlotDto);
+        Assert.assertTrue(retrievedParkingSlotDto.isEmpty());
     }
 
     private void setUpPhotoSet()
