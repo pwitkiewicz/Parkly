@@ -1,6 +1,7 @@
 package com.parkly.backend.repo.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -12,12 +13,15 @@ public class BookingHistoryDTO {
     @Column(name = "bookingid")
     private long bookingid;
 
+    @NotNull
     @Column(name = "startdate")
     private long startDate;
 
+    @NotNull
     @Column(name = "isactive")
     private int isActive;
 
+    @NotNull
     @Column(name = "ownerid")
     private long ownerId;
 

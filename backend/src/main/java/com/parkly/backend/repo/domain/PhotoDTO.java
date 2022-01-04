@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +25,7 @@ public class PhotoDTO {
     @Column(name = "photoid")
     private long photoId;
 
+    @NotNull
     @Column(name = "path", nullable = false)
     private String path;
 
