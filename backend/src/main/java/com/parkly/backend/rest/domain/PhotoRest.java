@@ -14,10 +14,10 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PhotoRest implements Serializable {
 
-    @EqualsAndHashCode.Include
     @JsonProperty("id")
     private long photoId;
 
+    @EqualsAndHashCode.Include
     @JsonProperty("path")
     private String path;
 }

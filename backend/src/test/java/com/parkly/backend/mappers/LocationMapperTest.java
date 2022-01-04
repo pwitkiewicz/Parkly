@@ -6,11 +6,10 @@ import com.parkly.backend.rest.domain.LocationRest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import java.util.Optional;
 
-public class LocationMapperTest extends AbstractJUnit4SpringContextTests
+public class LocationMapperTest
 {
 
     private LocationRest mockLocationRest;

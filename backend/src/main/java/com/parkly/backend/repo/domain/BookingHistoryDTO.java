@@ -10,23 +10,23 @@ public class BookingHistoryDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "bookingid")
-    private long bookingid;
+    @Column(name = "booking_id")
+    private long bookingId;
 
     @NotNull
-    @Column(name = "startdate")
+    @Column(name = "start_date")
     private long startDate;
 
     @NotNull
-    @Column(name = "isactive")
+    @Column(name = "is_active")
     private int isActive;
 
     @NotNull
-    @Column(name = "ownerid")
+    @Column(name = "owner_id")
     private long ownerId;
 
     @ManyToOne
-    @JoinColumn(name = "parkingslotid", nullable = false)
+    @JoinColumn(name = "parking_slot_id", nullable = false)
     private ParkingSlotDTO parkingSlot;
 
     @Override
@@ -34,11 +34,11 @@ public class BookingHistoryDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingHistoryDTO that = (BookingHistoryDTO) o;
-        return bookingid == that.bookingid;
+        return bookingId == that.bookingId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookingid);
+        return Objects.hash(bookingId);
     }
 }

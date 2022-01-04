@@ -2,20 +2,17 @@ package com.parkly.backend.mapper;
 
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
-import com.parkly.backend.repo.domain.PhotoDTO;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 public class ParkingSlotMapper {
 
     public static Optional<ParkingSlotDTO> mapToParkingSlotDTO(final ParkingSlotRest parkingSlotRest,
-                                                               final LocationDTO locationDTO,
-                                                               final Set<PhotoDTO> photoDTOSet)
+                                                               final LocationDTO locationDTO)
     {
-        if(Objects.nonNull(parkingSlotRest) && Objects.nonNull(locationDTO) && Objects.nonNull(photoDTOSet))
+        if(Objects.nonNull(parkingSlotRest) && Objects.nonNull(locationDTO))
         {
             final Optional<Double> widthOpt = Optional.of(parkingSlotRest.getWidth());
             final Optional<Double> heightOpt = Optional.of(parkingSlotRest.getHeight());
@@ -32,7 +29,6 @@ public class ParkingSlotMapper {
             heightOpt.ifPresent(parkingSlotDTO::setHeight);
             descOpt.ifPresent(parkingSlotDTO::setDescription);
             parkingSlotDTO.setLocation(locationDTO);
-            parkingSlotDTO.setPhotoSet(photoDTOSet);
 
             return Optional.of(parkingSlotDTO);
         }

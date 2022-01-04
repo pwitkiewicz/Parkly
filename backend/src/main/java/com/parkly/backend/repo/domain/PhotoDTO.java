@@ -22,7 +22,7 @@ public class PhotoDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "photoid")
+    @Column(name = "photo_id")
     private long photoId;
 
     @NotNull
@@ -30,7 +30,7 @@ public class PhotoDTO {
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = "parkingslotid", nullable = false)
+    @JoinColumn(name = "parking_slot_id", nullable = false)
     private ParkingSlotDTO parkingSlot;
 
     @Override

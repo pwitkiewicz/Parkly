@@ -17,7 +17,7 @@ public class LocationDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "locationid")
+    @Column(name = "location_id")
     private long locationId;
 
     @NotNull
@@ -33,7 +33,7 @@ public class LocationDTO {
     private String street;
 
     @NotNull
-    @Column(name = "streetnumber")
+    @Column(name = "street_number")
     private String streetNumber;
 
     @NotNull

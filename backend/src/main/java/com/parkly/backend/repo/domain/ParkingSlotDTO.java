@@ -16,7 +16,7 @@ public class ParkingSlotDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "parkingslotId")
+    @Column(name = "parking_slot_id")
     private long parkingSlotId;
 
     @NotNull
@@ -24,15 +24,15 @@ public class ParkingSlotDTO {
     private String name;
 
     @NotNull
-    @Column(name = "startdate")
+    @Column(name = "start_date")
     private long startDate;
 
     @NotNull
-    @Column(name = "enddate")
+    @Column(name = "end_date")
     private long endDate;
 
     @NotNull
-    @Column(name = "isactive")
+    @Column(name = "is_active")
     private int isActive;
 
     @Column(name = "description")
@@ -49,11 +49,11 @@ public class ParkingSlotDTO {
     private double cost;
 
     @NotNull
-    @Column(name = "isdisabled")
+    @Column(name = "is_disabled")
     private int isDisabled;
 
     @ManyToOne
-    @JoinColumn(name = "locationid", nullable = false)
+    @JoinColumn(name = "location_id", nullable = false)
     private LocationDTO location;
 
     @OneToMany(mappedBy = "parkingSlot")
