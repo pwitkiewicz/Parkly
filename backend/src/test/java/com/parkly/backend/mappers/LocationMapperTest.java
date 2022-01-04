@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import java.util.Optional;
+
 public class LocationMapperTest extends AbstractJUnit4SpringContextTests
 {
 
@@ -29,17 +31,17 @@ public class LocationMapperTest extends AbstractJUnit4SpringContextTests
     @Test
     public void mapToLocationDTONonNullRest()
     {
-        final LocationDTO retrievedLocation = LocationMapper.mapToLocationDTO(mockLocationRest);
+        final Optional<LocationDTO> retrievedLocation = LocationMapper.mapToLocationDTO(mockLocationRest);
 
-        Assert.assertNotNull(retrievedLocation);
-        Assert.assertEquals("Test City", retrievedLocation.getCity());
-        Assert.assertEquals(0D, retrievedLocation.getLongitude(), 0);
+        Assert.assertTrue(retrievedLocation.isPresent());
+        Assert.assertEquals("Test City", retrievedLocation.get().getCity());
+        Assert.assertEquals(0D, retrievedLocation.get().getLongitude(), 0);
     }
 
     @Test
     public void mapToLocationDTONullRest()
     {
-        final LocationDTO retrievedLocation = LocationMapper.mapToLocationDTO(null);
-        Assert.assertNull(retrievedLocation);
+        final Optional<LocationDTO> retrievedLocation = LocationMapper.mapToLocationDTO(null);
+        Assert.assertFalse(retrievedLocation.isPresent());
     }
 }

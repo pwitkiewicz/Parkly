@@ -4,10 +4,11 @@ import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.rest.domain.LocationRest;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class LocationMapper
 {
-    public static LocationDTO mapToLocationDTO(final LocationRest locationRest)
+    public static Optional<LocationDTO> mapToLocationDTO(final LocationRest locationRest)
     {
         if(Objects.nonNull(locationRest))
         {
@@ -20,8 +21,8 @@ public class LocationMapper
             locationDTO.setLatitude(locationRest.getLatitude());
             locationDTO.setLongitude(locationRest.getLongitude());
 
-            return locationDTO;
+            return Optional.of(locationDTO);
         }
-        return null;
+        return Optional.empty();
     }
 }

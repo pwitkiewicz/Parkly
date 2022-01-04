@@ -11,11 +11,11 @@ import java.util.Set;
 
 public class ParkingSlotMapper {
 
-    public static ParkingSlotDTO mapToParkingSlotDTO(final LocationDTO locationDTO,
-                                                     final Set<PhotoDTO> photoDTOSet,
-                                                     final ParkingSlotRest parkingSlotRest)
+    public static Optional<ParkingSlotDTO> mapToParkingSlotDTO(final ParkingSlotRest parkingSlotRest,
+                                                               final LocationDTO locationDTO,
+                                                               final Set<PhotoDTO> photoDTOSet)
     {
-        if(Objects.nonNull(locationDTO) && Objects.nonNull(parkingSlotRest) && Objects.nonNull(photoDTOSet))
+        if(Objects.nonNull(parkingSlotRest) && Objects.nonNull(locationDTO) && Objects.nonNull(photoDTOSet))
         {
             final Optional<Double> widthOpt = Optional.of(parkingSlotRest.getWidth());
             final Optional<Double> heightOpt = Optional.of(parkingSlotRest.getHeight());
@@ -26,16 +26,16 @@ public class ParkingSlotMapper {
             parkingSlotDTO.setCost(parkingSlotRest.getCost());
             parkingSlotDTO.setEndDate(parkingSlotRest.getEndDate());
             parkingSlotDTO.setStartDate(parkingSlotRest.getStartDate());
-            parkingSlotDTO.setLocation(locationDTO);
-            parkingSlotDTO.setPhotoSet(photoDTOSet);
             parkingSlotDTO.setIsActive(parkingSlotRest.isActive()? 1 : 0);
             parkingSlotDTO.setIsDisabled(parkingSlotRest.isDisabledFriendly()? 1 : 0);
             widthOpt.ifPresent(parkingSlotDTO::setWidth);
             heightOpt.ifPresent(parkingSlotDTO::setHeight);
             descOpt.ifPresent(parkingSlotDTO::setDescription);
+            parkingSlotDTO.setLocation(locationDTO);
+            parkingSlotDTO.setPhotoSet(photoDTOSet);
 
-            return parkingSlotDTO;
+            return Optional.of(parkingSlotDTO);
         }
-        return null;
+        return Optional.empty();
     }
 }
