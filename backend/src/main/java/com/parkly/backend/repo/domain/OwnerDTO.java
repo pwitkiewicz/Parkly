@@ -1,42 +1,42 @@
 package com.parkly.backend.repo.domain;
 
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
-@Entity
+
 @Getter
-@Table(name = "bookinghistory")
-public class BookingHistoryDTO {
+@Setter
+@Entity
+@Table(name = "owner")
+public class OwnerDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "bookingid")
-    private long bookingid;
-
-    @Column(name = "startdate")
-    private long startDate;
-
-    @Column(name = "isactive")
-    private int isActive;
-
     @Column(name = "ownerid")
     private long ownerId;
 
-    @ManyToOne
-    @JoinColumn(name = "parkingslotid", nullable = false)
-    private ParkingSlotDTO parkingSlot;
+    @Column(name = "firstname")
+    private String firstName;
 
-    @ManyToOne
-    @JoinColumn(name = "ownerid", nullable = false)
-    private OwnerDTO owner;
+    @Column(name = "lastname")
+    private String lastName;
+
+    @Column(name = "number")
+    private Long phoneNumber;
+
+    @OneToMany
+    @JoinColumn(name = "bookingid", nullable = false)
+    private Set<BookingHistoryDTO> bookings;
 
     @Override
     public boolean equals(Object o) {
@@ -46,12 +46,12 @@ public class BookingHistoryDTO {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        BookingHistoryDTO that = (BookingHistoryDTO) o;
-        return bookingid == that.getBookingid();
+        OwnerDTO ownerDTO = (OwnerDTO) o;
+        return ownerId == ownerDTO.getOwnerId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookingid);
+        return Objects.hash(ownerId);
     }
 }
