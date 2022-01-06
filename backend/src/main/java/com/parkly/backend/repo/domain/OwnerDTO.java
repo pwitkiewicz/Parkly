@@ -10,25 +10,36 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "owner")
 public class OwnerDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ownerid")
-    private long ownerId;
+    public OwnerDTO(@NotNull final String firstName,
+                     @NotNull final String lastName,
+                     @NotNull final Long phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
 
-    @Column(name = "firstname")
+    @Id
+    @Column(name = "ownerid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long ownerId;
+
+    @Column(name = "firstname", updatable = false)
     private String firstName;
 
-    @Column(name = "lastname")
+    @Column(name = "lastname", updatable = false)
     private String lastName;
 
     @Column(name = "number")
@@ -47,7 +58,7 @@ public class OwnerDTO {
             return false;
         }
         OwnerDTO ownerDTO = (OwnerDTO) o;
-        return ownerId == ownerDTO.getOwnerId();
+        return Objects.equals(ownerId, ownerDTO.getOwnerId());
     }
 
     @Override

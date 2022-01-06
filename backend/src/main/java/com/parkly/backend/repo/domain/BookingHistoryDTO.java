@@ -19,7 +19,7 @@ public class BookingHistoryDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "bookingid")
-    private long bookingid;
+    private long bookingId;
 
     @Column(name = "startdate")
     private long startDate;
@@ -47,11 +47,11 @@ public class BookingHistoryDTO {
             return false;
         }
         BookingHistoryDTO that = (BookingHistoryDTO) o;
-        return bookingid == that.getBookingid();
+        return bookingId == that.getBookingId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookingid);
+        return Objects.hash(bookingId);
     }
 }
