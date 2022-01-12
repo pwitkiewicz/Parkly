@@ -35,7 +35,7 @@ public class PhotosController {
         this.securityService = securityService;
     }
 
-    @PostMapping(value = "{parkingSlotId}", consumes = {"multipart/form-data"})
+    @PostMapping(path = "{parkingSlotId}", consumes = {"multipart/form-data"})
     public ResponseEntity<PhotoRest> savePhoto(@RequestHeader HttpHeaders headers,
                                                @PathVariable Long parkingSlotId,
                                                @RequestBody MultipartFile file) {

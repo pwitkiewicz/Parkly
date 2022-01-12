@@ -3,10 +3,7 @@ package com.parkly.backend.bizz.owner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
-import com.parkly.backend.config.ServiceTest;
 import com.parkly.backend.repo.OwnerRepository;
 import com.parkly.backend.repo.domain.OwnerDTO;
 import com.parkly.backend.rest.domain.OwnerRest;
@@ -14,23 +11,23 @@ import java.util.Collections;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 
-@ServiceTest
+@ExtendWith(MockitoExtension.class)
 class OwnerServiceImplTest {
 
-    @Autowired
     @InjectMocks
     private OwnerServiceImpl ownerService;
 
-    @MockBean
+    @Mock
     private OwnerRepository repository;
-
     private OwnerDTO owner;
 
     @BeforeEach
@@ -39,9 +36,9 @@ class OwnerServiceImplTest {
         owner = new OwnerDTO("Jan", "Kowalski", 48_123_456_789L);
         owner.setOwnerId(1L);
 
-        when(repository.findById(1L)).thenReturn(Optional.of(owner));
-        when(repository.findById(2137L)).thenReturn(Optional.empty());
-        when(repository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+        Mockito.lenient().when(repository.findById(1L)).thenReturn(Optional.of(owner));
+        Mockito.lenient().when(repository.findById(2137L)).thenReturn(Optional.empty());
+        Mockito.lenient().when(repository.save(any())).thenAnswer(i -> i.getArguments()[0]);
     }
 
     @Test
@@ -79,7 +76,7 @@ class OwnerServiceImplTest {
             48_123_456_789L,
             Collections.emptySet());
 
-        when(repository.save(any())).thenAnswer(i -> {
+        Mockito.lenient().when(repository.save(any())).thenAnswer(i -> {
             var temp = (OwnerDTO) i.getArguments()[0];
             temp.setOwnerId(1L);
             return temp;
@@ -102,7 +99,7 @@ class OwnerServiceImplTest {
     void getEmptyOptionalWhenIncorrectOwnerIsGiven() {
         // given
         final var newOwner = new OwnerRest();
-        doThrow(new DataAccessResourceFailureException("Failure")).when(repository).save(any());
+        Mockito.lenient().doThrow(new DataAccessResourceFailureException("Failure")).when(repository).save(any());
 
         // when
         var optional = ownerService.addOwner(newOwner);
@@ -121,7 +118,7 @@ class OwnerServiceImplTest {
             48_987_654_321L,
             Collections.emptySet());
 
-        when(repository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+        Mockito.lenient().when(repository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
         // when
         final var optional = ownerService.updateOwner(1L, updatedOwner);
@@ -168,7 +165,7 @@ class OwnerServiceImplTest {
     void getFalseWhenIncorrectIdGiven()
     {
         // given
-        doThrow(new EmptyResultDataAccessException(2137)).when(repository).deleteById(anyLong());
+        Mockito.lenient().doThrow(new EmptyResultDataAccessException(2137)).when(repository).deleteById(anyLong());
 
         // when
         boolean result = ownerService.deleteOwner(1L);
