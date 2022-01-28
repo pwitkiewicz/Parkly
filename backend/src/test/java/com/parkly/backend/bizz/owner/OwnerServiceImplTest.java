@@ -92,7 +92,7 @@ class OwnerServiceImplTest {
         assertThat(ownerRest.getOwnerId()).isEqualTo(owner.getOwnerId());
         assertThat(ownerRest.getFirstName()).isEqualTo(owner.getFirstName());
         assertThat(ownerRest.getLastName()).isEqualTo(owner.getLastName());
-        assertThat(ownerRest.getPhoneNumber()).isEqualTo(owner.getPhoneNumber());
+        assertThat(ownerRest.getPhoneNumber()).isEqualTo(owner.getTelephoneNumber());
     }
 
     @Test

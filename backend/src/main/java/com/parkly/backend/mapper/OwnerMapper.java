@@ -35,7 +35,7 @@ public class OwnerMapper {
                     ownerDTO.getOwnerId(),
                     ownerDTO.getFirstName(),
                     ownerDTO.getLastName(),
-                    ownerDTO.getPhoneNumber(),
+                    ownerDTO.getTelephoneNumber(),
                     Collections.emptySet()
             ));
         }
