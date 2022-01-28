@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,19 +16,23 @@ public class ParkingSlotDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "parkingslotId")
+    @Column(name = "parking_slot_id")
     private long parkingSlotId;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
-    @Column(name = "startdate")
+    @NotNull
+    @Column(name = "start_date")
     private long startDate;
 
-    @Column(name = "enddate")
+    @NotNull
+    @Column(name = "end_date")
     private long endDate;
 
-    @Column(name = "isactive")
+    @NotNull
+    @Column(name = "is_active")
     private int isActive;
 
     @Column(name = "description")
@@ -39,14 +44,16 @@ public class ParkingSlotDTO {
     @Column(name = "height")
     private double height;
 
+    @NotNull
     @Column(name = "cost")
     private double cost;
 
-    @Column(name = "isdisabled")
+    @NotNull
+    @Column(name = "is_disabled")
     private int isDisabled;
 
-    @OneToOne
-    @JoinColumn(name = "locationid")
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
     private LocationDTO location;
 
     @OneToMany(mappedBy = "parkingSlot")
