@@ -81,14 +81,15 @@ const ParkingSpotsPage = () => {
                         longitude: 0
                     },
                     cost: 0
-                }}/>
+                }} getParkingSpots={getParkingSpots}
+                />
                 {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpot) => (
                     <ParkingSpotItem id={parkingSpot.id} name={parkingSpot.name}
                                      startDateTime={parkingSpot.startDateTime} endDateTime={parkingSpot.endDateTime}
                                      isActive={parkingSpot.isActive} isDisabledFriendly={parkingSpot.isDisabledFriendly}
                                      photos={parkingSpot.photos} description={parkingSpot.description}
                                      height={parkingSpot.height} width={parkingSpot.width}
-                                     location={parkingSpot.location} cost={parkingSpot.cost} key={parkingSpot.id}/>
+                                     location={parkingSpot.location} cost={parkingSpot.cost} key={parkingSpot.id}  getParkingSpots={getParkingSpots}/>
                 ))}
             </StyledGrid>
         </>

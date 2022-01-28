@@ -11,7 +11,11 @@ type ParkingSpotEditModal = {
     isVisible: boolean;
 }
 
-const ParkingSpotItem: FC<ParkingSpot> = (parkingPlace) => {
+type GetParkingSpotsFunction = {
+    getParkingSpots: () => void;
+}
+
+const ParkingSpotItem: FC<ParkingSpot & GetParkingSpotsFunction> = (parkingPlace) => {
 
     const [editParkingSpotState, setParkingSpotState] = useState<ParkingSpotEditModal>({
         isVisible: false
@@ -42,7 +46,9 @@ const ParkingSpotItem: FC<ParkingSpot> = (parkingPlace) => {
                 </CardContent>
                 <CardActions style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     <Button style={{color: `${Theme.colors.accept}`, marginRight: '1.5vw'}} onClick={() => {
-                        bookParkingSpot(parkingPlace.id);
+                        bookParkingSpot(parkingPlace.id).then(() => {
+                            parkingPlace.getParkingSpots();
+                        });
                     }}>
                         Book
                     </Button>
@@ -52,7 +58,9 @@ const ParkingSpotItem: FC<ParkingSpot> = (parkingPlace) => {
                         Edit
                     </Button>
                     <Button style={{color: `${Theme.colors.remove}`}} onClick={() => {
-                        deleteParkingSpot(parkingPlace.id);
+                        deleteParkingSpot(parkingPlace.id).then(() => {
+                            parkingPlace.getParkingSpots();
+                        });
                     }}>
                         Delete
                     </Button>
