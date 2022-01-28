@@ -1,6 +1,6 @@
 package com.parkly.backend.rest;
 
-import com.parkly.backend.bizz.BookingService;
+import com.parkly.backend.bizz.booking.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

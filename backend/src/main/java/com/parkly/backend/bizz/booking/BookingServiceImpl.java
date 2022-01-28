@@ -1,4 +1,4 @@
-package com.parkly.backend.bizz;
+package com.parkly.backend.bizz.booking;
 
 import com.parkly.backend.repo.BookingHistoryRepository;
 import com.parkly.backend.rest.domain.BookingRest;
@@ -18,7 +18,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public void bookByBookingId(Long bookingId) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

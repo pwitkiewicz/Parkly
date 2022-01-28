@@ -3,8 +3,8 @@ package com.parkly.backend.rest;
 import static com.parkly.backend.utils.LogWriter.logException;
 import static com.parkly.backend.utils.LogWriter.logHeaders;
 
-import com.parkly.backend.bizz.ParkingSlotService;
-import com.parkly.backend.bizz.SecurityService;
+import com.parkly.backend.bizz.parking_slot.ParkingSlotService;
+import com.parkly.backend.bizz.security.SecurityService;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.utils.Filter;
 import com.parkly.backend.utils.Sort;
@@ -12,7 +12,6 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Slf4j
+
 @RestController
 @RequestMapping(path = "/items")
 public class ParkingSlotsController {
@@ -124,8 +123,11 @@ public class ParkingSlotsController {
                                                     @PathVariable Long parkingSlotId) {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers) && parkingSlotService.deleteParkingSlot(parkingSlotId)) {
-            return ResponseEntity.ok().body(JSONObject.quote("Item deleted"));
+        if(securityService.isAuthenticated(headers)) {
+            if(parkingSlotService.deleteParkingSlot(parkingSlotId)) {
+                return ResponseEntity.ok().body(JSONObject.quote("Item deleted"));
+            }
+            return ResponseEntity.ok().body(JSONObject.quote("Invalid request"));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(JSONObject.quote("Unauthorized access"));

@@ -10,11 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "photo")
 public class PhotoDTO {
 
@@ -29,6 +32,11 @@ public class PhotoDTO {
     @ManyToOne
     @JoinColumn(name = "parkingslotid", nullable = false)
     private ParkingSlotDTO parkingSlot;
+
+    public PhotoDTO(final String path, final ParkingSlotDTO parkingSlot) {
+        this.path = path;
+        this.parkingSlot = parkingSlot;
+    }
 
     @Override
     public boolean equals(Object o) {

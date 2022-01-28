@@ -1,4 +1,4 @@
-package com.parkly.backend.bizz;
+package com.parkly.backend.bizz.login;
 
 import com.parkly.backend.rest.domain.LoginFormRest;
 import java.util.Optional;

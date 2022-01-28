@@ -1,4 +1,4 @@
-package com.parkly.backend.bizz;
+package com.parkly.backend.bizz.security;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;

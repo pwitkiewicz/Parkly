@@ -1,4 +1,4 @@
-package com.parkly.backend.bizz;
+package com.parkly.backend.bizz.parking_slot;
 
 import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
