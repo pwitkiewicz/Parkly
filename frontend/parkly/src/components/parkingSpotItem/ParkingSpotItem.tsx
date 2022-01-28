@@ -5,12 +5,17 @@ import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mu
 import {ParkingSpot} from "../../models/models";
 import Theme from "../../constants/Styles";
 import ParkingSpotModal from '../../pages/parkingSpotsPage/components/ParkingSpotModal';
+import {bookParkingSpot, deleteParkingSpot} from "../../queries/queries";
 
 type ParkingSpotEditModal = {
     isVisible: boolean;
 }
 
-const ParkingSpotItem: FC<ParkingSpot> = (parkingPlace) => {
+type GetParkingSpotsFunction = {
+    getParkingSpots: () => void;
+}
+
+const ParkingSpotItem: FC<ParkingSpot & GetParkingSpotsFunction> = (parkingPlace) => {
 
     const [editParkingSpotState, setParkingSpotState] = useState<ParkingSpotEditModal>({
         isVisible: false
@@ -40,15 +45,23 @@ const ParkingSpotItem: FC<ParkingSpot> = (parkingPlace) => {
                     </TypographyContainer>
                 </CardContent>
                 <CardActions style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <Button style={{color: `${Theme.colors.accept}`, marginRight: '1.5vw'}}>
+                    <Button style={{color: `${Theme.colors.accept}`, marginRight: '1.5vw'}} onClick={() => {
+                        bookParkingSpot(parkingPlace.id).then(() => {
+                            parkingPlace.getParkingSpots();
+                        });
+                    }}>
                         Book
                     </Button>
                     <Button onClick={() => {
-                        setParkingSpotState({isVisible: true})
+                        setParkingSpotState({isVisible: true});
                     }} style={{color: `${Theme.colors.edit}`, marginRight: '1.5vw'}}>
                         Edit
                     </Button>
-                    <Button style={{color: `${Theme.colors.remove}`}}>
+                    <Button style={{color: `${Theme.colors.remove}`}} onClick={() => {
+                        deleteParkingSpot(parkingPlace.id).then(() => {
+                            parkingPlace.getParkingSpots();
+                        });
+                    }}>
                         Delete
                     </Button>
                 </CardActions>
