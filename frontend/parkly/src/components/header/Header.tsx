@@ -5,6 +5,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import {Link} from "react-router-dom";
 
 import Theme from '../../constants/Styles'
 
@@ -12,33 +13,43 @@ const Header = () => {
     return (
         <HeaderBar>
             <HeaderContainer>
-                <Logo>
-                    Parking Spot System
-                </Logo>
-                <StyledButton>
-                    <Icon>
-                        <ShoppingCartIcon/>
-                    </Icon>
-                    Bookings
-                </StyledButton>
-                <StyledButton>
-                    <Icon>
-                        <DirectionsCarIcon/>
-                    </Icon>
-                    Parking spots
-                </StyledButton>
-                <StyledButton>
-                    <Icon>
-                        <SettingsIcon/>
-                    </Icon>
-                    Settings
-                </StyledButton>
-                <StyledButton style={{marginLeft: 'auto', marginRight: '4vw'}}>
-                    <Icon>
-                        <LogoutIcon/>
-                    </Icon>
-                    Log Out
-                </StyledButton>
+                <StyledLink to="/">
+                    <Logo>
+                        Parking Spot System
+                    </Logo>
+                </StyledLink>
+                <StyledLink to="/">
+                    <StyledButton>
+                        <Icon>
+                            <ShoppingCartIcon/>
+                        </Icon>
+                        Bookings
+                    </StyledButton>
+                </StyledLink>
+                <StyledLink to="/parking-spots">
+                    <StyledButton>
+                        <Icon>
+                            <DirectionsCarIcon/>
+                        </Icon>
+                        Parking spots
+                    </StyledButton>
+                </StyledLink>
+                <StyledLink to="/settings">
+                    <StyledButton>
+                        <Icon>
+                            <SettingsIcon/>
+                        </Icon>
+                        Settings
+                    </StyledButton>
+                </StyledLink>
+                <StyledLink to="/logout" style={{marginLeft: 'auto', marginRight: '4vw'}}>
+                    <StyledButton>
+                        <Icon>
+                            <LogoutIcon/>
+                        </Icon>
+                        Log Out
+                    </StyledButton>
+                </StyledLink>
             </HeaderContainer>
         </HeaderBar>
     )
@@ -74,6 +85,10 @@ const Icon = styled(SvgIcon)`
   height: 3vh;
   color: white;
   margin-right: 0.5vw;
+`
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
 `
 
 export default Header;

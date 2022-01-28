@@ -1,47 +1,55 @@
 package com.parkly.backend.repo.domain;
 
 
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Setter
+@Getter
 @Entity
 @Table(name = "location")
 public class LocationDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "locationid")
+    @Column(name = "location_id")
     private long locationId;
 
+    @NotNull
     @Column(name = "country")
     private String country;
 
+    @NotNull
     @Column(name = "city")
     private String city;
 
+    @NotNull
     @Column(name = "street")
     private String street;
 
-    @Column(name = "streetnumber")
+    @NotNull
+    @Column(name = "street_number")
     private String streetNumber;
 
+    @NotNull
     @Column(name = "zipcode")
     private String zipCode;
 
-    @Column(name = "latitude", nullable = false)
+    @NotNull
+    @Column(name = "latitude")
     private double latitude;
 
-    @Column(name = "longitude", nullable = false)
+    @NotNull
+    @Column(name = "longitude")
     private double longitude;
 
-    @OneToOne(mappedBy = "location")
-    private ParkingSlotDTO parkingSlot;
+    @OneToMany(mappedBy = "location")
+    private Set<ParkingSlotDTO> parkingSlot;
 
     @Override
     public boolean equals(Object o) {

@@ -1,5 +1,8 @@
 package com.parkly.backend.repo.domain;
 
+
+import javax.validation.constraints.NotNull;
+
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,20 +21,24 @@ public class BookingHistoryDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "bookingid")
+
+    @Column(name = "booking_id")
     private long bookingId;
 
-    @Column(name = "startdate")
+    @NotNull
+    @Column(name = "start_date")
     private long startDate;
 
-    @Column(name = "isactive")
+    @NotNull
+    @Column(name = "is_active")
     private int isActive;
 
-    @Column(name = "ownerid")
+    @NotNull
+    @Column(name = "owner_id")
     private long ownerId;
 
     @ManyToOne
-    @JoinColumn(name = "parkingslotid", nullable = false)
+    @JoinColumn(name = "parking_slot_id", nullable = false)
     private ParkingSlotDTO parkingSlot;
 
     @ManyToOne
