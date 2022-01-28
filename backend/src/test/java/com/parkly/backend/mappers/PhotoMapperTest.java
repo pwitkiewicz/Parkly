@@ -19,8 +19,7 @@ public class PhotoMapperTest
     @Before
     public void setUp()
     {
-        mockPhotoRest = new PhotoRest();
-        mockPhotoRest.setPath("Test Path");
+        mockPhotoRest = PhotoRest.of(0L,"Test Path");
         setUpParkingSlot();
     }
 

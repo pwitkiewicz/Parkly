@@ -1,40 +1,45 @@
 package com.parkly.backend.mapper;
 
-import com.parkly.backend.bizz.booking.BookingService;
 import com.parkly.backend.repo.domain.OwnerDTO;
 import com.parkly.backend.rest.domain.OwnerRest;
-import java.util.Collections;
-import javax.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@Component
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OwnerMapper {
 
-    @Autowired
-    private BookingService bookingService;
+    public static Optional<OwnerDTO> mapToOwnerDTO(final OwnerRest ownerRest) {
+        if(Objects.nonNull(ownerRest)) {
+            var entity = new OwnerDTO(
+                    ownerRest.getFirstName(),
+                    ownerRest.getLastName(),
+                    ownerRest.getPhoneNumber());
 
-    public static OwnerDTO mapRestToEntity(@NotNull final OwnerRest ownerRest) {
-        var entity = new OwnerDTO(
-            ownerRest.getFirstName(),
-            ownerRest.getLastName(),
-            ownerRest.getPhoneNumber());
+            if(ownerRest.getOwnerId() != null) {
+                entity.setOwnerId(ownerRest.getOwnerId());
+            }
 
-        if(ownerRest.getOwnerId() != null) {
-            entity.setOwnerId(ownerRest.getOwnerId());
+            return Optional.of(entity);
         }
 
-        return entity;
+        return Optional.empty();
     }
 
-    public static OwnerRest mapEntityToRest(@NotNull final OwnerDTO ownerDTO) {
-        return new OwnerRest(
-            ownerDTO.getOwnerId(),
-            ownerDTO.getFirstName(),
-            ownerDTO.getLastName(),
-            ownerDTO.getPhoneNumber(),
-            //TODO replace next line with bookingService.getAllBookingsForOwnerId when service implemented
-            Collections.emptySet()
-        );
+    public static Optional<OwnerRest> mapToOwnerRest(final OwnerDTO ownerDTO) {
+        if(Objects.nonNull(ownerDTO)) {
+            return Optional.of(new OwnerRest(
+                    ownerDTO.getOwnerId(),
+                    ownerDTO.getFirstName(),
+                    ownerDTO.getLastName(),
+                    ownerDTO.getPhoneNumber(),
+                    Collections.emptySet()
+            ));
+        }
+
+        return Optional.empty();
     }
 }

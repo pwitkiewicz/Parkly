@@ -25,4 +25,22 @@ public class LocationMapper
         }
         return Optional.empty();
     }
+
+    public static Optional<LocationRest> mapToLocationRest(final LocationDTO locationDTO)
+    {
+        if(Objects.nonNull(locationDTO))
+        {
+            final LocationRest locationRest = new LocationRest();
+            locationRest.setCountry(locationDTO.getCountry());
+            locationRest.setCity(locationDTO.getCity());
+            locationRest.setStreet(locationDTO.getStreet());
+            locationRest.setStreetNumber(locationDTO.getStreetNumber());
+            locationRest.setZipCode(locationDTO.getZipCode());
+            locationRest.setLatitude(locationDTO.getLatitude());
+            locationRest.setLongitude(locationDTO.getLongitude());
+
+            return Optional.of(locationRest);
+        }
+        return Optional.empty();
+    }
 }
