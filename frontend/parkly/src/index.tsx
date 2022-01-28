@@ -8,6 +8,8 @@ import reportWebVitals from './reportWebVitals';
 import NotFoundPage from "./pages/notFoundPage/NotFoundPage";
 import RequireAuth from "./auth/RequireAuth";
 import NotAuthorizedPage from "./pages/notAuthorizedPage/NotAuthorizedPage";
+import { getAllBookings } from './queries/queries';
+import BookingsPage from './pages/bookingsPage/bookingsPage';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -16,6 +18,18 @@ ReactDOM.render(
                 <Route path="/" element={
                     <RequireAuth>
                         <App/>
+                    </RequireAuth>}
+                />
+                <Route path="/parking-spots" element={
+                    <RequireAuth>
+                        <App/>
+                    </RequireAuth>}
+                />
+                <Route path="/bookings" element={
+                    <RequireAuth>
+                        <>
+                        <BookingsPage/>
+                        </>
                     </RequireAuth>}
                 />
                 <Route path="/not-authorized" element={<NotAuthorizedPage/>}/>
