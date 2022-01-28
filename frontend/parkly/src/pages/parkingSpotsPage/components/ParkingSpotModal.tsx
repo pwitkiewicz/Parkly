@@ -1,4 +1,4 @@
-import React, {ChangeEventHandler, useCallback, useState} from 'react';
+import React, {ChangeEventHandler, useState} from 'react';
 import {Moment} from "moment/moment";
 import {
     Button,
@@ -24,10 +24,7 @@ interface Props {
     editing?: boolean;
 }
 
-/* TODO: Add a way to upload photos and enter location
-*   Then modify their handlers to properly save data
-*   At the end send data to BE with proper call */
-
+// TODO: Add BE calls
 // TODO 2: Fix date pickers warnings
 
 const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, editing}) => {
@@ -76,16 +73,45 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
     const handleChangeWidth: ChangeEventHandler<HTMLInputElement> = event => {
         setEditedParkingModal(prev => ({...prev, width: Number(event.target.value)}));
     }
-    const handleChangeLocation: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, id: event.target.value}));
-    }
     const handleChangeCost: ChangeEventHandler<HTMLInputElement> = event => {
         setEditedParkingModal(prev => ({...prev, cost: Number(event.target.value)}));
     }
-
-    const handleSubmit = useCallback(() => {
-        addParkingSpot(editedParkingModal);
-    }, []);
+    const handleChangeCity: ChangeEventHandler<HTMLInputElement> = event => {
+        const location = {
+            ...editedParkingModal.location,
+            city: event.target.value
+        }
+        setEditedParkingModal(prev => ({...prev, location: location}));
+    }
+    const handleChangeStreet: ChangeEventHandler<HTMLInputElement> = event => {
+        const location = {
+            ...editedParkingModal.location,
+            street: event.target.value
+        }
+        setEditedParkingModal(prev => ({...prev, location: location}));
+    }
+    const handleChangeNumber: ChangeEventHandler<HTMLInputElement> = event => {
+        const location = {
+            ...editedParkingModal.location,
+            number: parseInt(event.target.value)
+        }
+        setEditedParkingModal(prev => ({...prev, location: location}));
+    }
+    const handleChangeZip: ChangeEventHandler<HTMLInputElement> = event => {
+        const location = {
+            ...editedParkingModal.location,
+            zipcode: event.target.value
+        }
+        setEditedParkingModal(prev => ({...prev, location: location}));
+    }
+    const handleSubmit = () => {
+        if (editing) {
+            addParkingSpot(editedParkingModal, parkingPlace.id);
+        } else {
+            addParkingSpot(editedParkingModal);
+        }
+        onCancel();
+    }
 
     return (
         <Dialog open={visible} onClose={onCancel}>
@@ -172,6 +198,48 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
                     variant="standard"
                     onChange={handleChangeCost}
                     value={editedParkingModal.cost}
+                />
+                <TextField
+                    margin="dense"
+                    id="city"
+                    label="City"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={handleChangeCity}
+                    value={editedParkingModal.location.city}
+                />
+                <TextField
+                    margin="dense"
+                    id="street"
+                    label="Street"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={handleChangeStreet}
+                    value={editedParkingModal.location.street}
+                />
+                <TextField
+                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                    margin="dense"
+                    id="number"
+                    label="Number"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={handleChangeNumber}
+                    value={editedParkingModal.location.number}
+                />
+                <TextField
+                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                    margin="dense"
+                    id="zip"
+                    label="Zip code"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={handleChangeZip}
+                    value={editedParkingModal.location.zipcode}
                 />
             </DialogContent>
             <DialogActions>
