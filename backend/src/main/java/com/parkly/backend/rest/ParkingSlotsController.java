@@ -3,8 +3,10 @@ package com.parkly.backend.rest;
 import static com.parkly.backend.utils.LogWriter.logException;
 import static com.parkly.backend.utils.LogWriter.logHeaders;
 
+import com.parkly.backend.bizz.booking.BookingService;
 import com.parkly.backend.bizz.parking_slot.ParkingSlotService;
 import com.parkly.backend.bizz.security.SecurityService;
+import com.parkly.backend.rest.domain.BookingRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.utils.domain.FilterEnum;
 import com.parkly.backend.utils.domain.SortEnum;
@@ -35,11 +37,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class ParkingSlotsController {
 
     private final ParkingSlotService parkingSlotService;
+    private final BookingService bookingService;
     private final SecurityService securityService;
 
     @Autowired
-    public ParkingSlotsController(final ParkingSlotService parkingSlotService, final SecurityService securityService) {
+    public ParkingSlotsController(final ParkingSlotService parkingSlotService,
+                                  final BookingService bookingService,
+                                  final SecurityService securityService) {
         this.parkingSlotService = parkingSlotService;
+        this.bookingService = bookingService;
         this.securityService = securityService;
     }
 
@@ -72,8 +78,8 @@ public class ParkingSlotsController {
         if (securityService.isAuthenticated(headers)) {
             var foundParkingSlot = parkingSlotService.getParkingSlotById(parkingSlotId);
 
-            if(!foundParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
-                return ResponseEntity.ok(parkingSlotService.getParkingSlotById(parkingSlotId));
+            if(foundParkingSlot.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(foundParkingSlot.get());
             }
         }
 
@@ -88,13 +94,13 @@ public class ParkingSlotsController {
         if(securityService.isAuthenticated(headers)) {
             var addedParkingSlot = parkingSlotService.addParkingSlot(newParkingSlot);
 
-            if(!addedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
+            if(addedParkingSlot.isPresent()) {
                 URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/items/{parkingSlotId}")
-                    .buildAndExpand(addedParkingSlot.getParkingSlotId())
+                    .buildAndExpand(addedParkingSlot.get().getParkingSlotId())
                     .toUri();
 
-                return ResponseEntity.status(HttpStatus.OK).location(uri).body(addedParkingSlot);
+                return ResponseEntity.status(HttpStatus.OK).location(uri).body(addedParkingSlot.get());
             }
         }
 
@@ -110,8 +116,8 @@ public class ParkingSlotsController {
         if(securityService.isAuthenticated(headers)) {
             var updatedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlotToUpdate);
 
-            if(!updatedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
-                return ResponseEntity.ok(updatedParkingSlot);
+            if(updatedParkingSlot.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(updatedParkingSlot.get());
             }
         }
 
@@ -131,5 +137,61 @@ public class ParkingSlotsController {
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(JSONObject.quote("Unauthorized access"));
+    }
+
+    @PutMapping("{parkingSlotId}/book")
+    public ResponseEntity<ParkingSlotRest> bookParkingSlot(@RequestHeader HttpHeaders headers,
+                                                  @PathVariable Long parkingSlotId,
+                                                  @RequestBody BookingRest bookingRest) {
+        logHeaders(headers);
+
+        if(securityService.isAuthenticated(headers)) {
+            var parkingSlotOptional = parkingSlotService.getParkingSlotById(parkingSlotId);
+
+            if(parkingSlotOptional.isPresent()) {
+                var parkingSlot = parkingSlotOptional.get();
+                bookingRest.setParkingSlotRest(parkingSlot);
+                bookingRest.setIsActive(true);
+                parkingSlot.setIsActive(true);
+
+                var addedBooking = bookingService.addBooking(bookingRest);
+                var bookedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlot);
+
+                if(addedBooking.isPresent() && bookedParkingSlot.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.OK).body(bookedParkingSlot.get());
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
+    }
+
+    @PutMapping("{parkingSlotId}/release")
+    public ResponseEntity<ParkingSlotRest> releaseParkingSlot(@RequestHeader HttpHeaders headers,
+                                                              @PathVariable Long parkingSlotId,
+                                                              @RequestBody Long bookingId) {
+        logHeaders(headers);
+
+        if(securityService.isAuthenticated(headers)) {
+            var parkingSlotOptional = parkingSlotService.getParkingSlotById(parkingSlotId);
+            var bookingOptional = bookingService.getBookingByBookingId(bookingId);
+
+            if(parkingSlotOptional.isPresent() && bookingOptional.isPresent()) {
+                var parkingSlot = parkingSlotOptional.get();
+                var booking = bookingOptional.get();
+
+                parkingSlot.setIsActive(false);
+                booking.setIsActive(false);
+
+                var updatedBooking = bookingService.updateBooking(bookingId, booking);
+                var updatedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlot);
+
+                if(updatedBooking.isPresent() && updatedParkingSlot.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.OK).body(updatedParkingSlot.get());
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
     }
 }

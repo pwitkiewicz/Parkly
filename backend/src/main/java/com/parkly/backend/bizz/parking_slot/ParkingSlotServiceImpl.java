@@ -42,7 +42,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
         this.photoRepository = photoRepository;
     }
 
-    @Override
+
     public Set<ParkingSlotRest> getAllParkingSlots(FilterEnum filter, Integer page, SortEnum sort) {
         return null;
     }
@@ -73,13 +73,13 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     }
 
     @Override
-    public ParkingSlotRest getParkingSlotById(final Long parkingSlotId) {
+    public Optional<ParkingSlotRest> getParkingSlotById(final Long parkingSlotId) {
         return null;
     }
 
     @Override
-    public ParkingSlotRest updateParkingSlot(final Long parkingSlotId, final ParkingSlotRest parkingSlotRest) {
-        return null;
+    public Optional<ParkingSlotRest> updateParkingSlot(final Long parkingSlotId, final ParkingSlotRest parkingSlotRest) {
+        return Optional.empty();
     }
 
     @Override

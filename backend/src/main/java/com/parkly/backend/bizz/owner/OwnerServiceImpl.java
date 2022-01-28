@@ -26,14 +26,14 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Optional<OwnerRest> getOwner(Long ownerId) {
+    public Optional<OwnerRest> getOwner(final Long ownerId) {
         var owner = ownerRepository.findById(ownerId);
 
         return owner.map(OwnerMapper::mapEntityToRest);
     }
 
     @Override
-    public Optional<OwnerRest> addOwner(OwnerRest owner) {
+    public Optional<OwnerRest> addOwner(final OwnerRest owner) {
         try {
             var savedOwner = ownerRepository.save(mapRestToEntity(owner));
             return Optional.of(mapEntityToRest(savedOwner));
@@ -45,7 +45,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Optional<OwnerRest> updateOwner(Long ownerId, OwnerRest updatedOwner) {
+    public Optional<OwnerRest> updateOwner(final Long ownerId, final OwnerRest updatedOwner) {
         try {
             var ownerOptional = ownerRepository.findById(ownerId);
 
@@ -65,7 +65,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public boolean deleteOwner(Long ownerId) {
+    public boolean deleteOwner(final Long ownerId) {
         try {
             ownerRepository.deleteById(ownerId);
             return true;
