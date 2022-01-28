@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,14 +25,15 @@ public class PhotoDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "photoid")
+    @Column(name = "photo_id")
     private long photoId;
 
+    @NotNull
     @Column(name = "path", nullable = false)
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = "parkingslotid", nullable = false)
+    @JoinColumn(name = "parking_slot_id", nullable = false)
     private ParkingSlotDTO parkingSlot;
 
     public PhotoDTO(final String path, final ParkingSlotDTO parkingSlot) {
