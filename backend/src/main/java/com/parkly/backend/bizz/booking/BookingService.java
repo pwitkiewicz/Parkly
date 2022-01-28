@@ -1,4 +1,4 @@
-package com.parkly.backend.bizz;
+package com.parkly.backend.bizz.booking;
 
 import com.parkly.backend.rest.domain.BookingRest;
 

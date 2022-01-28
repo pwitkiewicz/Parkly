@@ -1,4 +1,4 @@
-package com.parkly.backend.bizz;
+package com.parkly.backend.bizz.parking_slot;
 
 import com.parkly.backend.mapper.LocationMapper;
 import com.parkly.backend.mapper.ParkingSlotMapper;

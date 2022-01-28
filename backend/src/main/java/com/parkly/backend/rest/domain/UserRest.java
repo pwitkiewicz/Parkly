@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -12,9 +13,10 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserRest {
 
-    @EqualsAndHashCode.Include
+    @NonNull
     @JsonProperty("id")
-    private long userId;
+    @EqualsAndHashCode.Include
+    private Long userId;
 
     @JsonProperty("firstName")
     private String firstName;
@@ -22,12 +24,15 @@ public class UserRest {
     @JsonProperty("lastName")
     private String lastName;
 
+    @NonNull
     @JsonProperty("login")
     private String login;
 
+    @NonNull
     @JsonProperty("password")
     private String password;
 
+    @NonNull
     @JsonProperty("securityToken")
     private String securityToken;
 }
