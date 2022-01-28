@@ -7,14 +7,13 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.parkly.backend.mapper.LocationMapper.mapToLocationDTO;
 import static com.parkly.backend.mapper.ParkingSlotMapper.mapToParkingSlotDTO;
 import static com.parkly.backend.mapper.ParkingSlotMapper.mapToParkingSlotRest;
+import static com.parkly.backend.utils.TimeUtils.timestampsToDuration;
 
 
 @Slf4j
@@ -25,9 +24,7 @@ public class BookingMapper {
         var parkingSlotDTO = mapToParkingSlotRest(bookingHistoryDTO.getParkingSlot());
 
         if(parkingSlotDTO.isPresent()) {
-            var startInstant = Instant.ofEpochMilli(bookingHistoryDTO.getStartDate());
-            var endInstant = Instant.ofEpochMilli(bookingHistoryDTO.getEndDate());
-            var duration = Duration.between(startInstant, endInstant);
+            var duration = timestampsToDuration(bookingHistoryDTO.getStartDate(), bookingHistoryDTO.getEndDate());
 
             var totalCost = duration.toHours() * parkingSlotDTO.get().getCost();
 

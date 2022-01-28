@@ -1,6 +1,10 @@
 package com.parkly.backend.bizz.owner;
 
+import com.parkly.backend.mapper.BookingMapper;
+import com.parkly.backend.repo.BookingHistoryRepository;
 import com.parkly.backend.repo.OwnerRepository;
+import com.parkly.backend.repo.domain.OwnerDTO;
+import com.parkly.backend.rest.domain.BookingRest;
 import com.parkly.backend.rest.domain.OwnerRest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.parkly.backend.mapper.OwnerMapper.mapToOwnerDTO;
 import static com.parkly.backend.mapper.OwnerMapper.mapToOwnerRest;
@@ -19,10 +25,12 @@ import static com.parkly.backend.mapper.OwnerMapper.mapToOwnerRest;
 public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerRepository ownerRepository;
+    private final BookingHistoryRepository bookingHistoryRepository;
 
     @Autowired
-    public OwnerServiceImpl(final OwnerRepository ownerRepository) {
+    public OwnerServiceImpl(final OwnerRepository ownerRepository, final BookingHistoryRepository bookingHistoryRepository) {
         this.ownerRepository = ownerRepository;
+        this.bookingHistoryRepository = bookingHistoryRepository;
     }
 
     @Override
@@ -30,7 +38,12 @@ public class OwnerServiceImpl implements OwnerService {
         var owner = ownerRepository.findById(ownerId);
 
         if(owner.isPresent()) {
-            return mapToOwnerRest(owner.get());
+            var ownerRest = mapToOwnerRest(owner.get());
+
+            if(ownerRest.isPresent()) {
+                ownerRest.get().setBookings(getBookingsForOwner(owner.get()));
+                return ownerRest;
+            }
         }
 
         return Optional.empty();
@@ -62,8 +75,12 @@ public class OwnerServiceImpl implements OwnerService {
 
                 if(mappedOwner.isPresent()) {
                     var savedOwner = ownerRepository.save(mappedOwner.get());
+                    var ownerRest = mapToOwnerRest(savedOwner);
 
-                    return mapToOwnerRest(savedOwner);
+                    if(ownerRest.isPresent()) {
+                        ownerRest.get().setBookings(getBookingsForOwner(savedOwner));
+                        return ownerRest;
+                    }
                 }
             } else {
                 log.warn("Invalid owner id ({}) provided", ownerId);
@@ -84,5 +101,15 @@ public class OwnerServiceImpl implements OwnerService {
             log.warn("Owner id {} deletion failed!", ownerId, e);
             return false;
         }
+    }
+
+    private Set<BookingRest> getBookingsForOwner(final OwnerDTO ownerDTO) {
+        var bookings = bookingHistoryRepository.findBookingHistoryDTOSByOwner(ownerDTO);
+
+        return bookings.stream()
+                .map(BookingMapper::mapToBookingRest)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
     }
 }

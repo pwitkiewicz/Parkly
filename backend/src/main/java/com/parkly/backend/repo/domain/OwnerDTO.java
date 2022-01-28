@@ -1,19 +1,13 @@
 package com.parkly.backend.repo.domain;
 
-import java.util.Objects;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
@@ -25,28 +19,28 @@ public class OwnerDTO {
 
     public OwnerDTO(@NotNull final String firstName,
                      @NotNull final String lastName,
-                     @NotNull final Long phoneNumber) {
+                     @NotNull final Long telephoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+        this.telephoneNumber = telephoneNumber;
     }
 
     @Id
-    @Column(name = "ownerid")
+    @Column(name = "owner_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ownerId;
 
-    @Column(name = "firstname", updatable = false)
+    @Column(name = "first_name", updatable = false)
     private String firstName;
 
-    @Column(name = "lastname", updatable = false)
+    @Column(name = "last_name", updatable = false)
     private String lastName;
 
-    @Column(name = "number")
-    private Long phoneNumber;
+    @Column(name = "tel_number")
+    private Long telephoneNumber;
 
     @OneToMany
-    @JoinColumn(name = "bookingid", nullable = false)
+    @JoinColumn(name = "booking_id", nullable = false)
     private Set<BookingHistoryDTO> bookings;
 
     @Override

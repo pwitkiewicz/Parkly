@@ -58,11 +58,23 @@ CREATE TABLE IF NOT EXISTS photo (
 CREATE TABLE IF NOT EXISTS bookinghistory (
 	booking_id      INT(20) NOT NULL AUTO_INCREMENT,
     start_date      INTEGER(20) NOT NULL,
+    end_date        INTEGER(20) NOT NULL,
     is_active       BINARY(1) NOT NULL DEFAULT 1,
     owner_id        INT(20) NOT NULL,
     parking_slot_id INT(20) NOT NULL,
 
-    PRIMARY KEY ph_bookinghistory (booking_id),
-    FOREIGN KEY pk_bookinghistory_parkingslot (parking_slot_id) REFERENCES parking_slot(parking_slot_id)
-		ON UPDATE CASCADE ON DELETE RESTRICT
+    PRIMARY KEY pk_bookinghistory (booking_id),
+    FOREIGN KEY fk_bookinghistory_parkingslot (parking_slot_id) REFERENCES parkingslot(parking_slot_id)
+		ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY fk_bookinghistory_ownerid (owner_id) REFERENCES owner(owner_id)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS owner (
+    owner_id       INT(20) NOT NULL AUTO_INCREMENT,
+    first_name 	   VARCHAR(20) NOT NULL,
+    last_name 	   VARCHAR(30) NOT NULL,
+    tel_number     VARCHAR(30) NOT NULL,
+
+    PRIMARY KEY pk_owner (booking_id)
 ) ENGINE = INNODB;
