@@ -9,10 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "bookinghistory")
 public class BookingHistoryDTO {
 
@@ -24,11 +28,11 @@ public class BookingHistoryDTO {
     @Column(name = "startdate")
     private long startDate;
 
+    @Column(name = "endDate")
+    private long endDate;
+
     @Column(name = "isactive")
     private int isActive;
-
-    @Column(name = "ownerid")
-    private long ownerId;
 
     @ManyToOne
     @JoinColumn(name = "parkingslotid", nullable = false)

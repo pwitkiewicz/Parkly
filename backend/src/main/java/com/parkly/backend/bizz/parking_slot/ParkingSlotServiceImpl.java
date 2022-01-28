@@ -4,6 +4,8 @@ import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.utils.Filter;
 import com.parkly.backend.utils.Sort;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,22 +22,22 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     @Override
     public Set<ParkingSlotRest> getAllParkingSlots(Filter filter, Integer page, Sort sort) {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Optional<ParkingSlotRest> addParkingSlot(final ParkingSlotRest parkingSlotRest) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ParkingSlotRest> getParkingSlotById(final Long parkingSlotId) {
         return null;
     }
 
     @Override
-    public ParkingSlotRest addParkingSlot(final ParkingSlotRest parkingSlotRest) {
-        return null;
-    }
-
-    @Override
-    public ParkingSlotRest getParkingSlotById(final Long parkingSlotId) {
-        return null;
-    }
-
-    @Override
-    public ParkingSlotRest updateParkingSlot(final Long parkingSlotId, final ParkingSlotRest parkingSlotRest) {
-        return null;
+    public Optional<ParkingSlotRest> updateParkingSlot(final Long parkingSlotId, final ParkingSlotRest parkingSlotRest) {
+        return Optional.empty();
     }
 
     @Override
