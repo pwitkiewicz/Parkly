@@ -81,20 +81,20 @@ public class ParkingSlotsController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ParkingSlotRest> saveParkingSlot(@RequestHeader HttpHeaders headers,
+    public ResponseEntity<ParkingSlotRest> addParkingSlot(@RequestHeader HttpHeaders headers,
                                                            @RequestBody ParkingSlotRest newParkingSlot) {
         logHeaders(headers);
 
         if(securityService.isAuthenticated(headers)) {
-            var savedParkingSlot = parkingSlotService.addParkingSlot(newParkingSlot);
+            var addedParkingSlot = parkingSlotService.addParkingSlot(newParkingSlot);
 
-            if(!savedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
+            if(!addedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
                 URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/items/{parkingSlotId}")
-                    .buildAndExpand(savedParkingSlot.getParkingSlotId())
+                    .buildAndExpand(addedParkingSlot.getParkingSlotId())
                     .toUri();
 
-                return ResponseEntity.status(HttpStatus.OK).location(uri).body(savedParkingSlot);
+                return ResponseEntity.status(HttpStatus.OK).location(uri).body(addedParkingSlot);
             }
         }
 

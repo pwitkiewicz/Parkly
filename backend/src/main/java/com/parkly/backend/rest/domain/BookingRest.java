@@ -16,20 +16,20 @@ public class BookingRest implements Serializable {
 
     @EqualsAndHashCode.Include
     @JsonProperty("id")
-    private long bookingid;
+    private Long bookingid;
 
     @JsonProperty("startDateTime")
-    private long startDate;
+    private Long startDate;
 
     @JsonProperty("isactive")
-    private int isActive;
+    private Boolean isActive;
 
     @JsonProperty("totalCost")
-    private long totalCost;
+    private Long totalCost;
 
     @JsonProperty("parkingSlot")
     private ParkingSlotRest parkingSlotRest;
 
     @JsonProperty("customerid")
-    private long customerId;
+    private Long customerId;
 }
