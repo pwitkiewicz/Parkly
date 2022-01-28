@@ -78,11 +78,11 @@ public class ParkingSlotMapperTest
     {
         mockParkingSlotRest = new ParkingSlotRest();
         mockParkingSlotRest.setCost(10D);
-        mockParkingSlotRest.setEndDate(1609455600);
-        mockParkingSlotRest.setStartDate(1577833200);
+        mockParkingSlotRest.setEndDate(1609455600L);
+        mockParkingSlotRest.setStartDate(1577833200L);
         mockParkingSlotRest.setName("Test Parking Slot");
-        mockParkingSlotRest.setDisabledFriendly(true);
-        mockParkingSlotRest.setActive(false);
+        mockParkingSlotRest.setIsDisabledFriendly(true);
+        mockParkingSlotRest.setIsActive(false);
     }
 
 }

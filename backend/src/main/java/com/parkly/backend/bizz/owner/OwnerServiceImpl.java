@@ -1,17 +1,17 @@
 package com.parkly.backend.bizz.owner;
 
-import static com.parkly.backend.mapper.OwnerMapper.mapEntityToRest;
-import static com.parkly.backend.mapper.OwnerMapper.mapRestToEntity;
-
-import com.parkly.backend.mapper.OwnerMapper;
 import com.parkly.backend.repo.OwnerRepository;
 import com.parkly.backend.rest.domain.OwnerRest;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+import static com.parkly.backend.mapper.OwnerMapper.mapToOwnerDTO;
+import static com.parkly.backend.mapper.OwnerMapper.mapToOwnerRest;
 
 
 @Slf4j
@@ -29,14 +29,21 @@ public class OwnerServiceImpl implements OwnerService {
     public Optional<OwnerRest> getOwner(final Long ownerId) {
         var owner = ownerRepository.findById(ownerId);
 
-        return owner.map(OwnerMapper::mapEntityToRest);
+        if(owner.isPresent()) {
+            return mapToOwnerRest(owner.get());
+        }
+
+        return Optional.empty();
     }
 
     @Override
     public Optional<OwnerRest> addOwner(final OwnerRest owner) {
         try {
-            var savedOwner = ownerRepository.save(mapRestToEntity(owner));
-            return Optional.of(mapEntityToRest(savedOwner));
+            var ownerDtoOptional = mapToOwnerDTO(owner);
+            if(ownerDtoOptional.isPresent()) {
+                var savedOwner = ownerRepository.save(ownerDtoOptional.get());
+                return mapToOwnerRest(savedOwner);
+            }
         } catch (DataAccessException e) {
             log.warn("Error occured while saving owner {} to database", owner, e);
         }
@@ -51,9 +58,13 @@ public class OwnerServiceImpl implements OwnerService {
 
             if (ownerOptional.isPresent()) {
                 updatedOwner.setOwnerId(ownerOptional.get().getOwnerId());
-                var savedOwner = ownerRepository.save(mapRestToEntity(updatedOwner));
+                var mappedOwner = mapToOwnerDTO(updatedOwner);
 
-                return Optional.of(mapEntityToRest(savedOwner));
+                if(mappedOwner.isPresent()) {
+                    var savedOwner = ownerRepository.save(mappedOwner.get());
+
+                    return mapToOwnerRest(savedOwner);
+                }
             } else {
                 log.warn("Invalid owner id ({}) provided", ownerId);
             }

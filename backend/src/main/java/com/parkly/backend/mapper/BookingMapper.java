@@ -1,59 +1,72 @@
 package com.parkly.backend.mapper;
 
-import com.parkly.backend.repo.OwnerRepository;
 import com.parkly.backend.repo.domain.BookingHistoryDTO;
+import com.parkly.backend.repo.domain.OwnerDTO;
 import com.parkly.backend.rest.domain.BookingRest;
-import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.parkly.backend.mapper.LocationMapper.mapToLocationDTO;
+import static com.parkly.backend.mapper.ParkingSlotMapper.mapToParkingSlotDTO;
+import static com.parkly.backend.mapper.ParkingSlotMapper.mapToParkingSlotRest;
 
 
 @Slf4j
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
 
-    private final ParkingSlotMapper parkingSlotMapper;
-    private final OwnerRepository ownerRepository;
+    public static Optional<BookingRest> mapToBookingRest(final BookingHistoryDTO bookingHistoryDTO) {
+        var parkingSlotDTO = mapToParkingSlotRest(bookingHistoryDTO.getParkingSlot());
 
-    @Autowired
-    public BookingMapper(final ParkingSlotMapper parkingSlotMapper, final OwnerRepository ownerRepository) {
-        this.parkingSlotMapper = parkingSlotMapper;
-        this.ownerRepository = ownerRepository;
-    }
+        if(parkingSlotDTO.isPresent()) {
+            var startInstant = Instant.ofEpochMilli(bookingHistoryDTO.getStartDate());
+            var endInstant = Instant.ofEpochMilli(bookingHistoryDTO.getEndDate());
+            var duration = Duration.between(startInstant, endInstant);
 
-    public Optional<BookingRest> mapEntityToRest(final BookingHistoryDTO bookingHistoryDTO) {
-        var parkingSlot = bookingHistoryDTO.getParkingSlot();
-        // TODO update totalCost logic when it is established to what time period parkingSlot cost refers to
-        var totalCost = (bookingHistoryDTO.getEndDate() - bookingHistoryDTO.getStartDate()) * parkingSlot.getCost();
+            var totalCost = duration.toHours() * parkingSlotDTO.get().getCost();
 
-        return Optional.of(new BookingRest(
-            bookingHistoryDTO.getBookingId(),
-            bookingHistoryDTO.getStartDate(),
-            bookingHistoryDTO.getEndDate(),
-            bookingHistoryDTO.getIsActive() == 1,
-            totalCost,
-            parkingSlotMapper.mapEntityToRest(parkingSlot),
-            bookingHistoryDTO.getOwner().getOwnerId()
-        ));
-    }
-
-    public Optional<BookingHistoryDTO> mapRestToEntity(final BookingRest bookingRest) {
-        var owner = ownerRepository.findById(bookingRest.getOwnerId());
-        var isActive = bookingRest.getIsActive() ? 1 : 0;
-
-        if(owner.isEmpty()) {
-            log.error("Booking rest object has invalid owner id!");
-            return Optional.empty();
+            return Optional.of(new BookingRest(
+                    bookingHistoryDTO.getBookingId(),
+                    bookingHistoryDTO.getStartDate(),
+                    bookingHistoryDTO.getEndDate(),
+                    bookingHistoryDTO.getIsActive() == 1,
+                    totalCost,
+                    parkingSlotDTO.get(),
+                    bookingHistoryDTO.getOwner().getOwnerId()
+            ));
         }
 
-        return Optional.of(new BookingHistoryDTO(
-            bookingRest.getBookingId(),
-            bookingRest.getStartDate(),
-            bookingRest.getEndDate(),
-            isActive,
-            parkingSlotMapper.mapRestToEntity(bookingRest.getParkingSlotRest()),
-            owner.get()
-        ));
+        return Optional.empty();
+    }
+
+    public static Optional<BookingHistoryDTO> mapToBookingHistoryDTO(final BookingRest bookingRest, final OwnerDTO ownerDTO) {
+        if (Objects.nonNull(bookingRest)) {
+            var isActive = bookingRest.getIsActive() ? 1 : 0;
+            var location = bookingRest.getParkingSlotRest().getLocationRest();
+            var locationDTO = mapToLocationDTO(location);
+
+            if (locationDTO.isPresent()) {
+                var parkingSlotDTO = mapToParkingSlotDTO(bookingRest.getParkingSlotRest(), locationDTO.get());
+
+                if (parkingSlotDTO.isPresent()) {
+                    return Optional.of(new BookingHistoryDTO(
+                            bookingRest.getBookingId(),
+                            bookingRest.getStartDate(),
+                            bookingRest.getEndDate(),
+                            isActive,
+                            parkingSlotDTO.get(),
+                            ownerDTO
+                    ));
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 }
