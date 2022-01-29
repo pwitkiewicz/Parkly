@@ -39,8 +39,7 @@ public class OwnerDTO {
     @Column(name = "tel_number")
     private Long telephoneNumber;
 
-    @OneToMany
-    @JoinColumn(name = "booking_id", nullable = false)
+    @OneToMany(mappedBy = "owner")
     private Set<BookingHistoryDTO> bookings;
 
     @Override
