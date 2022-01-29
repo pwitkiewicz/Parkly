@@ -29,6 +29,7 @@ export interface Location {
     street: string;
     number: number;
     zipcode: string;
+    country: string;
     latitude: number;
     longitude: number;
 }

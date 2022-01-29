@@ -77,6 +77,7 @@ const ParkingSpotsPage = () => {
                         street: '',
                         number: 0,
                         zipcode: '',
+                        country: '',
                         latitude: 0,
                         longitude: 0
                     },

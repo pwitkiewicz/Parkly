@@ -22,10 +22,10 @@ const ParkingSpotItem: FC<ParkingSpot & GetParkingSpotsFunction> = (parkingPlace
     });
     return (
         <>
-        <ParkingSpotModal visible={editParkingSpotState.isVisible} onCancel={() =>
-            setParkingSpotState({
-                isVisible: false,
-            })} parkingPlace={parkingPlace} editing={true}/>
+            <ParkingSpotModal visible={editParkingSpotState.isVisible} onCancel={() =>
+                setParkingSpotState({
+                    isVisible: false,
+                })} parkingPlace={parkingPlace} editing={true} getParkingSpots={parkingPlace.getParkingSpots}/>
             <StyledCard>
                 <CardMedia component="img" image={parkingPlace.photos[0]?.path} alt="Parking spot image"/>
                 <CardContent>

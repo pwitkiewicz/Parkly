@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import NotFoundPage from "./pages/notFoundPage/NotFoundPage";
 import RequireAuth from "./auth/RequireAuth";
 import NotAuthorizedPage from "./pages/notAuthorizedPage/NotAuthorizedPage";
+import SettingsPage from "./pages/settingsPage/SettingsPage";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -16,6 +17,11 @@ ReactDOM.render(
                 <Route path="/" element={
                     <RequireAuth>
                         <App/>
+                    </RequireAuth>}
+                />
+                <Route path="/settings" element={
+                    <RequireAuth>
+                        <SettingsPage/>
                     </RequireAuth>}
                 />
                 <Route path="/not-authorized" element={<NotAuthorizedPage/>}/>

@@ -38,3 +38,7 @@ export const deleteParkingSpot = async (id: string) => {
 export const bookParkingSpot = async (id: string) => {
     alert(`Booked parking place with id ${id}`);
 }
+
+export const changePassword = async (password: string) => {
+    alert('Changed password!');
+}
