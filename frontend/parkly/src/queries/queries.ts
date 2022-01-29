@@ -23,7 +23,14 @@ export const getAllBookings = async () => {
     const response = await axios.get(`${server}/bookings`);
     return response.data;
 }
-
+export const getBooking = async(id: Number) =>{
+    const response = await axios.get(`${server}/bookings/${id}`);
+    return response.data;
+}
+export const getParkingSpot = async(id: Number) =>{
+    const response = await axios.get(`${server}/items/${id}`);
+    return response.data;
+}
 
 
 export const addParkingSpot = async (parkingSpot: ParkingSpot) => {

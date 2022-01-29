@@ -24,7 +24,6 @@ const BookingsPage = () => {
         const bookings = await getAllBookings();
         setBookings(bookings);
     }
-
     useEffect(() => {
        getBookings().then(() => {
             setIsFetching(false)

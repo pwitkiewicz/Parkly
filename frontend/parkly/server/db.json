@@ -1,37 +1,37 @@
 {
   "bookings":[
     {
-      "id": "1",
-      "startDateTime": "1234",
+    "id": "1",
+    "startDateTime": "1234",
       "endDateTime": "12345",
       "isActive": true,
-      "ownerId": "1",
+      "ownerId":"1",
       "parkingSlotId": "1"
     },
     {
       "id": "1",
       "startDateTime": "1234",
-      "endDateTime": "12345",
-      "isActive": true,
-      "ownerId": "1",
-      "parkingSlotId": "1"
-    },
-    {
-      "id": "1",
-      "startDateTime": "1234",
-      "endDateTime": "12345",
-      "isActive": true,
-      "ownerId": "1",
-      "parkingSlotId": "1"
-    },
-    {
-      "id": "1",
-      "startDateTime": "1234",
-      "endDateTime": "12345",
-      "isActive": true,
-      "ownerId": "1",
-      "parkingSlotId": "1"
-    }
+        "endDateTime": "12345",
+        "isActive": true,
+        "ownerId":"1",
+        "parkingSlotId": "1"
+      },
+      {
+        "id": "1",
+        "startDateTime": "1234",
+          "endDateTime": "12345",
+          "isActive": true,
+          "ownerId":"1",
+          "parkingSlotId": "1"
+        },
+        {
+          "id": "1",
+          "startDateTime": "1234",
+            "endDateTime": "12345",
+            "isActive": true,
+            "ownerId":"1",
+            "parkingSlotId": "1"
+          }
   ],
   "items": [
     {
