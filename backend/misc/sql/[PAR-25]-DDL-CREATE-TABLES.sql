@@ -76,5 +76,5 @@ CREATE TABLE IF NOT EXISTS owner (
     last_name 	   VARCHAR(30) NOT NULL,
     tel_number     VARCHAR(30) NOT NULL,
 
-    PRIMARY KEY pk_owner (booking_id)
+    PRIMARY KEY pk_owner (owner_id)
 ) ENGINE = INNODB;

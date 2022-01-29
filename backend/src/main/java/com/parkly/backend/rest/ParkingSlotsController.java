@@ -141,7 +141,7 @@ public class ParkingSlotsController {
             if (parkingSlotOptional.isPresent()) {
                 var parkingSlot = parkingSlotOptional.get();
                 bookingRest.setParkingSlotRest(parkingSlot);
-                bookingRest.setIsActive(true);
+                bookingRest.setIsActive(false);
                 parkingSlot.setIsActive(true);
 
                 var addedBooking = bookingService.addBooking(bookingRest);
@@ -170,7 +170,7 @@ public class ParkingSlotsController {
                 var parkingSlot = parkingSlotOptional.get();
                 var booking = bookingOptional.get();
 
-                parkingSlot.setIsActive(false);
+                parkingSlot.setIsActive(true);
                 booking.setIsActive(false);
 
                 var updatedBooking = bookingService.updateBooking(bookingId, booking);
