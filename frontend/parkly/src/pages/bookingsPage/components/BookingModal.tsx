@@ -8,9 +8,9 @@ import {
     Divider
 } from "@mui/material";
 import styled from "@emotion/styled";
+import moment from "moment";
 
 import {Booking, ParkingSpot} from '../../../models/models';
-import moment from "moment";
 
 interface Props {
     visible: boolean;

@@ -1,7 +1,8 @@
-import Header from "../../components/header/Header";
 import React from "react";
 import {Box, Button, TextField, Typography} from "@mui/material";
 import styled from "@emotion/styled";
+
+import Header from "../../components/header/Header";
 import {changePassword} from "../../queries/queries";
 
 const SettingsPage = () => {
