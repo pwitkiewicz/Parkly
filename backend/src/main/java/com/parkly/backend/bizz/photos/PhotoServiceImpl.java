@@ -9,15 +9,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 
-import com.parkly.backend.utils.domain.FilterEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.WritableResource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 @ConfigurationProperties(prefix = "photos")
 public class PhotoServiceImpl implements PhotoService {
 
-    @Value("${photos.path}")
-    private String path;
+    @Value("azure-blob://parklystorage/parkly-photos")
+    private Resource blobFile;
+
     private final PhotoRepository photoRepository;
     private final ParkingSlotRepository parkingSlotRepository;
 
@@ -87,26 +90,20 @@ public class PhotoServiceImpl implements PhotoService {
         }
     }
 
-    private Optional<String> savePhotoToStorage(final Long parkingSlotId, final InputStream fileStream)
-    {
+    private Optional<String> savePhotoToStorage(final Long parkingSlotId, final InputStream fileStream) throws IOException {
         final Optional<BufferedImage> image = readImage(fileStream);
 
         if (image.isPresent())
         {
             log.info("Saving image file for parking slot (id: {})", parkingSlotId);
 
-            final String fileName = parkingSlotId + "_" + UUID.randomUUID() + ".jpg";
-            final File file = new File(path, fileName);
-
-            try
-            {
-                ImageIO.write(image.get(), "jpg", file);
-            }
-            catch (IOException e)
-            {
+            try (OutputStream os = ((WritableResource) this.blobFile).getOutputStream()) {
+                ImageIO.write(image.get(), "jpg", os);
+            } catch (IOException e) {
                 log.error("Error saving image file for parking slot (id: {})", parkingSlotId);
             }
-            return Optional.of(file.getAbsolutePath());
+
+            return Optional.of(blobFile.getURL().toString());
         }
         return Optional.empty();
     }
