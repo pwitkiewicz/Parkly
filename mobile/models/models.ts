@@ -29,15 +29,6 @@ export interface Location {
     street: string;
     number: number;
     zipcode: string;
-    country: string;
     latitude: number;
     longitude: number;
-}
-export interface Booking {
-    id: number,
-    startDateTime: Date,
-    endDateTime: Date,
-    isActive: boolean,
-    ownerId: number,
-    parkingSlotId: number 
 }

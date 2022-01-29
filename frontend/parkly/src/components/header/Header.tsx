@@ -18,7 +18,7 @@ const Header = () => {
                         Parking Spot System
                     </Logo>
                 </StyledLink>
-                <StyledLink to="/">
+                <StyledLink to="/bookings">
                     <StyledButton>
                         <Icon>
                             <ShoppingCartIcon/>
