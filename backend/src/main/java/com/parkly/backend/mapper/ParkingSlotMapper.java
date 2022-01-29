@@ -4,10 +4,13 @@ import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParkingSlotMapper {
 
     public static Optional<ParkingSlotDTO> mapToParkingSlotDTO(final ParkingSlotRest parkingSlotRest,
@@ -15,8 +18,8 @@ public class ParkingSlotMapper {
     {
         if(Objects.nonNull(parkingSlotRest) && Objects.nonNull(locationDTO))
         {
-            final Optional<Double> widthOpt = Optional.of(parkingSlotRest.getWidth());
-            final Optional<Double> heightOpt = Optional.of(parkingSlotRest.getHeight());
+            final Optional<Double> widthOpt = Optional.ofNullable(parkingSlotRest.getWidth());
+            final Optional<Double> heightOpt = Optional.ofNullable(parkingSlotRest.getHeight());
             final Optional<String> descOpt = Optional.ofNullable(parkingSlotRest.getDescription());
 
             final ParkingSlotDTO parkingSlotDTO = new ParkingSlotDTO();
@@ -24,8 +27,8 @@ public class ParkingSlotMapper {
             parkingSlotDTO.setCost(parkingSlotRest.getCost());
             parkingSlotDTO.setEndDate(parkingSlotRest.getEndDate());
             parkingSlotDTO.setStartDate(parkingSlotRest.getStartDate());
-            parkingSlotDTO.setIsActive(parkingSlotRest.getIsActive()? 1 : 0);
-            parkingSlotDTO.setIsDisabled(parkingSlotRest.getIsDisabledFriendly()? 1 : 0);
+            parkingSlotDTO.setIsActive(Boolean.TRUE.equals(parkingSlotRest.getIsActive())? 1 : 0);
+            parkingSlotDTO.setIsDisabled(Boolean.TRUE.equals(parkingSlotRest.getIsDisabledFriendly())? 1 : 0);
             widthOpt.ifPresent(parkingSlotDTO::setWidth);
             heightOpt.ifPresent(parkingSlotDTO::setHeight);
             descOpt.ifPresent(parkingSlotDTO::setDescription);

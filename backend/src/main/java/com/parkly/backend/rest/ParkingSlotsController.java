@@ -87,10 +87,10 @@ public class ParkingSlotsController {
 
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/items/{parkingSlotId}")
-                    .buildAndExpand(addedParkingSlot.getParkingSlotId())
+                    .buildAndExpand(addedParkingSlot.get().getParkingSlotId())
                     .toUri();
 
-            return ResponseEntity.status(HttpStatus.OK).location(uri).body(addedParkingSlot);
+            return ResponseEntity.status(HttpStatus.OK).location(uri).body(addedParkingSlot.get());
 
         }
 
