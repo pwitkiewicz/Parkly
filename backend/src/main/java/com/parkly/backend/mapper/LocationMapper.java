@@ -2,10 +2,13 @@ package com.parkly.backend.mapper;
 
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.rest.domain.LocationRest;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LocationMapper
 {
     public static Optional<LocationDTO> mapToLocationDTO(final LocationRest locationRest)

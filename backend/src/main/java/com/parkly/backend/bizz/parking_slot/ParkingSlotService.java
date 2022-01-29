@@ -11,7 +11,7 @@ public interface ParkingSlotService {
 
     Set<ParkingSlotRest> getAllParkingSlots(FilterEnum filter, Integer page, SortEnum sort);
 
-    ParkingSlotRest addParkingSlot(ParkingSlotRest parkingSlotRest);
+    Optional<ParkingSlotRest> addParkingSlot(ParkingSlotRest parkingSlotRest);
 
     Optional<ParkingSlotRest> getParkingSlotById(Long parkingSlotId);
 
