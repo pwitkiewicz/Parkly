@@ -12,8 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
 @Table(name = "bookinghistory")
 public class BookingHistoryDTO {
 
@@ -36,11 +35,15 @@ public class BookingHistoryDTO {
 
     @NotNull
     @Column(name = "owner_id")
-    private long owner;
+    private long ownerId;
 
     @NotNull
-    @Column(name = "owner_data")
-    private String ownerData;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @NotNull
+    @Column(name = "last_name")
+    private String lastName;
 
     @ManyToOne
     @JoinColumn(name = "parking_slot_id", nullable = false)

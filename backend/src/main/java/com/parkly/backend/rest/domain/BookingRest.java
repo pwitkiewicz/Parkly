@@ -30,18 +30,21 @@ public class BookingRest implements Serializable {
     @JsonProperty("endDateTime")
     private Long endDate;
 
-    @JsonProperty("isactive")
+    @JsonProperty("active")
     private Boolean isActive;
 
     @JsonProperty("totalCost")
     private Double totalCost;
 
     @JsonProperty("parkingSlot")
-    private ParkingSlotRest parkingSlotRest;
+    private Long parkingSlotId;
 
     @JsonProperty("ownerId")
-    private Long ownerId;
+    private long ownerId;
     
-    @JsonProperty("ownerData")
-    private String ownerData;
+    @JsonProperty("firstName")
+    private String firstName;
+
+    @JsonProperty("lastName")
+    private String lastName;
 }

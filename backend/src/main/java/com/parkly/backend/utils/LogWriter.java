@@ -11,27 +11,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @Slf4j
 @UtilityClass
 public class LogWriter {
-
-    public static void logMessage(final String message, final LogTypeEnum logTypeEnum)
-    {
-        switch (logTypeEnum)
-        {
-            case INFO:
-                log.info(message);
-                break;
-            case ERROR:
-                log.error(message);
-                break;
-            case WARNING:
-                log.warn(message);
-                break;
-            default: break;
-        }
-    }
-
     public static void logException(Exception e)
     {
-
         log.warn("Exception thrown: ", e);
     }
 
