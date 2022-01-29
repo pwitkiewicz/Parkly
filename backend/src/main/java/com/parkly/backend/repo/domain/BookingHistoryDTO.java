@@ -34,13 +34,17 @@ public class BookingHistoryDTO {
     @Column(name = "is_active")
     private int isActive;
 
+    @NotNull
+    @Column(name = "owner_id")
+    private long owner;
+
+    @NotNull
+    @Column(name = "owner_data")
+    private String ownerData;
+
     @ManyToOne
     @JoinColumn(name = "parking_slot_id", nullable = false)
     private ParkingSlotDTO parkingSlot;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private OwnerDTO owner;
 
     @Override
     public boolean equals(Object o) {

@@ -41,4 +41,7 @@ public class BookingRest implements Serializable {
 
     @JsonProperty("ownerId")
     private Long ownerId;
+    
+    @JsonProperty("ownerData")
+    private String ownerData;
 }

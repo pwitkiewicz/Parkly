@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(name = "/login")
+@RequestMapping(path = "/login")
 public class LoginController {
 
     private final LoginService loginService;
@@ -26,7 +26,7 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<String> login(@RequestHeader HttpHeaders headers,
                                         @RequestBody LoginFormRest loginForm) {
         logHeaders(headers);
