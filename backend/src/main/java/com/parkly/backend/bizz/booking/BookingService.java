@@ -11,7 +11,5 @@ public interface BookingService {
 
     Optional<BookingRest> addBooking(BookingRest bookingRest);
 
-    Optional<BookingRest> updateBooking(Long bookingId, BookingRest bookingRest);
-
     boolean deleteBooking(Long bookingId);
 }

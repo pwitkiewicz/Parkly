@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS parkingslot (
 
 CREATE TABLE IF NOT EXISTS photo (
 	photo_id 	    INT(20) NOT NULL AUTO_INCREMENT,
-    path 		    VARCHAR(1024) NOT NULL,
+    path 		    VARCHAR(512) NOT NULL,
     parking_slot_id INT(20) NOT NULL,
 
     PRIMARY KEY pk_photo (photo_id),
@@ -61,7 +61,8 @@ CREATE TABLE IF NOT EXISTS bookinghistory (
     end_date        INTEGER(20) NOT NULL,
     is_active       BINARY(1) NOT NULL DEFAULT 1,
     owner_id        INT(20) NOT NULL,
-    owner_data      VARCHAR(128) NOT NULL,
+    first_name      VARCHAR(20) NOT NULL,
+    last_name       VARCHAR(30) NOT NULL,
     parking_slot_id INT(20) NOT NULL,
 
     PRIMARY KEY pk_bookinghistory (booking_id),

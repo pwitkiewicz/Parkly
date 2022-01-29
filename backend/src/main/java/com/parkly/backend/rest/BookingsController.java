@@ -8,6 +8,7 @@ import com.parkly.backend.rest.domain.BookingRest;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,16 +32,19 @@ public class BookingsController {
     private final SecurityService securityService;
 
     @Autowired
-    public BookingsController(final BookingService bookingService, final SecurityService securityService) {
+    public BookingsController(final BookingService bookingService, final SecurityService securityService)
+    {
         this.bookingService = bookingService;
         this.securityService = securityService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<Collection<BookingRest>> getAllBookings(@RequestHeader HttpHeaders headers) {
+    @GetMapping
+    public ResponseEntity<Collection<BookingRest>> getAllBookings(@RequestHeader HttpHeaders headers)
+    {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
+        if(securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.ok(bookingService.getAllBookings());
         }
 
@@ -50,13 +53,16 @@ public class BookingsController {
 
     @GetMapping("{bookingId}")
     public ResponseEntity<BookingRest> getBooking(@RequestHeader HttpHeaders headers,
-                                                  @PathVariable Long bookingId) {
+                                                  @PathVariable Long bookingId)
+    {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
-            var bookingOptional = bookingService.getBookingByBookingId(bookingId);
+        if(securityService.isAuthenticated(headers))
+        {
+            final Optional<BookingRest> bookingOptional = bookingService.getBookingByBookingId(bookingId);
 
-            if(bookingOptional.isPresent()) {
+            if(bookingOptional.isPresent())
+            {
                 return ResponseEntity.ok(bookingOptional.get());
             }
         }
@@ -64,16 +70,19 @@ public class BookingsController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BookingRest.EMPTY_BOOKING);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<BookingRest> addBooking(@RequestHeader HttpHeaders headers,
-                                                  @RequestBody BookingRest newBooking) {
+                                                  @RequestBody BookingRest newBooking)
+    {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
+        if(securityService.isAuthenticated(headers))
+        {
             var addedBooking = bookingService.addBooking(newBooking);
 
-            if(addedBooking.isPresent()) {
-                var booking = addedBooking.get();
+            if(addedBooking.isPresent())
+            {
+                final BookingRest booking = addedBooking.get();
 
                 URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/bookings/{bookingId}")
@@ -87,35 +96,20 @@ public class BookingsController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BookingRest.EMPTY_BOOKING);
     }
 
-    @PutMapping("{bookingId}")
-    public ResponseEntity<BookingRest> updateBooking(@RequestHeader HttpHeaders headers,
-                                                     @PathVariable Long bookingId,
-                                                     @RequestBody BookingRest bookingRest) {
-        logHeaders(headers);
-
-        if(securityService.isAuthenticated(headers)) {
-            var updatedBooking = bookingService.updateBooking(bookingId, bookingRest);
-
-            if(updatedBooking.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(updatedBooking.get());
-            }
-        }
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BookingRest.EMPTY_BOOKING);
-    }
-
     @DeleteMapping("{bookingId}")
     public ResponseEntity<String> deleteBooking(@RequestHeader HttpHeaders headers,
-        @PathVariable Long bookingId) {
+                                                @PathVariable Long bookingId)
+    {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
-            if(bookingService.deleteBooking(bookingId)) {
+        if(securityService.isAuthenticated(headers))
+        {
+            if(bookingService.deleteBooking(bookingId))
+            {
                 return ResponseEntity.ok().body(JSONObject.quote("Item deleted"));
             }
             return ResponseEntity.ok().body(JSONObject.quote("Invalid request"));
         }
-
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(JSONObject.quote("Unauthorized access"));
     }
 }

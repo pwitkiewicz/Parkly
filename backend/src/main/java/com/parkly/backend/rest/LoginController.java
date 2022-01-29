@@ -22,7 +22,8 @@ public class LoginController {
     private final LoginService loginService;
 
     @Autowired
-    public LoginController(final LoginService loginService) {
+    public LoginController(final LoginService loginService)
+    {
         this.loginService = loginService;
     }
 
