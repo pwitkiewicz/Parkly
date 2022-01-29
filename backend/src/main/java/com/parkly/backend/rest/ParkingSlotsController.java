@@ -1,46 +1,43 @@
 package com.parkly.backend.rest;
 
-import static com.parkly.backend.utils.LogWriter.logException;
-import static com.parkly.backend.utils.LogWriter.logHeaders;
-
-import com.parkly.backend.bizz.ParkingSlotService;
-import com.parkly.backend.bizz.SecurityService;
+import com.parkly.backend.bizz.booking.BookingService;
+import com.parkly.backend.bizz.parking_slot.ParkingSlotService;
+import com.parkly.backend.bizz.security.SecurityService;
+import com.parkly.backend.rest.domain.BookingRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
-import com.parkly.backend.utils.Filter;
-import com.parkly.backend.utils.Sort;
-import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
-import lombok.extern.slf4j.Slf4j;
+import com.parkly.backend.utils.domain.FilterEnum;
+import com.parkly.backend.utils.domain.SortEnum;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Slf4j
+import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
+
+import static com.parkly.backend.utils.LogWriter.logException;
+import static com.parkly.backend.utils.LogWriter.logHeaders;
+
+
 @RestController
 @RequestMapping(path = "/items")
 public class ParkingSlotsController {
 
     private final ParkingSlotService parkingSlotService;
+    private final BookingService bookingService;
     private final SecurityService securityService;
 
     @Autowired
-    public ParkingSlotsController(final ParkingSlotService parkingSlotService, final SecurityService securityService) {
+    public ParkingSlotsController(final ParkingSlotService parkingSlotService,
+                                  final BookingService bookingService,
+                                  final SecurityService securityService) {
         this.parkingSlotService = parkingSlotService;
+        this.bookingService = bookingService;
         this.securityService = securityService;
     }
 
@@ -53,11 +50,10 @@ public class ParkingSlotsController {
 
         if (securityService.isAuthenticated(headers)) {
             try {
-                var filterType = Filter.valueOf(filter.toUpperCase(Locale.ROOT));
-                var sortType = Sort.valueOf(sort.toUpperCase(Locale.ROOT));
+                var filterType = FilterEnum.valueOf(filter.toUpperCase(Locale.ROOT));
+                var sortType = SortEnum.valueOf(sort.toUpperCase(Locale.ROOT));
                 return ResponseEntity.ok(parkingSlotService.getAllParkingSlots(filterType, page, sortType));
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 logException(e);
             }
         }
@@ -73,8 +69,8 @@ public class ParkingSlotsController {
         if (securityService.isAuthenticated(headers)) {
             var foundParkingSlot = parkingSlotService.getParkingSlotById(parkingSlotId);
 
-            if(!foundParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
-                return ResponseEntity.ok(parkingSlotService.getParkingSlotById(parkingSlotId));
+            if (foundParkingSlot.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(foundParkingSlot.get());
             }
         }
 
@@ -82,21 +78,20 @@ public class ParkingSlotsController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ParkingSlotRest> saveParkingSlot(@RequestHeader HttpHeaders headers,
-                                                           @RequestBody ParkingSlotRest newParkingSlot) {
+    public ResponseEntity<ParkingSlotRest> addParkingSlot(@RequestHeader HttpHeaders headers,
+                                                          @RequestBody ParkingSlotRest newParkingSlot) {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
-            var savedParkingSlot = parkingSlotService.addParkingSlot(newParkingSlot);
+        if (securityService.isAuthenticated(headers)) {
+            var addedParkingSlot = parkingSlotService.addParkingSlot(newParkingSlot);
 
-            if(!savedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
-                URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/items/{parkingSlotId}")
-                    .buildAndExpand(savedParkingSlot.getParkingSlotId())
+                    .buildAndExpand(addedParkingSlot.getParkingSlotId())
                     .toUri();
 
-                return ResponseEntity.status(HttpStatus.OK).location(uri).body(savedParkingSlot);
-            }
+            return ResponseEntity.status(HttpStatus.OK).location(uri).body(addedParkingSlot);
+
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
@@ -108,11 +103,11 @@ public class ParkingSlotsController {
                                                              @RequestBody ParkingSlotRest parkingSlotToUpdate) {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
+        if (securityService.isAuthenticated(headers)) {
             var updatedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlotToUpdate);
 
-            if(!updatedParkingSlot.equals(ParkingSlotRest.EMPTY_SLOT)) {
-                return ResponseEntity.ok(updatedParkingSlot);
+            if (updatedParkingSlot.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(updatedParkingSlot.get());
             }
         }
 
@@ -124,10 +119,69 @@ public class ParkingSlotsController {
                                                     @PathVariable Long parkingSlotId) {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers) && parkingSlotService.deleteParkingSlot(parkingSlotId)) {
-            return ResponseEntity.ok().body(JSONObject.quote("Item deleted"));
+        if (securityService.isAuthenticated(headers)) {
+            if (parkingSlotService.deleteParkingSlot(parkingSlotId)) {
+                return ResponseEntity.ok().body(JSONObject.quote("Item deleted"));
+            }
+            return ResponseEntity.ok().body(JSONObject.quote("Invalid request"));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(JSONObject.quote("Unauthorized access"));
+    }
+
+    @PutMapping("{parkingSlotId}/book")
+    public ResponseEntity<ParkingSlotRest> bookParkingSlot(@RequestHeader HttpHeaders headers,
+                                                           @PathVariable Long parkingSlotId,
+                                                           @RequestBody BookingRest bookingRest) {
+        logHeaders(headers);
+
+        if (securityService.isAuthenticated(headers)) {
+            var parkingSlotOptional = parkingSlotService.getParkingSlotById(parkingSlotId);
+
+            if (parkingSlotOptional.isPresent()) {
+                var parkingSlot = parkingSlotOptional.get();
+                bookingRest.setParkingSlotRest(parkingSlot);
+                bookingRest.setIsActive(false);
+                parkingSlot.setIsActive(true);
+
+                var addedBooking = bookingService.addBooking(bookingRest);
+                var bookedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlot);
+
+                if (addedBooking.isPresent() && bookedParkingSlot.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.OK).body(bookedParkingSlot.get());
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
+    }
+
+    @PutMapping("{parkingSlotId}/release")
+    public ResponseEntity<ParkingSlotRest> releaseParkingSlot(@RequestHeader HttpHeaders headers,
+                                                              @PathVariable Long parkingSlotId,
+                                                              @RequestBody Long bookingId) {
+        logHeaders(headers);
+
+        if (securityService.isAuthenticated(headers)) {
+            var parkingSlotOptional = parkingSlotService.getParkingSlotById(parkingSlotId);
+            var bookingOptional = bookingService.getBookingByBookingId(bookingId);
+
+            if (parkingSlotOptional.isPresent() && bookingOptional.isPresent()) {
+                var parkingSlot = parkingSlotOptional.get();
+                var booking = bookingOptional.get();
+
+                parkingSlot.setIsActive(true);
+                booking.setIsActive(false);
+
+                var updatedBooking = bookingService.updateBooking(bookingId, booking);
+                var updatedParkingSlot = parkingSlotService.updateParkingSlot(parkingSlotId, parkingSlot);
+
+                if (updatedBooking.isPresent() && updatedParkingSlot.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.OK).body(updatedParkingSlot.get());
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ParkingSlotRest.EMPTY_SLOT);
     }
 }

@@ -1,33 +1,44 @@
 package com.parkly.backend.rest.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingRest implements Serializable {
+
+    public static final BookingRest EMPTY_BOOKING = new BookingRest();
 
     @EqualsAndHashCode.Include
     @JsonProperty("id")
-    private long bookingid;
+    private Long bookingId;
 
     @JsonProperty("startDateTime")
-    private long startDate;
+    private Long startDate;
+
+    @JsonProperty("endDateTime")
+    private Long endDate;
 
     @JsonProperty("isactive")
-    private int isActive;
+    private Boolean isActive;
 
     @JsonProperty("totalCost")
-    private long totalCost;
+    private Double totalCost;
 
     @JsonProperty("parkingSlot")
     private ParkingSlotRest parkingSlotRest;
 
-    @JsonProperty("customerid")
-    private long customerId;
+    @JsonProperty("ownerId")
+    private Long ownerId;
 }

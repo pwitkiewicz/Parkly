@@ -33,7 +33,25 @@ export const getParkingSpot = async(id: Number) =>{
 }
 
 
-export const addParkingSpot = async (parkingSpot: ParkingSpot) => {
-    const response = await axios.post(`${server}/items`, parkingSpot);
+export const addParkingSpot = async (parkingSpot: ParkingSpot, id?: string) => {
+    let response;
+    if (id) {
+        response = await axios.put(`${server}/items/${id}`, parkingSpot);
+    } else {
+        response = await axios.post(`${server}/items`, parkingSpot);
+    }
     return response.data;
+}
+
+export const deleteParkingSpot = async (id: string) => {
+    const response = await axios.delete(`${server}/items/${id}`);
+    return response.data;
+}
+
+export const bookParkingSpot = async (id: string) => {
+    alert(`Booked parking place with id ${id}`);
+}
+
+export const changePassword = async (password: string) => {
+    alert('Changed password!');
 }

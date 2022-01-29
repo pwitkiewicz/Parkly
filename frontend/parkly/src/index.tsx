@@ -10,6 +10,7 @@ import RequireAuth from "./auth/RequireAuth";
 import NotAuthorizedPage from "./pages/notAuthorizedPage/NotAuthorizedPage";
 import { getAllBookings } from './queries/queries';
 import BookingsPage from './pages/bookingsPage/bookingsPage';
+import SettingsPage from "./pages/settingsPage/SettingsPage";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -18,6 +19,11 @@ ReactDOM.render(
                 <Route path="/" element={
                     <RequireAuth>
                         <App/>
+                    </RequireAuth>}
+                />
+                <Route path="/settings" element={
+                    <RequireAuth>
+                        <SettingsPage/>
                     </RequireAuth>}
                 />
                 <Route path="/parking-spots" element={

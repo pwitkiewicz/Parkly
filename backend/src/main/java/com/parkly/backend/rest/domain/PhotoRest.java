@@ -1,21 +1,19 @@
 package com.parkly.backend.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+
+@Data(staticConstructor = "of")
 public class PhotoRest implements Serializable {
 
-    @EqualsAndHashCode.Include
+    public static final PhotoRest EMPTY_PHOTO = PhotoRest.of(null, null);
+
     @JsonProperty("id")
-    private long photoId;
+    private final Long photoId;
 
     @JsonProperty("path")
-    private String path;
+    private final String path;
 }

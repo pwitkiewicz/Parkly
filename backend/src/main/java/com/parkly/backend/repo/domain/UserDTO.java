@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,22 +20,27 @@ public class UserDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "userid")
+    @Column(name = "user_id")
     private long userId;
 
-    @Column(name = "firstname")
+    @NotNull
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "lastname")
+    @NotNull
+    @Column(name = "last_name")
     private String lastName;
 
+    @NotNull
     @Column(name = "login", nullable = false)
     private String login;
 
+    @NotNull
     @Column(name = "password")
     private String password;
 
-    @Column(name = "securitytoken", nullable = false)
+    @NotNull
+    @Column(name = "security_token", nullable = false)
     private String securityToken;
 
     @Override
