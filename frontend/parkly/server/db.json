@@ -2,11 +2,11 @@
   "bookings":[
     {
     "id": "1",
-    "startDateTime": "1234",
-      "endDateTime": "12345",
+    "startDateTime": "2021-12-31T11:30:27.376Z",
+      "endDateTime": "2021-12-31T11:30:27.376Z",
       "isActive": true,
       "ownerId":"1",
-      "parkingSlotId": "1"
+      "parkingSlotId": "HRL5EHR"
     },
     {
       "id": "1",
@@ -14,7 +14,7 @@
         "endDateTime": "12345",
         "isActive": true,
         "ownerId":"1",
-        "parkingSlotId": "1"
+        "parkingSlotId": "HRL5EHR"
       },
       {
         "id": "1",
@@ -22,7 +22,7 @@
           "endDateTime": "12345",
           "isActive": true,
           "ownerId":"1",
-          "parkingSlotId": "1"
+          "parkingSlotId": "HRL5EHR"
         },
         {
           "id": "1",
@@ -30,7 +30,7 @@
             "endDateTime": "12345",
             "isActive": true,
             "ownerId":"1",
-            "parkingSlotId": "1"
+            "parkingSlotId": "HRL5EHR"
           }
   ],
   "items": [
