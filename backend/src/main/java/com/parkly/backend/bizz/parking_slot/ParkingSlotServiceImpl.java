@@ -1,5 +1,7 @@
 package com.parkly.backend.bizz.parking_slot;
 
+import com.parkly.backend.bizz.booking.BookingService;
+import com.parkly.backend.mapper.BookingMapper;
 import com.parkly.backend.mapper.LocationMapper;
 import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.mapper.PhotoMapper;
@@ -8,6 +10,7 @@ import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.repo.PhotoRepository;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
+import com.parkly.backend.rest.domain.BookingRest;
 import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.rest.domain.PhotoRest;
@@ -19,11 +22,14 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolationException;
 
+@Slf4j
 @Service
 public class ParkingSlotServiceImpl implements ParkingSlotService {
 
@@ -33,15 +39,18 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     private final ParkingSlotRepository parkingSlotRepository;
     private final LocationRepository locationRepository;
     private final PhotoRepository photoRepository;
+    private final BookingService bookingService;
 
     @Autowired
     public ParkingSlotServiceImpl(final ParkingSlotRepository parkingSlotRepository,
                                   final LocationRepository locationRepository,
-                                  final PhotoRepository photoRepository)
+                                  final PhotoRepository photoRepository,
+                                  final BookingService bookingService)
     {
         this.parkingSlotRepository = parkingSlotRepository;
         this.locationRepository = locationRepository;
         this.photoRepository = photoRepository;
+        this.bookingService = bookingService;
     }
 
 
@@ -83,7 +92,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                         addPhotosToDatabase(parkingSlotRest.getPhotoRestSet(),parkingSlotDTO);
                         return parkingSlotRest;});
         }
-        LogWriter.logMessage(String.format("Parking slot %s is already in the database", parkingSlotRest.getName()),LogTypeEnum.WARNING);
+        log.warn(String.format("Parking slot %s is already in the database", parkingSlotRest.getName()));
         return Optional.empty();
     }
 
@@ -127,7 +136,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
             return ParkingSlotMapper.mapToParkingSlotRest(parkingSlotDTO);
 
         }
-        LogWriter.logMessage(String.format("Parking slot %s is already in the database",parkingSlotRest.getName()),LogTypeEnum.WARNING);
+        log.warn(String.format("Parking slot %s is already in the database",parkingSlotRest.getName()));
         return Optional.empty();
     }
 
@@ -140,11 +149,30 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
             parkingSlotRepository.delete(parkingSlotDTO);
             return true;
         }).orElseGet(() -> {
-            LogWriter.logMessage(
-                    String.format("Couldn't delete parking slot with id %d from database - parking slotnot found", parkingSlotId),
-                    LogTypeEnum.WARNING);
+            log.warn(String.format("Couldn't delete parking slot with id %d from database - parking slot not found", parkingSlotId));
             return false;
         });
+    }
+
+    @Override
+    public Optional<ParkingSlotRest> bookParkingSlot(final Long parkingSlotId, final BookingRest bookingRest)
+    {
+        final Optional<ParkingSlotDTO> parkingSlotOptional = parkingSlotRepository.findById(parkingSlotId);
+
+        if(parkingSlotOptional.isPresent() && parkingSlotOptional.get().getIsActive() == 1)
+        {
+            bookingRest.setIsActive(true);
+
+            if(bookingService.addBooking(bookingRest).isPresent())
+            {
+                return ParkingSlotMapper.mapToParkingSlotRest(parkingSlotOptional.get());
+            }
+
+            log.warn("An error encountered while booking parking slot with id {}",parkingSlotId);
+            return Optional.empty();
+        }
+        log.warn("Parking slot " + ((parkingSlotOptional.isPresent())? "not found" : "not active"));
+        return Optional.empty();
     }
 
     private void addPhotosToDatabase(final Set<PhotoRest> photoRestSet, final ParkingSlotDTO parkingSlotDTO)
@@ -158,7 +186,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                         try {
                             photoRepository.save(photoDTO.get());
                         } catch (final ConstraintViolationException e) {
-                            LogWriter.logMessage("Photo couldn't be added - it already exists in the database", LogTypeEnum.WARNING);
+                            log.warn("Photo couldn't be added - it already exists in the database");
                         }
                     });
         }
@@ -166,18 +194,18 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     private LocationDTO addLocationToDatabase(final LocationRest locationRest)
     {
-        return locationRepository.findByLatitudeAndLongitude(locationRest.getLatitude(),
-                        locationRest.getLongitude())
-                            .orElseGet(() -> {
-                                final LocationDTO locationDTO =
-                                        LocationMapper.mapToLocationDTO(locationRest).orElseGet(() ->{
-                                            LogWriter.logMessage("Program encountered error while retrieving location", LogTypeEnum.ERROR);
-                                            return null;});
-                                if(Objects.nonNull(locationDTO))
-                                {
-                                    locationRepository.save(locationDTO);
-                                }
-                                return locationDTO;
-                            });
+        return locationRepository.findByLatitudeAndLongitude(locationRest.getLatitude(), locationRest.getLongitude())
+                .orElseGet(() ->
+                {
+                    final LocationDTO locationDTO =
+                            LocationMapper.mapToLocationDTO(locationRest).orElseGet(() ->{
+                                log.error("Program encountered error while retrieving location");
+                                return null;});
+                    if(Objects.nonNull(locationDTO))
+                    {
+                        locationRepository.save(locationDTO);
+                    }
+                    return locationDTO;
+                });
     }
 }

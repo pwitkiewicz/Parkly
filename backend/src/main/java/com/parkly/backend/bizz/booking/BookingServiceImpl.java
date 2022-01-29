@@ -74,7 +74,8 @@ public class BookingServiceImpl implements BookingService {
             }
             catch (DataAccessException e)
             {
-                log.warn("Error occured while saving owner {} to database", bookingOptional.get(), e);
+                log.warn("Error occurred while saving booking {} to database", bookingOptional.get(), e);
+                return Optional.empty();
             }
         }
         log.error("Invalid Booking rest object provided");
@@ -94,5 +95,30 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Booking id {} deletion failed!", bookingId, e);
             return false;
         }
+    }
+
+    @Override
+    public boolean releaseBooking(final Long bookingId)
+    {
+        final Optional<BookingHistoryDTO> bookingHistoryOpt =
+                bookingHistoryRepository.findById(bookingId);
+
+        if(bookingHistoryOpt.isPresent())
+        {
+            try
+            {
+                final BookingHistoryDTO bookingHistoryDTO = bookingHistoryOpt.get();
+                bookingHistoryDTO.setIsActive(0);
+                bookingHistoryRepository.save(bookingHistoryDTO);
+                return true;
+            }
+            catch (DataAccessException e)
+            {
+                log.warn("Error occurred while saving booking {} to database", bookingHistoryOpt.get().getBookingId(), e);
+                return false;
+            }
+        }
+        log.warn("Booking {} does not exist in database", bookingId);
+        return false;
     }
 }

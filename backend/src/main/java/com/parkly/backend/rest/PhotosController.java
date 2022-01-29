@@ -38,38 +38,41 @@ public class PhotosController {
     @PostMapping(path = "{parkingSlotId}", consumes = {"multipart/form-data"})
     public ResponseEntity<PhotoRest> savePhoto(@RequestHeader HttpHeaders headers,
                                                @PathVariable Long parkingSlotId,
-                                               @RequestBody MultipartFile file) {
+                                               @RequestBody MultipartFile file)
+    {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
+        if(securityService.isAuthenticated(headers))
+        {
             var savedPhotoRestOptional = photoService.savePhoto(parkingSlotId, file);
 
-            if(savedPhotoRestOptional.isPresent()) {
-                var photoRest = savedPhotoRestOptional.get();
+            if(savedPhotoRestOptional.isPresent())
+            {
+                final PhotoRest photoRest = savedPhotoRestOptional.get();
                 URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path(photoRest.getPath())
                     .build()
                     .toUri();
-
                 return ResponseEntity.status(HttpStatus.OK).location(uri).body(photoRest);
             }
         }
-
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(PhotoRest.EMPTY_PHOTO);
     }
 
     @DeleteMapping("{photoId}")
     public ResponseEntity<String> deletePhoto(@RequestHeader HttpHeaders headers,
-                                              @PathVariable Long photoId) {
+                                              @PathVariable Long photoId)
+    {
         logHeaders(headers);
 
-        if(securityService.isAuthenticated(headers)) {
-            if(photoService.deletePhoto(photoId)) {
+        if(securityService.isAuthenticated(headers))
+        {
+            if(photoService.deletePhoto(photoId))
+            {
                 return ResponseEntity.ok().body(JSONObject.quote("Photo deleted"));
             }
             return ResponseEntity.ok().body(JSONObject.quote("Invalid request"));
         }
-
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(JSONObject.quote("Unauthorized access"));
     }
 }

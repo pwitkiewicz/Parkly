@@ -7,9 +7,10 @@ import java.time.Instant;
 
 @UtilityClass
 public class TimeUtils {
-    public static Duration timestampsToDuration(Long startTime, Long endTime) {
-        var startInstant = Instant.ofEpochMilli(startTime);
-        var endInstant = Instant.ofEpochMilli(endTime);
+    public static Duration timestampsToDuration(Long startTime, Long endTime)
+    {
+        final Instant startInstant = Instant.ofEpochMilli(startTime);
+        final Instant endInstant = Instant.ofEpochMilli(endTime);
         return Duration.between(startInstant, endInstant);
     }
 }

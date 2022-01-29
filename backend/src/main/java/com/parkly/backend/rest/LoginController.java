@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping(path = "/login")
 public class LoginController {
@@ -29,11 +31,11 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<String> login(@RequestHeader HttpHeaders headers,
-                                        @RequestBody LoginFormRest loginForm) {
+                                        @RequestBody LoginFormRest loginForm)
+    {
         logHeaders(headers);
 
-        var tokenOptional = loginService.loginToSystem(loginForm);
-
+        final Optional<String> tokenOptional = loginService.loginToSystem(loginForm);
         return tokenOptional.map(s -> ResponseEntity.ok(JSONObject.quote(s)))
             .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

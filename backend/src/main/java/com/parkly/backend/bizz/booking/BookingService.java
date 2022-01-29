@@ -12,4 +12,6 @@ public interface BookingService {
     Optional<BookingRest> addBooking(BookingRest bookingRest);
 
     boolean deleteBooking(Long bookingId);
+
+    boolean releaseBooking(Long bookingId);
 }
