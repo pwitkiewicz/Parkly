@@ -26,6 +26,7 @@ function createAuthService(): AuthService {
         return data;
     }
     const logout = () => {
+        sessionStorage.removeItem('key');
     }
     const getCurrentUserToken = () => {
     }
