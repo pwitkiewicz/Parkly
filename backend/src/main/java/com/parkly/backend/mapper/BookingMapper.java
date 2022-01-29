@@ -1,7 +1,6 @@
 package com.parkly.backend.mapper;
 
 import com.parkly.backend.repo.domain.BookingHistoryDTO;
-import com.parkly.backend.repo.domain.OwnerDTO;
 import com.parkly.backend.rest.domain.BookingRest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -35,14 +34,15 @@ public class BookingMapper {
                     bookingHistoryDTO.getIsActive() == 1,
                     totalCost,
                     parkingSlotDTO.get(),
-                    bookingHistoryDTO.getOwner().getOwnerId()
+                    bookingHistoryDTO.getOwner(),
+                    bookingHistoryDTO.getOwnerData()
             ));
         }
 
         return Optional.empty();
     }
 
-    public static Optional<BookingHistoryDTO> mapToBookingHistoryDTO(final BookingRest bookingRest, final OwnerDTO ownerDTO) {
+    public static Optional<BookingHistoryDTO> mapToBookingHistoryDTO(final BookingRest bookingRest) {
         if (Objects.nonNull(bookingRest)) {
             var isActive = bookingRest.getIsActive() ? 1 : 0;
             var location = bookingRest.getParkingSlotRest().getLocationRest();
@@ -57,8 +57,9 @@ public class BookingMapper {
                             bookingRest.getStartDate(),
                             bookingRest.getEndDate(),
                             isActive,
-                            parkingSlotDTO.get(),
-                            ownerDTO
+                            bookingRest.getOwnerId(),
+                            bookingRest.getOwnerData(),
+                            parkingSlotDTO.get()
                     ));
                 }
             }

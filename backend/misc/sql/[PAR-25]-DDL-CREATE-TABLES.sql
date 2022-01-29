@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS parkingslot (
     description     TEXT NULL,
     width   		FLOAT(7,2) NULL,
     height 		    FLOAT(7,2) NULL,
-	cost 		    INT(5) NOT NULL,
+	cost 		    FLOAT(5) NOT NULL,
     is_disabled     BINARY(1) NOT NULL DEFAULT 0,
     location_id     INT(20) NOT NULL,
 
@@ -61,20 +61,10 @@ CREATE TABLE IF NOT EXISTS bookinghistory (
     end_date        INTEGER(20) NOT NULL,
     is_active       BINARY(1) NOT NULL DEFAULT 1,
     owner_id        INT(20) NOT NULL,
+    owner_data      VARCHAR(128) NOT NULL,
     parking_slot_id INT(20) NOT NULL,
 
     PRIMARY KEY pk_bookinghistory (booking_id),
     FOREIGN KEY fk_bookinghistory_parkingslot (parking_slot_id) REFERENCES parkingslot(parking_slot_id)
 		ON UPDATE CASCADE ON DELETE RESTRICT,
-    FOREIGN KEY fk_bookinghistory_ownerid (owner_id) REFERENCES owner(owner_id)
-        ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE = INNODB;
-
-CREATE TABLE IF NOT EXISTS owner (
-    owner_id       INT(20) NOT NULL AUTO_INCREMENT,
-    first_name 	   VARCHAR(20) NOT NULL,
-    last_name 	   VARCHAR(30) NOT NULL,
-    tel_number     VARCHAR(30) NOT NULL,
-
-    PRIMARY KEY pk_owner (owner_id)
 ) ENGINE = INNODB;

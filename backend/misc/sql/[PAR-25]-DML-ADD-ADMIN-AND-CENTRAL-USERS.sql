@@ -1,2 +1,2 @@
-INSERT INTO user (login,password,first_name,last_name,security_token) VALUES ('admin','98303d7e09773fe701756bddbf3579fdac7792ccfc6d5bbbf416e04c8cd21d4d','Server','Administrator','a2622aca-27f8-431d-bc53-a4a4fd11a7e6');
-INSERT INTO user (login,password,first_name,last_name,security_token) VALUES ('par_reader','0ba0fa7fea6cb22bd385d1f2398e819f6cad49add240134a3c1913a53437e53a','API','Reader','1f7b572f-2c48-4ce7-a010-6b86112daea3');
+INSERT INTO user (user_id,login,password,first_name,last_name,security_token) VALUES ('1','admin','98303d7e09773fe701756bddbf3579fdac7792ccfc6d5bbbf416e04c8cd21d4d','Server','Administrator','a2622aca-27f8-431d-bc53-a4a4fd11a7e6');
+INSERT INTO user (user_id,login,password,first_name,last_name,security_token) VALUES ('2','par_reader','0ba0fa7fea6cb22bd385d1f2398e819f6cad49add240134a3c1913a53437e53a','API','Reader','1f7b572f-2c48-4ce7-a010-6b86112daea3');

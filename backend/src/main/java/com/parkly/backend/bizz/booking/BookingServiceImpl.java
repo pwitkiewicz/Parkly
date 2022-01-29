@@ -2,7 +2,6 @@ package com.parkly.backend.bizz.booking;
 
 import com.parkly.backend.mapper.BookingMapper;
 import com.parkly.backend.repo.BookingHistoryRepository;
-import com.parkly.backend.repo.OwnerRepository;
 import com.parkly.backend.rest.domain.BookingRest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,10 @@ import static com.parkly.backend.mapper.BookingMapper.mapToBookingRest;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingHistoryRepository bookingHistoryRepository;
-    private final OwnerRepository ownerRepository;
 
     @Autowired
-    public BookingServiceImpl(final BookingHistoryRepository bookingHistoryRepository,
-                              final OwnerRepository ownerRepository) {
+    public BookingServiceImpl(final BookingHistoryRepository bookingHistoryRepository) {
         this.bookingHistoryRepository = bookingHistoryRepository;
-        this.ownerRepository = ownerRepository;
     }
 
     @Override
@@ -57,18 +53,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Optional<BookingRest> addBooking(final BookingRest bookingRest) {
-        var ownerOptional = ownerRepository.findById(bookingRest.getOwnerId());
+        var bookingOptional = mapToBookingHistoryDTO(bookingRest);
 
-        if(ownerOptional.isPresent()) {
-            var bookingOptional = mapToBookingHistoryDTO(bookingRest, ownerOptional.get());
-
-            if (bookingOptional.isPresent()) {
-                try {
-                    var savedBooking = bookingHistoryRepository.save(bookingOptional.get());
-                    return mapToBookingRest(savedBooking);
-                } catch (DataAccessException e) {
-                    log.warn("Error occured while saving owner {} to database", bookingOptional.get(), e);
-                }
+        if (bookingOptional.isPresent()) {
+            try {
+                var savedBooking = bookingHistoryRepository.save(bookingOptional.get());
+                return mapToBookingRest(savedBooking);
+            } catch (DataAccessException e) {
+                log.warn("Error occured while saving owner {} to database", bookingOptional.get(), e);
             }
         }
 
@@ -79,7 +71,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Optional<BookingRest> updateBooking(final Long bookingId, BookingRest bookingRest) {
         try {
-            var owner = ownerRepository.findById(bookingRest.getOwnerId());
             var bookingOptional = bookingHistoryRepository.findById(bookingId);
 
             if (bookingOptional.isPresent()) {
@@ -88,18 +79,12 @@ public class BookingServiceImpl implements BookingService {
                 log.warn("Invalid booking id ({}) provided", bookingId);
             }
 
-            if(owner.isPresent()) {
-                var booking = mapToBookingHistoryDTO(bookingRest, owner.get());
+            var booking = mapToBookingHistoryDTO(bookingRest);
 
-                if (booking.isPresent()) {
-                    var updatedBooking = bookingHistoryRepository.save(booking.get());
-                    return mapToBookingRest(updatedBooking);
-                }
+            if (booking.isPresent()) {
+                var updatedBooking = bookingHistoryRepository.save(booking.get());
+                return mapToBookingRest(updatedBooking);
             }
-            else {
-                log.warn("Incorrect owner id");
-            }
-
         } catch (DataAccessException e) {
             log.warn("Error occured while updating booking {} to database", bookingRest, e);
         }
