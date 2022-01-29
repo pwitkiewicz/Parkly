@@ -61,7 +61,7 @@ const SettingsPage = () => {
       value={endDate}
       mode="date"
       display="default"
-      onChange={(date) => setEndDate(date)}
+      onChange={(e,date) => setEndDate(date)}
     />
 
     </Card>
