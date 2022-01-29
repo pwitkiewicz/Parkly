@@ -19,7 +19,7 @@ public class BookingHistoryDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
-    @Column(name = "booking_id")
+    @Column(name = "bookingid")
     private long bookingId;
 
     @NotNull
