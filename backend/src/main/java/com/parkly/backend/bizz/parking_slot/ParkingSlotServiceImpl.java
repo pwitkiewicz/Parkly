@@ -89,6 +89,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
             return newParkingSlotDtoOpt
                     .map(parkingSlotDTO -> {
                         parkingSlotRepository.save(parkingSlotDTO);
+                        parkingSlotRest.setParkingSlotId(parkingSlotDTO.getParkingSlotId());
                         addPhotosToDatabase(parkingSlotRest.getPhotoRestSet(),parkingSlotDTO);
                         return parkingSlotRest;});
         }
