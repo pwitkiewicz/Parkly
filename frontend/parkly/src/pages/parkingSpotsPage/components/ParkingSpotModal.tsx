@@ -96,6 +96,13 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
         }
         setEditedParkingModal(prev => ({...prev, location: location}));
     }
+    const handleChangeCountry: ChangeEventHandler<HTMLInputElement> = event => {
+        const location = {
+            ...editedParkingModal.location,
+            country: event.target.value
+        }
+        setEditedParkingModal(prev => ({...prev, location: location}));
+    }
     const handleChangeNumber: ChangeEventHandler<HTMLInputElement> = event => {
         const location = {
             ...editedParkingModal.location,
@@ -245,6 +252,16 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
                     variant="standard"
                     onChange={handleChangeStreet}
                     value={editedParkingModal.location.street}
+                />
+                <TextField
+                    margin="dense"
+                    id="country"
+                    label="Country"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={handleChangeCountry}
+                    value={editedParkingModal.location.country}
                 />
                 <TextField
                     inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
