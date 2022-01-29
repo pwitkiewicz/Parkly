@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "photos.path",
+      "type": "java.lang.String",
+      "description": "This is where pictures are saved."
+  }
+] }
