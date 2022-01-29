@@ -103,7 +103,7 @@ public class PhotoServiceImpl implements PhotoService {
                 log.error("Error saving image file for parking slot (id: {})", parkingSlotId);
             }
 
-            return Optional.of(blobFile.getURL().toString());
+            return Optional.of(blobFile.getURI().toString());
         }
         return Optional.empty();
     }
