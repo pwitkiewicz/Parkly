@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @ConfigurationProperties(prefix = "photos")
 public class PhotoServiceImpl implements PhotoService {
 
-    @Value("azure-blob://parklystorage/parkly-photos")
+    @Value("azure-blob://parkly-photos")
     private Resource blobFile;
 
     private final PhotoRepository photoRepository;
