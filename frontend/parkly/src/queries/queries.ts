@@ -46,55 +46,67 @@ export const getParkingSpot = async(id: number) =>{
 }
 
 export const addParkingSpot = async (parkingSpot: ParkingSpotSend, id?: number) => {
-    let response;
+    let errorCom = '';
     if (id) {
-        response = await axios.put(`${server}/items/${id}`, parkingSpot, {
+        await axios.put(`${server}/items/${id}`, parkingSpot, {
             headers: {
                 'security-header': sessionStorage.getItem('key') || ''
             }
+        }).catch(error => {
+            errorCom = error;
         });
     } else {
-        response = await axios.post(`${server}/items`, parkingSpot, {
+        await axios.post(`${server}/items`, parkingSpot, {
             headers: {
                 'security-header': sessionStorage.getItem('key') || ''
             }
+        }).catch(error => {
+            errorCom = error;
         });
     }
-    return response.data;
+    return errorCom !== '';
 }
 
 export const deleteParkingSpot = async (spot: ParkingSpotFetch) => {
-    for(let i=0;i<spot.photos.length;i++){
-        const response = await axios.delete(`${server}/photos/${spot.photos[i].id}`,{
+    let errorCom = '';
+    for (let i = 0; i < spot.photos.length; i++) {
+        await axios.delete(`${server}/photos/${spot.photos[i].id}`,{
             headers: {
                 'security-header': sessionStorage.getItem('key') || ''
             }
         });
     }
-    const response = await axios.delete(`${server}/items/${spot.id}`,{
+    await axios.delete(`${server}/items/${spot.id}`,{
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
+    }).catch(error => {
+        errorCom = error;
     });
-    return response.data;
+    return errorCom !== '';
 }
 
 export const uploadPhoto = async (fd: FormData, id: number) => {
+    let errorCom = '';
     await axios.post(`${server}/photos/${id}`, fd, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
-    }).then(response => {
-        return response.data;
+    }).catch(error => {
+        errorCom = error;
     });
+    return errorCom !== '';
 }
 export const cancelBooking = async (id: number) => {
-    const response = await axios.delete(`${server}/bookings/${id}`,{
+    let errorCom = '';
+    await axios.delete(`${server}/bookings/${id}`,{
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
+    }).catch(error => {
+        errorCom = error;
     });
-    return response.data;
+    return errorCom !== '';
 }
 
 export const getPagination = async (filter: string, location: string) => {

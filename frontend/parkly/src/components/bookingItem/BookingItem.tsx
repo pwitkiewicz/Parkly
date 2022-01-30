@@ -1,6 +1,16 @@
 import React, {FC, useState, useEffect} from 'react';
 import styled from "@emotion/styled";
-import {Button, Card, CardActions, CardContent, CardMedia, Typography, CircularProgress} from "@mui/material";
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Typography,
+    CircularProgress,
+    Snackbar,
+    Alert
+} from "@mui/material";
 import {Booking} from "../../models/models";
 import Theme from "../../constants/Styles";
 import {ParkingSpotFetch} from '../../models/models';
@@ -16,23 +26,52 @@ type GetBookingsFunction = {
     getBookings: () => void;
 }
 const BookingItem: FC<Booking & GetBookingsFunction> = (booking) => {
+
     const [parkingSpot, setParkingSpot] = useState<ParkingSpotFetch>();
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [detailsBookingState, setDetailsBookingState] = useState<ParkingSpotDetailsModal>({
         isVisible: false
     });
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarOpenError, setSnackbarOpenError] = useState(false);
+
     const getParking = async () => {
         console.log(booking);
         const parking = await getParkingSpot(booking.parkingSlot);
         setParkingSpot(parking);
     }
+
     useEffect(() => {
         getParking().then(() => {
             setIsFetching(false)
         });
     }, [])
+
+    const handleOpenSnackbar = () => {
+        setSnackbarOpen(true);
+    }
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    }
+    const handleOpenSnackbarError = () => {
+        setSnackbarOpenError(true);
+    }
+    const handleCloseSnackbarError = () => {
+        setSnackbarOpenError(false);
+    }
+
     return (
         <>
+            <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+                    Success!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={snackbarOpenError} autoHideDuration={5000} onClose={handleCloseSnackbarError}>
+                <Alert onClose={handleCloseSnackbarError} severity="error" sx={{ width: '100%' }}>
+                    Error!
+                </Alert>
+            </Snackbar>
             <BookingModal visible={detailsBookingState.isVisible} onCancel={() =>
                 setDetailsBookingState({
                     isVisible: false,
@@ -71,8 +110,13 @@ const BookingItem: FC<Booking & GetBookingsFunction> = (booking) => {
                             Details
                         </Button>
                         <Button style={{color: `${Theme.colors.remove}`}} onClick={() => {
-                            cancelBooking(booking.id).then(() => {
+                            cancelBooking(booking.id).then((response) => {
                                 booking.getBookings();
+                                if (response) {
+                                    handleOpenSnackbarError();
+                                } else {
+                                    handleOpenSnackbar();
+                                }
                             });
                         }}>
                             Cancel

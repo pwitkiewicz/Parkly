@@ -1,11 +1,12 @@
 import React, {ChangeEventHandler, useState} from 'react';
 import {
+    Alert,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    FormControlLabel,
+    FormControlLabel, Snackbar,
     Switch,
     TextField
 } from "@mui/material";
@@ -14,7 +15,7 @@ import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
 import styled from "@emotion/styled";
 
 import {addParkingSpot, uploadPhoto} from "../../../queries/queries";
-import { ParkingSpotFetch } from '../../../models/models';
+import {ParkingSpotFetch} from '../../../models/models';
 import {Moment} from "moment";
 
 interface Props {
@@ -45,6 +46,8 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
         cost: parkingPlace.cost
     })
     const [photo, setPhoto] = useState<File>();
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarOpenError, setSnackbarOpenError] = useState(false);
 
     const handleChangeName: ChangeEventHandler<HTMLInputElement> = event => {
         setEditedParkingModal(prev => ({...prev, name: event.target.value}));
@@ -113,15 +116,25 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
     const handleSubmit = () => {
         console.log(editedParkingModal);
         if (editing) {
-            addParkingSpot(editedParkingModal, parkingPlace?.id).then(() => {
+            addParkingSpot(editedParkingModal, parkingPlace?.id).then((response) => {
                 if (getParkingSpots) {
                     getParkingSpots();
                 }
+                if (response) {
+                    handleOpenSnackbarError();
+                } else {
+                    handleOpenSnackbar();
+                }
             });
         } else {
-            addParkingSpot(editedParkingModal).then(() => {
+            addParkingSpot(editedParkingModal).then((response) => {
                 if (getParkingSpots) {
                     getParkingSpots();
+                }
+                if (response) {
+                    handleOpenSnackbarError();
+                } else {
+                    handleOpenSnackbar();
                 }
             });
         }
@@ -136,165 +149,194 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
         if (photo) {
             const fd = new FormData();
             fd.append('file', photo, photo.name);
-            await uploadPhoto(fd, parkingPlace.id);
+            if (await uploadPhoto(fd, parkingPlace.id)) {
+                handleOpenSnackbarError();
+            } else {
+                handleOpenSnackbar();
+            }
             if (getParkingSpots) {
                 getParkingSpots();
             }
         }
     }
 
+    const handleOpenSnackbar = () => {
+        setSnackbarOpen(true);
+    }
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    }
+    const handleOpenSnackbarError = () => {
+        setSnackbarOpenError(true);
+    }
+    const handleCloseSnackbarError = () => {
+        setSnackbarOpenError(false);
+    }
+
     return (
-        <Dialog open={visible} onClose={onCancel}>
-            <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
-            <DialogContent>
-                {editing &&
-                    <>
-                        Upload photo:&nbsp;&nbsp;&nbsp;
-                        <input type="file" onChange={fileSelectedHandler}/>
-                        <button onClick={fileUploadHandler}>Upload</button>
-                    </>
-                }
-                <TextField
-                    margin="dense"
-                    id="name"
-                    label="Name"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeName}
-                    value={editedParkingModal.name}
-                    style={{ marginTop: '20px' }}
-                />
-                <LocalizationProvider dateAdapter={DateAdapter}>
-                    <DatePickerContainer>
-                        <DatePickerWrapper>
+        <>
+            <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+                    Success!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={snackbarOpenError} autoHideDuration={5000} onClose={handleCloseSnackbarError}>
+                <Alert onClose={handleCloseSnackbarError} severity="error" sx={{ width: '100%' }}>
+                    Error!
+                </Alert>
+            </Snackbar>
+            <Dialog open={visible} onClose={onCancel}>
+                <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
+                <DialogContent>
+                    {editing &&
+                        <>
+                            Upload photo:&nbsp;&nbsp;&nbsp;
+                            <input type="file" onChange={fileSelectedHandler}/>
+                            <button onClick={fileUploadHandler}>Upload</button>
+                        </>
+                    }
+                    <TextField
+                        margin="dense"
+                        id="name"
+                        label="Name"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeName}
+                        value={editedParkingModal.name}
+                        style={{marginTop: '20px'}}
+                    />
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DatePickerContainer>
+                            <DatePickerWrapper>
+                                <DesktopDatePicker
+                                    label="Start Date"
+                                    inputFormat="DD/MM/yyyy"
+                                    value={editedParkingModal.startDateTime}
+                                    onChange={handleChangeStartDate}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </DatePickerWrapper>
                             <DesktopDatePicker
-                                label="Start Date"
+                                label="End Date"
                                 inputFormat="DD/MM/yyyy"
-                                value={editedParkingModal.startDateTime}
-                                onChange={handleChangeStartDate}
+                                value={editedParkingModal.endDateTime}
+                                onChange={handleChangeEndDate}
                                 renderInput={(params) => <TextField {...params} />}
                             />
-                        </DatePickerWrapper>
-                        <DesktopDatePicker
-                            label="End Date"
-                            inputFormat="DD/MM/yyyy"
-                            value={editedParkingModal.endDateTime}
-                            onChange={handleChangeEndDate}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </DatePickerContainer>
-                </LocalizationProvider>
-                <CheckBoxesContainer>
-                    <FormControlLabel control={<Switch onChange={handleChangeIsActive}/>} label="Active"
-                                      checked={editedParkingModal.isActive}/>
-                    <FormControlLabel control={<Switch onChange={handleChangeIsDisabledFriendly}/>}
-                                      label="Disabled friendly"
-                                      checked={editedParkingModal.isDisabledFriendly}/>
-                </CheckBoxesContainer>
-                <TextField
-                    margin="dense"
-                    id="description"
-                    label="Description"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    multiline
-                    rows={4}
-                    onChange={handleChangeDescription}
-                    value={editedParkingModal.description}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="length"
-                    label="Length"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeHeight}
-                    value={editedParkingModal.height}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="width"
-                    label="Width"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeWidth}
-                    value={editedParkingModal.width}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="cost"
-                    label="Cost"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeCost}
-                    value={editedParkingModal.cost}
-                />
-                <TextField
-                    margin="dense"
-                    id="city"
-                    label="City"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeCity}
-                    value={editedParkingModal.location.city}
-                />
-                <TextField
-                    margin="dense"
-                    id="street"
-                    label="Street"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeStreet}
-                    value={editedParkingModal.location.street}
-                />
-                <TextField
-                    margin="dense"
-                    id="country"
-                    label="Country"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeCountry}
-                    value={editedParkingModal.location.country}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="number"
-                    label="Number"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeNumber}
-                    value={editedParkingModal.location.number}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="zip"
-                    label="Zip code"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeZip}
-                    value={editedParkingModal.location.zipcode}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onCancel}>Cancel</Button>
-                <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
-            </DialogActions>
-        </Dialog>
+                        </DatePickerContainer>
+                    </LocalizationProvider>
+                    <CheckBoxesContainer>
+                        <FormControlLabel control={<Switch onChange={handleChangeIsActive}/>} label="Active"
+                                          checked={editedParkingModal.isActive}/>
+                        <FormControlLabel control={<Switch onChange={handleChangeIsDisabledFriendly}/>}
+                                          label="Disabled friendly"
+                                          checked={editedParkingModal.isDisabledFriendly}/>
+                    </CheckBoxesContainer>
+                    <TextField
+                        margin="dense"
+                        id="description"
+                        label="Description"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        multiline
+                        rows={4}
+                        onChange={handleChangeDescription}
+                        value={editedParkingModal.description}
+                    />
+                    <TextField
+                        inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                        margin="dense"
+                        id="length"
+                        label="Length"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeHeight}
+                        value={editedParkingModal.height}
+                    />
+                    <TextField
+                        inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                        margin="dense"
+                        id="width"
+                        label="Width"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeWidth}
+                        value={editedParkingModal.width}
+                    />
+                    <TextField
+                        inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                        margin="dense"
+                        id="cost"
+                        label="Cost"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeCost}
+                        value={editedParkingModal.cost}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="city"
+                        label="City"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeCity}
+                        value={editedParkingModal.location.city}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="street"
+                        label="Street"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeStreet}
+                        value={editedParkingModal.location.street}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="country"
+                        label="Country"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeCountry}
+                        value={editedParkingModal.location.country}
+                    />
+                    <TextField
+                        inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                        margin="dense"
+                        id="number"
+                        label="Number"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeNumber}
+                        value={editedParkingModal.location.number}
+                    />
+                    <TextField
+                        inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
+                        margin="dense"
+                        id="zip"
+                        label="Zip code"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChangeZip}
+                        value={editedParkingModal.location.zipcode}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onCancel}>Cancel</Button>
+                    <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
+                </DialogActions>
+            </Dialog>
+        </>
     )
 }
 
