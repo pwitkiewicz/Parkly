@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParkingSlotMapper {

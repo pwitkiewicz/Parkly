@@ -100,6 +100,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                     .map(parkingSlotDTO -> {
                         parkingSlotRepository.save(parkingSlotDTO);
                         parkingSlotRest.setParkingSlotId(parkingSlotDTO.getParkingSlotId());
+                        parkingSlotRest.getLocationRest().setLocationId(locationDTO.getLocationId());
                         addPhotosToDatabase(parkingSlotRest.getPhotoRestSet(),parkingSlotDTO);
                         return parkingSlotRest;});
         }
@@ -205,7 +206,7 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
     private LocationDTO addLocationToDatabase(final LocationRest locationRest)
     {
-        return locationRepository.findByLatitudeAndLongitude(locationRest.getLatitude(), locationRest.getLongitude())
+        return locationRepository.findByZipCodeAndStreetAndStreetNumber(locationRest.getZipCode(), locationRest.getStreet(), locationRest.getStreetNumber())
                 .orElseGet(() ->
                 {
                     final LocationDTO locationDTO =

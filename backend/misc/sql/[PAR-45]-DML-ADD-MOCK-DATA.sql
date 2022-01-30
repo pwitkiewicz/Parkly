@@ -1,11 +1,11 @@
-INSERT INTO LOCATION (location_id, city, country, latitude, longitude, street, street_number, zipcode)
-VALUES(2, 'city 2', 'country 2', 0 , 0, 'street 2', 'A2', 'zipcode2');
+INSERT INTO LOCATION (location_id, city, country, street, street_number, zipcode)
+VALUES(2, 'city 2', 'country 2', 'street 2', 'A2', 'zipcode2');
 
-INSERT INTO LOCATION (location_id, city, country, latitude, longitude, street, street_number, zipcode)
-VALUES(3, 'city 3', 'country 3', 0 , 0, 'street 3', 'A3', 'zipcode3');
+INSERT INTO LOCATION (location_id, city, country, street, street_number, zipcode)
+VALUES(3, 'city 3', 'country 3', 'street 3', 'A3', 'zipcode3');
 
-INSERT INTO LOCATION (location_id, city, country, latitude, longitude, street, street_number, zipcode)
-VALUES(4, 'city 4', 'country 4', 0 , 0, 'street 4', 'A4', 'zipcode4');
+INSERT INTO LOCATION (location_id, city, country, street, street_number, zipcode)
+VALUES(4, 'city 4', 'country 4', 'street 4', 'A4', 'zipcode4');
 
 
 INSERT INTO PARKINGSLOT
