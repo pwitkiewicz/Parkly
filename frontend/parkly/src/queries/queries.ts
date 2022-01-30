@@ -3,9 +3,9 @@ import axios from "axios";
 import {server} from "../constants/constants"
 import {ParkingSpotSend} from "../models/models";
 
-export const getAllParkingSpots = async () => {
-    console.log(`Request to ${server}/items`);
-    const response = await axios.get(`${server}/items`, {
+export const getAllParkingSpots = async (filter: string, city: string,active:string) => {
+    console.log(`Request to ${server}/items?sort=${filter}&location=${city}`);
+    const response = await axios.get(`${server}/items?sort=${filter}&location=${city}&filter=${active}`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
