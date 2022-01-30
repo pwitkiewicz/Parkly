@@ -1,7 +1,6 @@
 package com.parkly.backend.bizz.parking_slot;
 
 import com.parkly.backend.bizz.booking.BookingService;
-import com.parkly.backend.mapper.BookingMapper;
 import com.parkly.backend.mapper.LocationMapper;
 import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.mapper.PhotoMapper;
@@ -16,14 +15,13 @@ import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.rest.domain.PhotoRest;
 import com.parkly.backend.utils.domain.FilterEnum;
 import com.parkly.backend.utils.domain.SortEnum;
-import java.time.Instant;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import io.micrometer.core.lang.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolationException;
@@ -53,10 +51,10 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     }
 
     @Override
-    public Set<ParkingSlotRest> getAllParkingSlots(FilterEnum filter,
-                                                   Integer page,
-                                                   SortEnum sort,
-                                                   String location,
+    public Set<ParkingSlotRest> getAllParkingSlots(final FilterEnum filter,
+                                                   final Integer page,
+                                                   final SortEnum sort,
+                                                   final String location,
                                                    @Nullable Long startDate,
                                                    @Nullable Long endDate)
     {
@@ -67,18 +65,16 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
         final Predicate<ParkingSlotDTO> filterParkingSlotsByLocation =
                 (parkingSlot -> (location.equals("all")) || (parkingSlot.getLocation().getCity().equals(location)));
         final Predicate<ParkingSlotDTO> filterParkingSlotsByDates =
-                (parkingSlot -> {
-                    final Long dateTo = (Objects.nonNull(endDate))? endDate : Instant.now().getEpochSecond();
-                    return (Objects.nonNull(startDate) && parkingSlot.getStartDate() >= startDate) ||
-                            (parkingSlot.getEndDate() <= dateTo) ||
-                            (Objects.isNull(startDate) && Objects.isNull(endDate));
-                });
-        final Comparator<ParkingSlotRest> sortParkingSlots = Comparator.comparing(ParkingSlotRest::getName,
-                (parking1, parking2) ->  parking1.compareTo(parking2) * sort.getValue());
+                (parkingSlot -> filterByDates(startDate, endDate, parkingSlot));
+
+        final Comparator<ParkingSlotRest> sortParkingSlots = Comparator.comparing(ParkingSlotRest::getLocationRest,
+                (parking1, parking2) ->  parking1.getCity().compareTo(parking2.getCity()) * sort.getValue());
 
         return StreamSupport.stream(parkingSlots.spliterator(), false)
                 .filter(filterParkingSlotsByActive.and(filterParkingSlotsByDates).and(filterParkingSlotsByLocation))
-                .map(ps -> ParkingSlotMapper.mapToParkingSlotRest(ps).get())
+                .map(ParkingSlotMapper::mapToParkingSlotRest)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .sorted(sortParkingSlots)
                 .skip((long) page * PAGE_MAX)
                 .limit(PAGE_MAX)
@@ -219,5 +215,18 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                     }
                     return locationDTO;
                 });
+    }
+
+    private boolean filterByDates(final Long startDate, final Long endDate, final ParkingSlotDTO parkingSlot)
+    {
+        if(Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
+            final Set<BookingRest> bookingHistoryForParking =
+                    bookingService.getAllBookings(parkingSlot.getParkingSlotId()).stream()
+                            .filter(bookingRest -> (bookingRest.getStartDate() >= startDate && bookingRest.getStartDate() <= endDate) ||
+                                    (bookingRest.getEndDate() <= endDate && bookingRest.getEndDate() >= startDate))
+                            .collect(Collectors.toSet());
+            return bookingHistoryForParking.isEmpty();
+        }
+        return true;
     }
 }

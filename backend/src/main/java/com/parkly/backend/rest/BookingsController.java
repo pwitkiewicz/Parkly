@@ -45,7 +45,7 @@ public class BookingsController {
 
         if(securityService.isAuthenticated(headers))
         {
-            return ResponseEntity.ok(bookingService.getAllBookings());
+            return ResponseEntity.ok(bookingService.getAllBookings(null));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singleton(BookingRest.EMPTY_BOOKING));
@@ -78,7 +78,7 @@ public class BookingsController {
 
         if(securityService.isAuthenticated(headers))
         {
-            var addedBooking = bookingService.addBooking(newBooking);
+            final Optional<BookingRest> addedBooking = bookingService.addBooking(newBooking);
 
             if(addedBooking.isPresent())
             {
