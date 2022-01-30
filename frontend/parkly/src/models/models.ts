@@ -3,14 +3,27 @@ export interface LoginInformation {
     password: string;
 }
 
-export interface ParkingSpot {
-    id: string;
+export interface ParkingSpotFetch {
+    id: number;
     name: string;
-    startDateTime: Date;
-    endDateTime: Date;
+    startDateTime: number;
+    endDateTime: number;
     isActive: boolean;
     isDisabledFriendly: boolean;
     photos: PhotosList[];
+    description: string;
+    height: number;
+    width: number;
+    location: Location;
+    cost: number;
+}
+
+export interface ParkingSpotSend {
+    name: string;
+    startDateTime: number;
+    endDateTime: number;
+    isActive: boolean;
+    isDisabledFriendly: boolean;
     description: string;
     height: number;
     width: number;

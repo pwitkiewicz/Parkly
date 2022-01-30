@@ -10,11 +10,11 @@ import {
 import styled from "@emotion/styled";
 import moment from "moment";
 
-import {Booking, ParkingSpot} from '../../../models/models';
+import {Booking, ParkingSpotFetch} from '../../../models/models';
 
 interface Props {
     visible: boolean;
-    parkingSpot?: ParkingSpot;
+    parkingSpot?: ParkingSpotFetch;
     booking: Booking;
     onCancel: () => void;
 }

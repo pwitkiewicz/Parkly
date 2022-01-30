@@ -16,12 +16,13 @@ import styled from "@emotion/styled";
 import Dropzone, {IDropzoneProps, IMeta} from 'react-dropzone-uploader'
 
 import {addParkingSpot} from "../../../queries/queries";
-import { ParkingSpot } from '../../../models/models';
+import { ParkingSpotFetch } from '../../../models/models';
+import moment from "moment";
 
 interface Props {
     visible: boolean;
     onCancel: () => void;
-    parkingPlace: ParkingSpot;
+    parkingPlace: ParkingSpotFetch;
     editing?: boolean;
     getParkingSpots?: () => void;
 }
@@ -31,8 +32,8 @@ interface Props {
 
 const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, editing, getParkingSpots}) => {
 
-    const [editedParkingModal, setEditedParkingModal] = useState({
-        id: parkingPlace.id,
+    const [editedParkingModal, setEditedParkingModal] = useState<ParkingSpotFetch>({
+        id: parkingPlace?.id,
         name: parkingPlace.name,
         startDateTime: parkingPlace.startDateTime,
         endDateTime: parkingPlace.endDateTime,
@@ -56,12 +57,12 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
     const handleChangeName: ChangeEventHandler<HTMLInputElement> = event => {
         setEditedParkingModal(prev => ({...prev, name: event.target.value}));
     }
-    const handleChangeStartDate = (date: Moment | null) => {
-        const startDate = date?.toDate() || new Date();
+    const handleChangeStartDate = (date: number | null) => {
+        const startDate = date || moment().unix();
         setEditedParkingModal(prev => ({...prev, startDateTime: startDate}));
     }
-    const handleChangeEndDate = (date: Moment | null) => {
-        const endDate = date?.toDate() || new Date();
+    const handleChangeEndDate = (date: number | null) => {
+        const endDate = date || moment().unix();
         setEditedParkingModal(prev => ({...prev, endDateTime: endDate}));
     }
     const handleChangeIsActive: ChangeEventHandler<HTMLInputElement> = event => {
@@ -119,7 +120,7 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
     }
     const handleSubmit = () => {
         if (editing) {
-            addParkingSpot(editedParkingModal, parkingPlace.id).then(() => {
+            addParkingSpot(editedParkingModal, parkingPlace?.id).then(() => {
                 if (getParkingSpots) {
                     getParkingSpots();
                 }

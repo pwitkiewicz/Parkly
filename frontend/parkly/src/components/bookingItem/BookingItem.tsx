@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import {Button, Card, CardActions, CardContent, CardMedia, Typography, CircularProgress} from "@mui/material";
 import {Booking} from "../../models/models";
 import Theme from "../../constants/Styles";
-import {ParkingSpot} from '../../models/models';
+import {ParkingSpotFetch} from '../../models/models';
 import {getParkingSpot} from '../../queries/queries'
 import BookingModal from '../../pages/bookingsPage/components/BookingModal'
 import moment from "moment";
@@ -12,7 +12,7 @@ type ParkingSpotDetailsModal = {
     isVisible: boolean;
 }
 const BookingItem: FC<Booking> = (booking) => {
-    const [parkingSpot, setParkingSpot] = useState<ParkingSpot>();
+    const [parkingSpot, setParkingSpot] = useState<ParkingSpotFetch>();
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [detailsBookingState, setDetailsBookingState] = useState<ParkingSpotDetailsModal>({
         isVisible: false
