@@ -1,11 +1,12 @@
 import React, {FC, useState} from 'react';
 import styled from "@emotion/styled";
-import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 
 import {ParkingSpotFetch} from "../../models/models";
 import Theme from "../../constants/Styles";
 import ParkingSpotModal from '../../pages/parkingSpotsPage/components/ParkingSpotModal';
-import { deleteParkingSpot} from "../../queries/queries";
+import {deleteParkingSpot} from "../../queries/queries";
+import ParkingSpotPicture from "../../assets/parking-place.jpg";
 
 type ParkingSpotEditModal = {
     isVisible: boolean;
@@ -20,7 +21,6 @@ const ParkingSpotItem: FC<ParkingSpotFetch & GetParkingSpotsFunction> = (parking
     const [editParkingSpotState, setParkingSpotState] = useState<ParkingSpotEditModal>({
         isVisible: false
     });
-    console.log(parkingPlace);
 
     return (
         <>
@@ -29,7 +29,12 @@ const ParkingSpotItem: FC<ParkingSpotFetch & GetParkingSpotsFunction> = (parking
                     isVisible: false,
                 })} parkingPlace={parkingPlace} editing={true} getParkingSpots={parkingPlace.getParkingSpots}/>
             <StyledCard>
-                {/*<CardMedia component="img" image={parkingPlace?.photos[0]?.path} alt="Parking spot image"/>*/}
+                {parkingPlace?.photos && parkingPlace?.photos.length > 0 &&
+                    <CardMedia component="img" image={parkingPlace?.photos[0]?.path} alt="Parking spot image" sx={{ width: '280px', height: '300px' }}/>
+                }
+                {parkingPlace?.photos && parkingPlace?.photos.length === 0 &&
+                    <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image" sx={{ width: '280px', height: '300px' }}/>
+                }
                 <CardContent>
                     <Typography variant="h4">
                         {parkingPlace.name}

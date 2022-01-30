@@ -101,7 +101,8 @@ const ParkingSpotsPage = () => {
                                      isActive={parkingSpot.isActive} isDisabledFriendly={parkingSpot.isDisabledFriendly}
                                      photos={parkingSpot.photos} description={parkingSpot.description}
                                      height={parkingSpot.height} width={parkingSpot.width}
-                                     location={parkingSpot.location} cost={parkingSpot.cost} key={parkingSpot.id}  getParkingSpots={getParkingSpots}/>
+                                     location={parkingSpot.location} cost={parkingSpot.cost} key={parkingSpot.id}
+                                     getParkingSpots={getParkingSpots}/>
                 ))}
             </StyledGrid>
         </>
