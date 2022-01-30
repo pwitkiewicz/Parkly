@@ -54,8 +54,8 @@ public class BookingMapper {
             bookingHistoryDTO.setStartDate(bookingRest.getStartDate());
             bookingHistoryDTO.setIsActive(isActive);
             bookingHistoryDTO.setParkingSlot(parkingSlotDTO);
-            bookingHistoryDTO.setFirstName(bookingHistoryDTO.getFirstName());
-            bookingHistoryDTO.setLastName(bookingHistoryDTO.getLastName());
+            bookingHistoryDTO.setFirstName(bookingRest.getFirstName());
+            bookingHistoryDTO.setLastName(bookingRest.getLastName());
 
             return Optional.of(bookingHistoryDTO);
         }

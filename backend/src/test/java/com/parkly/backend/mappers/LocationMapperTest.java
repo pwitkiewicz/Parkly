@@ -43,6 +43,7 @@ public class LocationMapperTest
     public void mapToLocationRestNotNullDTO()
     {
         final Optional<LocationRest> retrievedLocation = LocationMapper.mapToLocationRest(mockLocationDTO);
+
         Assert.assertTrue(retrievedLocation.isPresent());
         Assert.assertEquals("Test City 2", retrievedLocation.get().getCity());
         Assert.assertEquals("20-000", retrievedLocation.get().getZipCode());
@@ -52,6 +53,7 @@ public class LocationMapperTest
     public void mapToLocationRestNullDTO()
     {
         final Optional<LocationRest> retrievedLocation = LocationMapper.mapToLocationRest(null);
+
         Assert.assertFalse(retrievedLocation.isPresent());
     }
 
