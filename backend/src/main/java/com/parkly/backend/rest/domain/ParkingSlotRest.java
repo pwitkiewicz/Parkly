@@ -25,10 +25,10 @@ public class ParkingSlotRest implements Serializable {
     private String name;
 
     @JsonProperty("startDateTime")
-    private Long startDate;
+    private String startDate;
 
     @JsonProperty("endDateTime")
-    private Long endDate;
+    private String endDate;
 
     @JsonProperty("isActive")
     private Boolean isActive;
