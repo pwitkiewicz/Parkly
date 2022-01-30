@@ -55,5 +55,5 @@ jobs:
         with:
           app-name: 'parkly-2022'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_627225CDD700473D86FF97B5522C1F0F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F05F68ED508D4BE1A06A0283FB22BCDF }}
           package: '*.jar'
