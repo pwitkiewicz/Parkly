@@ -14,15 +14,14 @@ import com.parkly.backend.rest.domain.BookingRest;
 import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.rest.domain.PhotoRest;
-import com.parkly.backend.utils.LogWriter;
 import com.parkly.backend.utils.domain.FilterEnum;
-import com.parkly.backend.utils.domain.LogTypeEnum;
 import com.parkly.backend.utils.domain.SortEnum;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
+import io.micrometer.core.lang.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,21 +52,32 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
         this.bookingService = bookingService;
     }
 
-
-    public Set<ParkingSlotRest> getAllParkingSlots(final FilterEnum filter,
-                                                   final Integer page,
-                                                   final SortEnum sort)
+    @Override
+    public Set<ParkingSlotRest> getAllParkingSlots(FilterEnum filter,
+                                                   Integer page,
+                                                   SortEnum sort,
+                                                   String location,
+                                                   @Nullable Long startDate,
+                                                   @Nullable Long endDate)
     {
         final Iterable<ParkingSlotDTO>  parkingSlots = parkingSlotRepository.findAll();
 
-        final Predicate<ParkingSlotDTO> filterParkingSlots =
+        final Predicate<ParkingSlotDTO> filterParkingSlotsByActive =
                 (parkingSlot -> (filter.equals(FilterEnum.ALL)) || (parkingSlot.getIsActive() == filter.getValue() && Objects.nonNull(parkingSlot.getLocation())));
-
+        final Predicate<ParkingSlotDTO> filterParkingSlotsByLocation =
+                (parkingSlot -> (location.equals("all")) || (parkingSlot.getLocation().getCity().equals(location)));
+        final Predicate<ParkingSlotDTO> filterParkingSlotsByDates =
+                (parkingSlot -> {
+                    final Long dateTo = (Objects.nonNull(endDate))? endDate : Instant.now().getEpochSecond();
+                    return (Objects.nonNull(startDate) && parkingSlot.getStartDate() >= startDate) ||
+                            (parkingSlot.getEndDate() <= dateTo) ||
+                            (Objects.isNull(startDate) && Objects.isNull(endDate));
+                });
         final Comparator<ParkingSlotRest> sortParkingSlots = Comparator.comparing(ParkingSlotRest::getName,
                 (parking1, parking2) ->  parking1.compareTo(parking2) * sort.getValue());
 
         return StreamSupport.stream(parkingSlots.spliterator(), false)
-                .filter(filterParkingSlots)
+                .filter(filterParkingSlotsByActive.and(filterParkingSlotsByDates).and(filterParkingSlotsByLocation))
                 .map(ps -> ParkingSlotMapper.mapToParkingSlotRest(ps).get())
                 .sorted(sortParkingSlots)
                 .skip((long) page * PAGE_MAX)

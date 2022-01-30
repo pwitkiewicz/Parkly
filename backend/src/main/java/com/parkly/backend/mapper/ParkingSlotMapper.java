@@ -50,6 +50,7 @@ public class ParkingSlotMapper {
             final Optional<String> descOpt = Optional.ofNullable(parkingSlotDTO.getDescription());
 
             final ParkingSlotRest parkingSlotRest = new ParkingSlotRest();
+            parkingSlotRest.setParkingSlotId(parkingSlotDTO.getParkingSlotId());
             parkingSlotRest.setName(parkingSlotDTO.getName());
             parkingSlotRest.setCost(parkingSlotDTO.getCost());
             parkingSlotRest.setEndDate(parkingSlotDTO.getEndDate());

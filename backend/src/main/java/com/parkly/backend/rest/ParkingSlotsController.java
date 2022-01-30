@@ -45,6 +45,9 @@ public class ParkingSlotsController {
 
     @GetMapping
     public ResponseEntity<Collection<ParkingSlotRest>> getAllParkingSlots(@RequestHeader HttpHeaders headers,
+                                                                          @RequestParam(defaultValue = "all") String location,
+                                                                          @RequestParam(required = false) Long startDate,
+                                                                          @RequestParam(required = false) Long endDate,
                                                                           @RequestParam(defaultValue = "all") String filter,
                                                                           @RequestParam(defaultValue = "0") Integer page,
                                                                           @RequestParam(defaultValue = "none") String sort)
@@ -57,7 +60,8 @@ public class ParkingSlotsController {
             {
                 final FilterEnum filterType = FilterEnum.valueOf(filter.toUpperCase(Locale.ROOT));
                 final SortEnum sortType = SortEnum.valueOf(sort.toUpperCase(Locale.ROOT));
-                return ResponseEntity.ok(parkingSlotService.getAllParkingSlots(filterType, page, sortType));
+                return ResponseEntity.ok(parkingSlotService.getAllParkingSlots(filterType, page, sortType, location,
+                        startDate, endDate));
             }
             catch (IllegalArgumentException e)
             {
