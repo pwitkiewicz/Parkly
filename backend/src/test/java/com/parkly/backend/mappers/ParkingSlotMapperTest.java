@@ -1,6 +1,6 @@
 package com.parkly.backend.mappers;
 
-import com.parkly.backend.common.CommonMockObjectsMappers;
+import com.parkly.backend.common.CommonMockObjects;
 import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class ParkingSlotMapperTest extends CommonMockObjectsMappers
+public class ParkingSlotMapperTest extends CommonMockObjects
 {
 
     private ParkingSlotRest mockParkingSlotRest;
@@ -108,13 +108,13 @@ public class ParkingSlotMapperTest extends CommonMockObjectsMappers
     public void mapToParkingSlotRestPhotoSetEmpty()
     {
         mockParkingSlotDTO.setDescription("Test desc");
-        mockParkingSlotDTO.setPhotoSet(Collections.emptySet());
+        mockParkingSlotDTO.setPhotoSet(null);
 
         final Optional<ParkingSlotRest> retrievedParkingSlotRest =
                 ParkingSlotMapper.mapToParkingSlotRest(mockParkingSlotDTO);
 
         Assert.assertTrue(retrievedParkingSlotRest.isPresent());
-        Assert.assertEquals(0L, retrievedParkingSlotRest.get().getPhotoRestSet().size());
+        Assert.assertNull(retrievedParkingSlotRest.get().getPhotoRestSet());
     }
 
     @Test

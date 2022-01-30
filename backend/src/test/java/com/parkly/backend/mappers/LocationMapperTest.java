@@ -1,6 +1,6 @@
 package com.parkly.backend.mappers;
 
-import com.parkly.backend.common.CommonMockObjectsMappers;
+import com.parkly.backend.common.CommonMockObjects;
 import com.parkly.backend.mapper.LocationMapper;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.rest.domain.LocationRest;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-public class LocationMapperTest extends CommonMockObjectsMappers
+public class LocationMapperTest extends CommonMockObjects
 {
 
     private LocationRest mockLocationRest;

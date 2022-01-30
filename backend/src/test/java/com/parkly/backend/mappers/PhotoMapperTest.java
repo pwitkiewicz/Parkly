@@ -1,6 +1,6 @@
 package com.parkly.backend.mappers;
 
-import com.parkly.backend.common.CommonMockObjectsMappers;
+import com.parkly.backend.common.CommonMockObjects;
 import com.parkly.backend.mapper.PhotoMapper;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.repo.domain.PhotoDTO;
@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-public class PhotoMapperTest extends CommonMockObjectsMappers
+public class PhotoMapperTest extends CommonMockObjects
 {
 
     private PhotoRest mockPhotoRest;

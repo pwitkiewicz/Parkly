@@ -45,6 +45,28 @@ public class ParkingSlotsController {
         this.securityService = securityService;
     }
 
+    @GetMapping("/pages")
+    public ResponseEntity<Long> getParkingSlotsPages(@RequestHeader HttpHeaders headers,
+                                                     @RequestParam(defaultValue = "all") String location,
+                                                     @RequestParam(defaultValue = "all") String filter)
+    {
+        logHeaders(headers);
+
+        if(securityService.isAuthenticated(headers))
+        {
+            try
+            {
+                final FilterEnum filterType = FilterEnum.valueOf(filter.toUpperCase(Locale.ROOT));
+                return ResponseEntity.ok(parkingSlotService.getPageNumber(filterType, location));
+            }
+            catch (IllegalArgumentException e)
+            {
+                logException(e);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(-1L);
+    }
+
     @GetMapping
     public ResponseEntity<Collection<ParkingSlotRest>> getAllParkingSlots(@RequestHeader HttpHeaders headers,
                                                                           @RequestParam(defaultValue = "all") String location,

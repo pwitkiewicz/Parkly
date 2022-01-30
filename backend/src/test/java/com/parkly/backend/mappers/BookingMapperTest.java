@@ -1,6 +1,6 @@
 package com.parkly.backend.mappers;
 
-import com.parkly.backend.common.CommonMockObjectsMappers;
+import com.parkly.backend.common.CommonMockObjects;
 import com.parkly.backend.mapper.BookingMapper;
 import com.parkly.backend.repo.domain.BookingHistoryDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.Optional;
 
-public class BookingMapperTest extends CommonMockObjectsMappers
+public class BookingMapperTest extends CommonMockObjects
 {
 
     private BookingHistoryDTO mockBookingHistoryDTO;

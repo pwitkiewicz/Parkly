@@ -12,7 +12,7 @@ import com.parkly.backend.rest.domain.PhotoRest;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CommonMockObjectsMappers
+public class CommonMockObjects extends AbstractTestConfig
 {
     protected LocationDTO setUpLocationDTO()
     {
