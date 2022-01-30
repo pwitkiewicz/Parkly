@@ -45,8 +45,8 @@ public class ParkingSlotMapper {
         if(Objects.nonNull(parkingSlotDTO))
         {
             final Optional<LocationRest> locationRest = LocationMapper.mapToLocationRest(parkingSlotDTO.getLocation());
-            final Optional<Double> widthOpt = Optional.of(parkingSlotDTO.getWidth());
-            final Optional<Double> heightOpt = Optional.of(parkingSlotDTO.getHeight());
+            final Optional<Double> widthOpt = Optional.ofNullable(parkingSlotDTO.getWidth());
+            final Optional<Double> heightOpt = Optional.ofNullable(parkingSlotDTO.getHeight());
             final Optional<String> descOpt = Optional.ofNullable(parkingSlotDTO.getDescription());
 
             final ParkingSlotRest parkingSlotRest = new ParkingSlotRest();
