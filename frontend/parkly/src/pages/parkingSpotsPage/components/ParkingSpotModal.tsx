@@ -137,6 +137,9 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
             const fd = new FormData();
             fd.append('file', photo, photo.name);
             await uploadPhoto(fd, parkingPlace.id);
+            if (getParkingSpots) {
+                getParkingSpots();
+            }
         }
     }
 
@@ -146,6 +149,7 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
             <DialogContent>
                 {editing &&
                     <>
+                        Upload photo:&nbsp;&nbsp;&nbsp;
                         <input type="file" onChange={fileSelectedHandler}/>
                         <button onClick={fileUploadHandler}>Upload</button>
                     </>

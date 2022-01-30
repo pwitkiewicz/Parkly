@@ -9,10 +9,12 @@ import com.parkly.backend.rest.domain.BookingRest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -79,6 +81,11 @@ public class BookingServiceImpl implements BookingService {
             {
                 final BookingHistoryDTO savedBooking = bookingHistoryRepository.save(bookingOptional.get());
                 return mapToBookingRest(savedBooking);
+            }
+            catch (DataIntegrityViolationException e)
+            {
+                log.warn("Booking for parking slot {} at that time slot already exists", bookingOptional.get().getParkingSlot().getParkingSlotId(), e);
+                return Optional.empty();
             }
             catch (DataAccessException e)
             {

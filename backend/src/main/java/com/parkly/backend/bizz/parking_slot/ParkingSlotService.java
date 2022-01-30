@@ -11,6 +11,8 @@ import java.util.Set;
 
 public interface ParkingSlotService {
 
+    Long getPageNumber(FilterEnum filter, String location);
+
     Set<ParkingSlotRest> getAllParkingSlots(FilterEnum filter,
                                             Integer page,
                                             SortEnum sort,

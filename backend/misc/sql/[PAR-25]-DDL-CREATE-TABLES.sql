@@ -65,5 +65,6 @@ CREATE TABLE IF NOT EXISTS bookinghistory (
 
     PRIMARY KEY pk_bookinghistory (booking_id),
     FOREIGN KEY fk_bookinghistory_parkingslot (parking_slot_id) REFERENCES parkingslot(parking_slot_id)
-		ON UPDATE CASCADE ON DELETE RESTRICT
+		ON UPDATE CASCADE ON DELETE RESTRICT,
+	UNIQUE KEY uk_booking_history (start_date, end_date, parking_slot_id)
 ) ENGINE = INNODB;

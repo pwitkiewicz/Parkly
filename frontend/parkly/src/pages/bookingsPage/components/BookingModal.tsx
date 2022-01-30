@@ -5,10 +5,12 @@ import {
     DialogActions,
     CardMedia,
     Typography,
-    Divider
+    Divider,
 } from "@mui/material";
 import styled from "@emotion/styled";
 import moment from "moment";
+import  Carousel from 'react-bootstrap/Carousel';
+import { CarouselItem } from 'react-bootstrap';
 
 import {Booking, ParkingSpotFetch} from '../../../models/models';
 import ParkingSpotPicture from "../../../assets/parking-place.jpg";
@@ -25,7 +27,10 @@ const BookingModal: React.FC<Props> = ({visible, parkingSpot, booking, onCancel}
     return (
         <Dialog open={visible} onClose={onCancel}>
             {parkingSpot?.photos && parkingSpot?.photos && parkingSpot?.photos.length > 0 &&
-                <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image" sx={{ width: '400px', height: '420px' }}/>
+                <StyledCarousel fade={true} nextLabel="" prevLabel="" variant='dark' indicators={false}>
+                    {parkingSpot?.photos.map(photo => <Carousel.Item><img src={photo.path} alt="Parking spot image" width='400px' height= '420px'/></Carousel.Item>)}
+                </StyledCarousel>
+               // <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image" sx={{ width: '400px', height: '420px' }}/>
             }
             {parkingSpot?.photos && parkingSpot?.photos.length === 0 &&
                 <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image" sx={{ width: '400px', height: '420px' }}/>
@@ -66,5 +71,9 @@ const StyledDivider = styled(Divider)`
 const TypographyContainer = styled.div`
   margin-left: 4px;
 `;
-
+const StyledCarousel = styled(Carousel)`
+width:400px;
+  height:420px;
+  margin: auto;
+`
 export default BookingModal;

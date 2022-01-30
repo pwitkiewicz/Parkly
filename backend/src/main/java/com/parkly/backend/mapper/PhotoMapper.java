@@ -23,7 +23,12 @@ public class PhotoMapper {
         return Optional.empty();
     }
 
-    public static PhotoRest mapToPhotoRest(final PhotoDTO photoDTO) {
-        return PhotoRest.of(photoDTO.getPhotoId(), photoDTO.getPath());
+    public static Optional<PhotoRest> mapToPhotoRest(final PhotoDTO photoDTO)
+    {
+        if(Objects.nonNull(photoDTO))
+        {
+            return Optional.of(PhotoRest.of(photoDTO.getPhotoId(), photoDTO.getPath()));
+        }
+        return Optional.empty();
     }
 }

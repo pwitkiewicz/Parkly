@@ -52,6 +52,19 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     }
 
     @Override
+    public Long getPageNumber(final FilterEnum filter, final String location)
+    {
+        final Predicate<ParkingSlotDTO> filterParkingSlotsByActive =
+                (parkingSlot -> (filter.equals(FilterEnum.ALL)) || (parkingSlot.getIsActive() == filter.getValue() && Objects.nonNull(parkingSlot.getLocation())));
+        final Predicate<ParkingSlotDTO> filterParkingSlotsByLocation =
+                (parkingSlot -> (location.equals("all")) || (parkingSlot.getLocation().getCity().equals(location)));
+
+        return Math.round(Math.ceil((double) StreamSupport.stream(parkingSlotRepository.findAll().spliterator(),false)
+                                            .filter(filterParkingSlotsByActive.and(filterParkingSlotsByLocation))
+                                            .count() / 10));
+    }
+
+    @Override
     public Set<ParkingSlotRest> getAllParkingSlots(final FilterEnum filter,
                                                    final Integer page,
                                                    final SortEnum sort,
