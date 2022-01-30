@@ -58,7 +58,10 @@ public class ParkingSlotMapper {
             parkingSlotRest.setIsActive(parkingSlotDTO.getIsActive() == 1);
             parkingSlotRest.setIsDisabledFriendly(parkingSlotDTO.getIsDisabled() == 1);
             parkingSlotRest.setPhotoRestSet(parkingSlotDTO.getPhotoSet().stream()
-                    .map(PhotoMapper::mapToPhotoRest).collect(Collectors.toSet()));
+                            .map(PhotoMapper::mapToPhotoRest)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                    .collect(Collectors.toSet()));
             widthOpt.ifPresent(parkingSlotRest::setWidth);
             heightOpt.ifPresent(parkingSlotRest::setHeight);
             descOpt.ifPresent(parkingSlotRest::setDescription);

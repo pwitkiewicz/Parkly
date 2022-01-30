@@ -1,5 +1,6 @@
 package com.parkly.backend.mappers;
 
+import com.parkly.backend.common.CommonMockObjectsMappers;
 import com.parkly.backend.mapper.PhotoMapper;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.repo.domain.PhotoDTO;
@@ -10,45 +11,50 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-public class PhotoMapperTest
+public class PhotoMapperTest extends CommonMockObjectsMappers
 {
 
     private PhotoRest mockPhotoRest;
+    private PhotoDTO mockPhotoDTO;
     private ParkingSlotDTO mockParkingSlotDto;
 
     @Before
     public void setUp()
     {
-        mockPhotoRest = PhotoRest.of(0L,"Test Path");
-        setUpParkingSlot();
+        mockPhotoDTO = setUpPhotoDTO();
+        mockPhotoRest = setUpPhotoRest();
+        mockParkingSlotDto = setUpParkingSlotDTO();
     }
 
     @Test
-    public void mapToPhotoDTONonNullRest()
+    public void mapToPhotoDTONonNullPhotoRest()
     {
         final Optional<PhotoDTO> retrievedPhoto = PhotoMapper.mapToPhotoDTO(mockPhotoRest, mockParkingSlotDto);
 
         Assert.assertTrue(retrievedPhoto.isPresent());
-        Assert.assertEquals("Test Path", retrievedPhoto.get().getPath());
+        Assert.assertEquals("Test photo path REST", retrievedPhoto.get().getPath());
     }
 
     @Test
-    public void mapToPhotoDTONullRest()
+    public void mapToPhotoDTONullPhotoRest()
     {
         final Optional<PhotoDTO> retrievedPhoto = PhotoMapper.mapToPhotoDTO(null, mockParkingSlotDto);
         Assert.assertFalse(retrievedPhoto.isPresent());
     }
 
-    private void setUpParkingSlot()
+    @Test
+    public void mapToPhotoRestNonNullPhotoDTO()
     {
-        mockParkingSlotDto = new ParkingSlotDTO();
-        mockParkingSlotDto.setCost(10D);
-        mockParkingSlotDto.setEndDate(1609455600);
-        mockParkingSlotDto.setStartDate(1577833200);
-        mockParkingSlotDto.setName("Test Parking Slot");
-        mockParkingSlotDto.setIsDisabled(1);
-        mockParkingSlotDto.setIsActive(1);
+        final Optional<PhotoRest> retrievedPhoto = PhotoMapper.mapToPhotoRest(mockPhotoDTO);
+        Assert.assertTrue(retrievedPhoto.isPresent());
+        Assert.assertEquals("Test photo path DTO", retrievedPhoto.get().getPath());
     }
 
+    @Test
+    public void mapToPhotoDTONullPhotoDTO()
+    {
+        final Optional<PhotoRest> retrievedPhoto = PhotoMapper.mapToPhotoRest(null);
+        Assert.assertFalse(retrievedPhoto.isPresent());
+    }
 
 }
