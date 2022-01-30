@@ -13,16 +13,13 @@ public class LocationMapperTest
 {
 
     private LocationRest mockLocationRest;
+    private LocationDTO mockLocationDTO;
 
     @Before
     public void setUp()
     {
-        mockLocationRest = new LocationRest();
-        mockLocationRest.setCity("Test City");
-        mockLocationRest.setCountry("Test Country");
-        mockLocationRest.setStreet("Test Street");
-        mockLocationRest.setStreetNumber("0T");
-        mockLocationRest.setZipCode("00-000");
+        setUpLocationRest();
+        setUpLocationDTO();
     }
 
     @Test
@@ -31,8 +28,8 @@ public class LocationMapperTest
         final Optional<LocationDTO> retrievedLocation = LocationMapper.mapToLocationDTO(mockLocationRest);
 
         Assert.assertTrue(retrievedLocation.isPresent());
-        Assert.assertEquals("Test City", retrievedLocation.get().getCity());
-        Assert.assertEquals("00-000", retrievedLocation.get().getZipCode());
+        Assert.assertEquals("Test City 1", retrievedLocation.get().getCity());
+        Assert.assertEquals("10-000", retrievedLocation.get().getZipCode());
     }
 
     @Test
@@ -40,5 +37,41 @@ public class LocationMapperTest
     {
         final Optional<LocationDTO> retrievedLocation = LocationMapper.mapToLocationDTO(null);
         Assert.assertFalse(retrievedLocation.isPresent());
+    }
+
+    @Test
+    public void mapToLocationRestNotNullDTO()
+    {
+        final Optional<LocationRest> retrievedLocation = LocationMapper.mapToLocationRest(mockLocationDTO);
+        Assert.assertTrue(retrievedLocation.isPresent());
+        Assert.assertEquals("Test City 2", retrievedLocation.get().getCity());
+        Assert.assertEquals("20-000", retrievedLocation.get().getZipCode());
+    }
+
+    @Test
+    public void mapToLocationRestNullDTO()
+    {
+        final Optional<LocationRest> retrievedLocation = LocationMapper.mapToLocationRest(null);
+        Assert.assertFalse(retrievedLocation.isPresent());
+    }
+
+    private void setUpLocationRest()
+    {
+        mockLocationRest = new LocationRest();
+        mockLocationRest.setCity("Test City 1");
+        mockLocationRest.setCountry("Test Country 1");
+        mockLocationRest.setStreet("Test Street 1");
+        mockLocationRest.setStreetNumber("1T");
+        mockLocationRest.setZipCode("10-000");
+    }
+
+    private void setUpLocationDTO()
+    {
+        mockLocationDTO = new LocationDTO();
+        mockLocationDTO.setCity("Test City 2");
+        mockLocationDTO.setCountry("Test Country 2");
+        mockLocationDTO.setStreet("Test Street 2");
+        mockLocationDTO.setStreetNumber("2T");
+        mockLocationDTO.setZipCode("20-000");
     }
 }

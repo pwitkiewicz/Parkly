@@ -73,8 +73,8 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                             (parkingSlot.getEndDate() <= dateTo) ||
                             (Objects.isNull(startDate) && Objects.isNull(endDate));
                 });
-        final Comparator<ParkingSlotRest> sortParkingSlots = Comparator.comparing(ParkingSlotRest::getName,
-                (parking1, parking2) ->  parking1.compareTo(parking2) * sort.getValue());
+        final Comparator<ParkingSlotRest> sortParkingSlots = Comparator.comparing(ParkingSlotRest::getLocationRest,
+                (parking1, parking2) ->  parking1.getCity().compareTo(parking2.getCity()) * sort.getValue());
 
         return StreamSupport.stream(parkingSlots.spliterator(), false)
                 .filter(filterParkingSlotsByActive.and(filterParkingSlotsByDates).and(filterParkingSlotsByLocation))

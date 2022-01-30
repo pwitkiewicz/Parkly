@@ -78,7 +78,7 @@ public class BookingsController {
 
         if(securityService.isAuthenticated(headers))
         {
-            var addedBooking = bookingService.addBooking(newBooking);
+            final Optional<BookingRest> addedBooking = bookingService.addBooking(newBooking);
 
             if(addedBooking.isPresent())
             {
