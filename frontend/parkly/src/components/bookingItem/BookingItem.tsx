@@ -4,14 +4,17 @@ import {Button, Card, CardActions, CardContent, CardMedia, Typography, CircularP
 import {Booking} from "../../models/models";
 import Theme from "../../constants/Styles";
 import {ParkingSpotFetch} from '../../models/models';
-import {getParkingSpot} from '../../queries/queries'
+import {getParkingSpot,cancelBooking} from '../../queries/queries'
 import BookingModal from '../../pages/bookingsPage/components/BookingModal'
 import moment from "moment";
 
 type ParkingSpotDetailsModal = {
     isVisible: boolean;
 }
-const BookingItem: FC<Booking> = (booking) => {
+type GetBookingsFunction = {
+    getBookings: () => void;
+}
+const BookingItem: FC<Booking & GetBookingsFunction> = (booking) => {
     const [parkingSpot, setParkingSpot] = useState<ParkingSpotFetch>();
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [detailsBookingState, setDetailsBookingState] = useState<ParkingSpotDetailsModal>({
@@ -59,7 +62,11 @@ const BookingItem: FC<Booking> = (booking) => {
                         }} style={{color: `${Theme.colors.edit}`, marginRight: '1.5vw'}}>
                             Details
                         </Button>
-                        <Button style={{color: `${Theme.colors.remove}`}}>
+                        <Button style={{color: `${Theme.colors.remove}`}} onClick={() => {
+                        cancelBooking(booking.id).then(() => {
+                            booking.getBookings();
+                        });
+                    }}>
                             Cancel
                         </Button>
                     </CardActions>

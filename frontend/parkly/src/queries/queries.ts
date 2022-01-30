@@ -77,3 +77,11 @@ export const uploadPhoto = async (fd: FormData, id: number) => {
         return response.data;
     });
 }
+export const cancelBooking = async(id: number) => {
+    const response = await axios.delete(`${server}/bookings/${id}`,{
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
+    return response.data;
+}

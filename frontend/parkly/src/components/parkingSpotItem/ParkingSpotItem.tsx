@@ -5,7 +5,7 @@ import {Button, Card, CardActions, CardContent, Typography} from "@mui/material"
 import {ParkingSpotFetch} from "../../models/models";
 import Theme from "../../constants/Styles";
 import ParkingSpotModal from '../../pages/parkingSpotsPage/components/ParkingSpotModal';
-import {bookParkingSpot, deleteParkingSpot} from "../../queries/queries";
+import { deleteParkingSpot} from "../../queries/queries";
 
 type ParkingSpotEditModal = {
     isVisible: boolean;
@@ -47,13 +47,6 @@ const ParkingSpotItem: FC<ParkingSpotFetch & GetParkingSpotsFunction> = (parking
                     </TypographyContainer>
                 </CardContent>
                 <CardActions style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <Button style={{color: `${Theme.colors.accept}`, marginRight: '1.5vw'}} onClick={() => {
-                        bookParkingSpot(parkingPlace.id).then(() => {
-                            parkingPlace.getParkingSpots();
-                        });
-                    }}>
-                        Book
-                    </Button>
                     <Button onClick={() => {
                         setParkingSpotState({isVisible: true});
                     }} style={{color: `${Theme.colors.edit}`, marginRight: '1.5vw'}}>
