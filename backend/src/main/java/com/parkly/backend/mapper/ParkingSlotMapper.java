@@ -4,7 +4,6 @@ import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
-import com.parkly.backend.rest.domain.PhotoRest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -58,13 +57,8 @@ public class ParkingSlotMapper {
             parkingSlotRest.setStartDate(parkingSlotDTO.getStartDate());
             parkingSlotRest.setIsActive(parkingSlotDTO.getIsActive() == 1);
             parkingSlotRest.setIsDisabledFriendly(parkingSlotDTO.getIsDisabled() == 1);
-            parkingSlotRest.setPhotoRestSet(
-                    parkingSlotDTO.getPhotoSet()
-                            .stream()
-                            .map(p -> PhotoRest.of(p.getPhotoId(), p.getPath()))
-                            .collect(Collectors.toSet()
-                            )
-                    );
+            parkingSlotRest.setPhotoRestSet(parkingSlotDTO.getPhotoSet().stream()
+                    .map(PhotoMapper::mapToPhotoRest).collect(Collectors.toSet()));
             widthOpt.ifPresent(parkingSlotRest::setWidth);
             heightOpt.ifPresent(parkingSlotRest::setHeight);
             descOpt.ifPresent(parkingSlotRest::setDescription);
