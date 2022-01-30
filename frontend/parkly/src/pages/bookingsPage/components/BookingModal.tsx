@@ -10,11 +10,11 @@ import {
 import styled from "@emotion/styled";
 import moment from "moment";
 
-import {Booking, ParkingSpot} from '../../../models/models';
+import {Booking, ParkingSpotFetch} from '../../../models/models';
 
 interface Props {
     visible: boolean;
-    parkingSpot?: ParkingSpot;
+    parkingSpot?: ParkingSpotFetch;
     booking: Booking;
     onCancel: () => void;
 }
@@ -22,12 +22,12 @@ interface Props {
 const BookingModal: React.FC<Props> = ({visible, parkingSpot, booking, onCancel}) => {
     return (
         <Dialog open={visible} onClose={onCancel}>
-            <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>
+            {/*<CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>*/}
             <TypographyContainer>
                 <StyledTextContainer>
                     <Typography variant="h6" style={{ fontWeight: 600 }}>Information: </Typography>
                     <Typography variant="body1">Booking ID: {booking.id}</Typography>
-                    <Typography variant="body1">Parking Spot ID: {booking.parkingSlotId}</Typography>
+                    <Typography variant="body1">Parking Spot ID: {booking.parkingSlot}</Typography>
                     <Typography variant="body1">Owner ID: {booking.ownerId}</Typography>
                     <StyledDivider/>
                     <Typography variant="h6" style={{ fontWeight: 600 }}>Location: </Typography>

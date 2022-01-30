@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import NotFoundPage from "./pages/notFoundPage/NotFoundPage";
 import RequireAuth from "./auth/RequireAuth";
 import NotAuthorizedPage from "./pages/notAuthorizedPage/NotAuthorizedPage";
-import BookingsPage from './pages/bookingsPage/bookingsPage';
+import BookingsPage from './pages/bookingsPage/BookingsPage';
 import SettingsPage from "./pages/settingsPage/SettingsPage";
 import LogoutPage from "./pages/logoutPage/LogoutPage";
 
