@@ -15,8 +15,8 @@ public interface ParkingSlotService {
                                             Integer page,
                                             SortEnum sort,
                                             String location,
-                                            @Nullable Long startDate,
-                                            @Nullable Long endDate);
+                                            @Nullable String startDate,
+                                            @Nullable String endDate);
 
     Optional<ParkingSlotRest> addParkingSlot(ParkingSlotRest parkingSlotRest);
 

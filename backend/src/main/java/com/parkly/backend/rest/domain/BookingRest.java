@@ -25,10 +25,10 @@ public class BookingRest implements Serializable {
     private Long bookingId;
 
     @JsonProperty("startDateTime")
-    private Long startDate;
+    private String startDate;
 
     @JsonProperty("endDateTime")
-    private Long endDate;
+    private String endDate;
 
     @JsonProperty("active")
     private Boolean isActive;
