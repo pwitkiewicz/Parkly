@@ -3,14 +3,27 @@ export interface LoginInformation {
     password: string;
 }
 
-export interface ParkingSpot {
-    id: string;
+export interface ParkingSpotFetch {
+    id: number;
     name: string;
     startDateTime: Date;
     endDateTime: Date;
     isActive: boolean;
     isDisabledFriendly: boolean;
     photos: PhotosList[];
+    description: string;
+    height: number;
+    width: number;
+    location: Location;
+    cost: number;
+}
+
+export interface ParkingSpotSend {
+    name: string;
+    startDateTime: Date;
+    endDateTime: Date;
+    isActive: boolean;
+    isDisabledFriendly: boolean;
     description: string;
     height: number;
     width: number;
@@ -34,10 +47,13 @@ export interface Location {
     longitude: number;
 }
 export interface Booking {
-    id: number,
-    startDateTime: Date,
-    endDateTime: Date,
-    isActive: boolean,
-    ownerId: number,
-    parkingSlotId: number 
+    id: number;
+    startDateTime: Date;
+    endDateTime: Date;
+    active: boolean;
+    parkingSlot: number;
+    ownerId: number;
+    firstName: string;
+    lastName: string;
+    
 }

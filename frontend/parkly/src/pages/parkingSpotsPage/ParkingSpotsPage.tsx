@@ -3,7 +3,7 @@ import {Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Selec
 import styled from "@emotion/styled";
 
 import {getAllParkingSpots} from "../../queries/queries";
-import {ParkingSpot} from '../../models/models';
+import {ParkingSpotFetch} from '../../models/models';
 import ParkingSpotItem from "../../components/parkingSpotItem/ParkingSpotItem";
 import ParkingSpotModal from "./components/ParkingSpotModal";
 
@@ -14,7 +14,7 @@ type ParkingSpotModel = {
 const ParkingSpotsPage = () => {
 
     const [isFetching, setIsFetching] = useState<boolean>(true);
-    const [parkingSpots, setParkingSpots] = useState<ParkingSpot[]>();
+    const [parkingSpots, setParkingSpots] = useState<ParkingSpotFetch[]>();
     const [filter, setFilter] = useState("Location");
     const handleChange = (event: any) => {
         setFilter(event.target.value);
@@ -61,7 +61,7 @@ const ParkingSpotsPage = () => {
                         isVisible: false,
                     })
                 } parkingPlace={{
-                    id: '',
+                    id: 0,
                     name: '',
                     startDateTime: new Date(),
                     endDateTime: new Date(),
@@ -84,7 +84,7 @@ const ParkingSpotsPage = () => {
                     cost: 0
                 }} getParkingSpots={getParkingSpots}
                 />
-                {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpot) => (
+                {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpotFetch) => (
                     <ParkingSpotItem id={parkingSpot.id} name={parkingSpot.name}
                                      startDateTime={parkingSpot.startDateTime} endDateTime={parkingSpot.endDateTime}
                                      isActive={parkingSpot.isActive} isDisabledFriendly={parkingSpot.isDisabledFriendly}
