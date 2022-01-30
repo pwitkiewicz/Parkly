@@ -235,8 +235,9 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
     {
         if(Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
             final Set<BookingRest> bookingHistoryForParking =
-                    bookingService.getAllBookings(parkingSlot.getParkingSlotId()).stream()
-                            .filter(bookingRest -> (TimeUtils.stringToUnixTimestamp(bookingRest.getStartDate()) >= startDate && TimeUtils.stringToUnixTimestamp(bookingRest.getStartDate()) <= endDate) ||
+                    bookingService.getAllBookings(parkingSlot.getParkingSlotId(), null).stream()
+                            .filter(bookingRest ->
+                                    (TimeUtils.stringToUnixTimestamp(bookingRest.getStartDate()) >= startDate && TimeUtils.stringToUnixTimestamp(bookingRest.getStartDate()) <= endDate) ||
                                     (TimeUtils.stringToUnixTimestamp(bookingRest.getEndDate()) <= endDate && TimeUtils.stringToUnixTimestamp(bookingRest.getEndDate()) >= startDate))
                             .collect(Collectors.toSet());
             return bookingHistoryForParking.isEmpty();

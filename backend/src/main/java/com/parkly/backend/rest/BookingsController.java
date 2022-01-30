@@ -1,5 +1,6 @@
 package com.parkly.backend.rest;
 
+import static com.parkly.backend.utils.LogWriter.logException;
 import static com.parkly.backend.utils.LogWriter.logHeaders;
 
 import com.parkly.backend.bizz.booking.BookingService;
@@ -8,20 +9,16 @@ import com.parkly.backend.rest.domain.BookingRest;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Optional;
+
+import com.parkly.backend.utils.domain.FilterEnum;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
@@ -38,14 +35,34 @@ public class BookingsController {
         this.securityService = securityService;
     }
 
-    @GetMapping
-    public ResponseEntity<Collection<BookingRest>> getAllBookings(@RequestHeader HttpHeaders headers)
+    @GetMapping("/pages")
+    public ResponseEntity<Long> getBookingsPages(@RequestHeader HttpHeaders headers)
     {
         logHeaders(headers);
 
         if(securityService.isAuthenticated(headers))
         {
-            return ResponseEntity.ok(bookingService.getAllBookings(null));
+            try
+            {
+                return ResponseEntity.ok(bookingService.getPageNumber());
+            }
+            catch (IllegalArgumentException e)
+            {
+                logException(e);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(-1L);
+    }
+
+    @GetMapping
+    public ResponseEntity<Collection<BookingRest>> getAllBookings(@RequestHeader HttpHeaders headers,
+                                                                  @RequestParam(defaultValue = "0") Integer page)
+    {
+        logHeaders(headers);
+
+        if(securityService.isAuthenticated(headers))
+        {
+            return ResponseEntity.ok(bookingService.getAllBookings(null, null));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singleton(BookingRest.EMPTY_BOOKING));

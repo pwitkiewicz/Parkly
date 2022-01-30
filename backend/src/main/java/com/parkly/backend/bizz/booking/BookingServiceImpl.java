@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import static com.parkly.backend.mapper.BookingMapper.mapToBookingHistoryDTO;
 import static com.parkly.backend.mapper.BookingMapper.mapToBookingRest;
@@ -32,6 +33,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingHistoryRepository bookingHistoryRepository;
     private final ParkingSlotRepository parkingSlotRepository;
 
+    private static final int PAGE_MAX = 10;
+
     @Autowired
     public BookingServiceImpl(final BookingHistoryRepository bookingHistoryRepository,
                               final ParkingSlotRepository parkingSlotRepository)
@@ -41,18 +44,30 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Set<BookingRest> getAllBookings(final @Nullable Long parkingSlotId)
+    public Long getPageNumber()
+    {
+        return Math.round(Math.ceil((double) StreamSupport.stream(bookingHistoryRepository.findAll().spliterator(),false)
+                .count() / 10));
+    }
+
+    @Override
+    public Set<BookingRest> getAllBookings(final @Nullable Long parkingSlotId, final @Nullable Long page)
     {
         final Predicate<BookingHistoryDTO> filterByParkingSlot =
                 (parkingSlot -> (Objects.nonNull(parkingSlotId) && parkingSlot.getParkingSlot().getParkingSlotId() == parkingSlotId) || (Objects.isNull(parkingSlotId)));
 
-        return StreamSupport
-                .stream(bookingHistoryRepository.findAll().spliterator(), false)
+        final Stream<BookingRest> bookingRests =
+                StreamSupport.stream(bookingHistoryRepository.findAll().spliterator(), false)
                 .filter(filterByParkingSlot)
                 .map(BookingMapper::mapToBookingRest)
                 .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
+                .map(Optional::get);
+
+        if(Objects.nonNull(page))
+        {
+            return bookingRests.skip(page * PAGE_MAX).limit(PAGE_MAX).collect(Collectors.toSet());
+        }
+        return bookingRests.collect(Collectors.toSet());
     }
 
     @Override
