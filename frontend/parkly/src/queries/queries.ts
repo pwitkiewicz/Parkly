@@ -4,7 +4,6 @@ import {server} from "../constants/constants"
 import {ParkingSpotSend} from "../models/models";
 
 export const getAllParkingSpots = async () => {
-    console.log(`Request to ${server}/items`);
     const response = await axios.get(`${server}/items`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''

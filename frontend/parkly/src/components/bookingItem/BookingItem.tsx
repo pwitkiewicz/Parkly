@@ -4,9 +4,10 @@ import {Button, Card, CardActions, CardContent, CardMedia, Typography, CircularP
 import {Booking} from "../../models/models";
 import Theme from "../../constants/Styles";
 import {ParkingSpotFetch} from '../../models/models';
-import {getParkingSpot,cancelBooking} from '../../queries/queries'
+import {getParkingSpot, cancelBooking} from '../../queries/queries'
 import BookingModal from '../../pages/bookingsPage/components/BookingModal'
 import moment from "moment";
+import ParkingSpotPicture from "../../assets/parking-place.jpg";
 
 type ParkingSpotDetailsModal = {
     isVisible: boolean;
@@ -39,7 +40,14 @@ const BookingItem: FC<Booking & GetBookingsFunction> = (booking) => {
             {isFetching ?
                 <CircularProgress/> :
                 <StyledCard>
-                    {/*<CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>*/}
+                    {parkingSpot?.photos && parkingSpot?.photos.length > 0 &&
+                        <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"
+                                   sx={{width: '280px', height: '300px'}}/>
+                    }
+                    {parkingSpot?.photos && parkingSpot?.photos.length === 0 &&
+                        <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image"
+                                   sx={{width: '280px', height: '300px'}}/>
+                    }
                     <CardContent>
                         <Typography variant="h4">
                             Booking ID: {booking.id}
@@ -63,10 +71,10 @@ const BookingItem: FC<Booking & GetBookingsFunction> = (booking) => {
                             Details
                         </Button>
                         <Button style={{color: `${Theme.colors.remove}`}} onClick={() => {
-                        cancelBooking(booking.id).then(() => {
-                            booking.getBookings();
-                        });
-                    }}>
+                            cancelBooking(booking.id).then(() => {
+                                booking.getBookings();
+                            });
+                        }}>
                             Cancel
                         </Button>
                     </CardActions>
