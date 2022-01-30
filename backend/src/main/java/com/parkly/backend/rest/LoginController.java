@@ -4,6 +4,8 @@ import static com.parkly.backend.utils.LogWriter.logHeaders;
 
 import com.parkly.backend.bizz.login.LoginService;
 import com.parkly.backend.rest.domain.LoginFormRest;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +32,9 @@ public class LoginController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Login endpoint", notes = "Endpoint serving login functionality.")
     public ResponseEntity<String> login(@RequestHeader HttpHeaders headers,
+                                        @ApiParam(value = "With user name and unencrypted password.")
                                         @RequestBody LoginFormRest loginForm)
     {
         logHeaders(headers);

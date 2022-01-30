@@ -99,6 +99,11 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.56" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.3.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.3.14" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-security:2.5.8" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:5.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:5.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:5.5.4" level="project" />
     <orderEntry type="library" name="Maven: com.azure.spring:azure-spring-boot-starter:3.10.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-validation:2.5.8" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.2.0.Final" level="project" />
