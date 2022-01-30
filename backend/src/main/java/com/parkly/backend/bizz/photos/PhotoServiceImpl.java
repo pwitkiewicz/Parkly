@@ -1,5 +1,9 @@
 package com.parkly.backend.bizz.photos;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.repo.PhotoRepository;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
@@ -9,17 +13,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.WritableResource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,9 +32,11 @@ import org.springframework.web.multipart.MultipartFile;
 @ConfigurationProperties(prefix = "photos")
 public class PhotoServiceImpl implements PhotoService {
 
-    @Value("azure-blob://parklystorage/photo.jpg")
-    Resource blobFile;
+    private static final String CONTAINER_NAME = "parkly-photos";
 
+    @Value("${photos.connection.string}")
+    private String connectionString;
+    private BlobContainerClient containerClient;
     private final PhotoRepository photoRepository;
     private final ParkingSlotRepository parkingSlotRepository;
 
@@ -41,6 +45,12 @@ public class PhotoServiceImpl implements PhotoService {
     {
         this.photoRepository = photoRepository;
         this.parkingSlotRepository = parkingSlotRepository;
+    }
+
+    @PostConstruct
+    public void init(){
+        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
+        containerClient = blobServiceClient.getBlobContainerClient(CONTAINER_NAME);
     }
 
     @Override
@@ -97,13 +107,22 @@ public class PhotoServiceImpl implements PhotoService {
         {
             log.info("Saving image file for parking slot (id: {})", parkingSlotId);
 
-            try (OutputStream os = ((WritableResource) this.blobFile).getOutputStream()) {
-                ImageIO.write(image.get(), "jpg", os);
+            final String fileName = parkingSlotId + "_" + UUID.randomUUID() + ".jpg";
+            final String localPath = "./";
+            final File localFile = new File(localPath + fileName);
+            BlobClient blobClient = containerClient.getBlobClient(fileName);
+
+            try {
+                ImageIO.write(image.get(), "jpg", localFile);
+                blobClient.uploadFromFile(localPath + localFile);
+                if(localFile.delete()) {
+                    log.info("local file {} deleted", localFile);
+                }
             } catch (IOException e) {
                 log.error("Error saving image file for parking slot (id: {})", parkingSlotId);
             }
 
-            return Optional.of(blobFile.getURI().toString());
+            return Optional.of(blobClient.getBlobUrl());
         }
         return Optional.empty();
     }
