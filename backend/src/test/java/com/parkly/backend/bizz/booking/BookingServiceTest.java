@@ -2,6 +2,7 @@ package com.parkly.backend.bizz.booking;
 
 import com.parkly.backend.common.CommonMockObjects;
 import com.parkly.backend.repo.BookingHistoryRepository;
+import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.repo.domain.BookingHistoryDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.BookingRest;
@@ -26,6 +27,8 @@ public class BookingServiceTest extends CommonMockObjects
 
     @MockBean
     private BookingHistoryRepository mockBookingHistoryRepository;
+    @MockBean
+    private ParkingSlotRepository mockParkingSlotRepository;
 
     private Set<BookingHistoryDTO> mockBookingHistoryAll;
     private Set<BookingHistoryDTO> mockBookingHistoryParking1;
@@ -92,6 +95,22 @@ public class BookingServiceTest extends CommonMockObjects
         Assert.assertFalse(retrievedBookingRest.isPresent());
     }
 
+    @Test
+    public void addBookingParkingSlotNotEmpty()
+    {
+        final BookingRest mockBookingRest = setUpBookingHistoryRest();
+        mockBookingRest.setStartDate("2022-01-15T00:00:00.000Z");
+        mockBookingRest.setEndDate("2022-01-15T01:00:00.000Z");
+
+        Mockito.when(mockBookingHistoryRepository.save(Mockito.any(BookingHistoryDTO.class))).thenAnswer(ans -> ans.getArguments()[0]);
+
+        final Optional<BookingRest> retrievedBookingRest = bookingService.addBooking(mockBookingRest);
+        Assert.assertTrue(retrievedBookingRest.isPresent());
+        Assert.assertEquals(0L, retrievedBookingRest.get().getBookingId().longValue());
+        Assert.assertEquals(100D, retrievedBookingRest.get().getTotalCost(),0);
+        Assert.assertEquals("Test first name REST", retrievedBookingRest.get().getFirstName());
+    }
+
     private void setUpBookingHistory()
     {
         final ParkingSlotDTO mockParkingSpot1 = setUpParkingSlotDTO();
@@ -124,6 +143,7 @@ public class BookingServiceTest extends CommonMockObjects
 
         mockBookingHistoryAll = Stream.concat(mockBookingHistoryParking1.stream(),bookingHistoryDtoSet2.stream()).collect(Collectors.toSet());
         Mockito.doReturn(Optional.of(mockBookingHistoryDTO1)).when(mockBookingHistoryRepository).findById(1L);
+        Mockito.doReturn(Optional.of(mockParkingSpot1)).when(mockParkingSlotRepository).findById(1L);
     }
 
 }

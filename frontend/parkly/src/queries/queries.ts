@@ -1,15 +1,23 @@
 import axios from "axios";
 
 import {server} from "../constants/constants"
-import {ParkingSpotSend} from "../models/models";
+import {ParkingSpotFetch, ParkingSpotSend} from "../models/models";
 
-export const getAllParkingSpots = async (filter: string, city: string,active:string) => {
-    console.log(`Request to ${server}/items?sort=${filter}&location=${city}`);
-    const response = await axios.get(`${server}/items?sort=${filter}&location=${city}&filter=${active}`, {
-        headers: {
-            'security-header': sessionStorage.getItem('key') || ''
-        }
-    });
+export const getAllParkingSpots = async (filter: string, city: string, active: string, page?: number) => {
+    let response;
+    if (!page) {
+        response = await axios.get(`${server}/items?sort=${filter}&location=${city}&filter=${active}`, {
+            headers: {
+                'security-header': sessionStorage.getItem('key') || ''
+            }
+        });
+    } else {
+        response = await axios.get(`${server}/items?sort=${filter}&location=${city}&filter=${active}&page=${page - 1}`, {
+            headers: {
+                'security-header': sessionStorage.getItem('key') || ''
+            }
+        });
+    }
     return response.data;
 }
 export const getAllBookings = async () => {
@@ -55,17 +63,20 @@ export const addParkingSpot = async (parkingSpot: ParkingSpotSend, id?: number) 
     return response.data;
 }
 
-export const deleteParkingSpot = async (id: number) => {
-    const response = await axios.delete(`${server}/items/${id}`,{
+export const deleteParkingSpot = async (spot: ParkingSpotFetch) => {
+    for(let i=0;i<spot.photos.length;i++){
+        const response = await axios.delete(`${server}/photos/${spot.photos[i].id}`,{
+            headers: {
+                'security-header': sessionStorage.getItem('key') || ''
+            }
+        });
+    }
+    const response = await axios.delete(`${server}/items/${spot.id}`,{
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
     });
     return response.data;
-}
-
-export const bookParkingSpot = async (id: number) => {
-    alert(`Booked parking place with id ${id}`); //addBooking()
 }
 
 export const uploadPhoto = async (fd: FormData, id: number) => {
@@ -77,8 +88,17 @@ export const uploadPhoto = async (fd: FormData, id: number) => {
         return response.data;
     });
 }
-export const cancelBooking = async(id: number) => {
+export const cancelBooking = async (id: number) => {
     const response = await axios.delete(`${server}/bookings/${id}`,{
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
+    return response.data;
+}
+
+export const getPagination = async (filter: string, location: string) => {
+    const response = await axios.get(`${server}/items/pages?filter=${filter}&location=${location}`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
