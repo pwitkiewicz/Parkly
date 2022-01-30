@@ -8,17 +8,17 @@ class TimeUtilsTest {
 
     @Test
     void convertCorrectlyStringToUnixTimestamp() {
-        var localDateTimeString = "Sun Jan 30 2022 15:12:45 GMT+0100 (CET)";
+        var localDateTimeString = "2022-02-10T18:45:04.000Z";
         long timestamp = TimeUtils.stringToUnixTimestamp(localDateTimeString);
 
-        assertThat(timestamp).isEqualTo(1643551965L);
+        assertThat(timestamp).isEqualTo(1644518704L);
     }
 
     @Test
     void convertCorrectlyTimestampToString() {
-        var timestamp = 1643551965L;
+        var timestamp = 1644518704L;
         var localDateTimeString = TimeUtils.unixTimestampToString(timestamp);
 
-        assertThat(localDateTimeString).isEqualTo("Sun Jan 30 2022 14:12:45 GMT+0000");
+        assertThat(localDateTimeString).isEqualTo("2022-02-10T18:45:04Z");
     }
 }

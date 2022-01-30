@@ -1,57 +1,38 @@
 import SearchBar from "../components/SearchBar";
-import { StyleSheet, Text, View, Button, FlatList, ScrollView, Pressable } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import React, { useEffect, useState } from "react";
-import AnimatedProgressWheel from 'react-native-progress-wheel';
-import { Ionicons } from "@expo/vector-icons";
-//import { getAllParkingSpots } from "../queries/queries";
-//import { ParkingSpot } from '../models/models';
-//import ParkingSpotItem from "../components/ParkingSpotItem";
-//import ParkingSpotModal from "../components/ParkingSpotModal";
-
-
-
-
+import ParkingSpots from "./ParkingSpots";
+import { withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 
 function HomePage({ navigation }) {
+  //const navigation = useNavigation();
+
+
   const [isFetching, setIsFetching] = useState(true);
   const [parkingSpots, setParkingSpots] = useState();
-  const [filter, setFilter] = useState("Location");
+  const [filter, setFilter] = useState("");
   const handleChange = (text) => {
     setFilter(text);
   };
-  const [addParkingSpotState, setParkingSpotState] = useState({
-    isVisible: false
-  });
 
   const getParkingSpots = async () => {
-    const parkingSpots = await getAllParkingSpots();
+    const parkingSpots = {}//await getAllParkingSpots();
     setParkingSpots(parkingSpots);
   }
-
+  const onButtonClick=()=>{
+    navigation.navigate('SettingsPage')}
+  
   useEffect(() => {
     getParkingSpots().then(() => {
       setIsFetching(false)
     });
   }, [])
-
   return (
     <View style={styles.container}>
       <SearchBar onChange={handleChange}></SearchBar>
+      <ParkingSpots onButtonClick={onButtonClick} filter={filter}></ParkingSpots>
 
-      <ScrollView>
-        <Text style={{ fontSize: 96 }}>JEst</Text>
-        <Text style={{ fontSize: 96 }}>Ciezko</Text>
-        <Text style={{ fontSize: 96 }}>Ciezko</Text>
-        <Text style={{ fontSize: 96 }}>Ciezko</Text>
-        <Text style={{ fontSize: 96 }}>Ciezko</Text>
-        <Text style={{ fontSize: 96 }}>Ciezko</Text>
-      </ScrollView>
-      {//<Pressable style={styles.button}
-        //onPress={() => navigation.navigate('ParkingSpotDetailPage')}>
-        //</View><Text style={styles.content}>Button</Text>
-        //</Pressable>
-      }
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         <View>
@@ -60,6 +41,8 @@ function HomePage({ navigation }) {
         </View>
         <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
       </View>
+      {//<Button title="sd" onButtonClick={onButtonClick}/>
+      }
     </View>
   );
 }
@@ -86,4 +69,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   }
 });
-export default HomePage
+export default withNavigation(HomePage);
