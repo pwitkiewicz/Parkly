@@ -1,5 +1,6 @@
 import {LoginInformation} from "../models/models";
 import axios from "axios";
+import {server} from "../constants/constants";
 
 interface AuthService {
     login: (loginInfo: LoginInformation) => void;
@@ -7,14 +8,12 @@ interface AuthService {
     getCurrentUserToken: () => void;
 }
 
-const authServer = 'http://localhost:8080'
-
 function createAuthService(): AuthService {
 
     let data = '';
 
     const login = async (loginInfo: LoginInformation) => {
-        await axios.post(`${authServer}/login`, {
+        await axios.post(`${server}/login`, {
             login: loginInfo.login,
             password: loginInfo.password
         }).then(response => {
@@ -26,6 +25,7 @@ function createAuthService(): AuthService {
         return data;
     }
     const logout = () => {
+        sessionStorage.removeItem('key');
     }
     const getCurrentUserToken = () => {
     }

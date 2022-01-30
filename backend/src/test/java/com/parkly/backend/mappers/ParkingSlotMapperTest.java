@@ -4,6 +4,7 @@ import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
+import com.parkly.backend.utils.TimeUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,16 +71,14 @@ public class ParkingSlotMapperTest
         mockLocationDto.setStreet("Test Street");
         mockLocationDto.setStreetNumber("0T");
         mockLocationDto.setZipCode("00-000");
-        mockLocationDto.setLatitude(0D);
-        mockLocationDto.setLongitude(0D);
     }
 
     private void setUpParkingSlotRest()
     {
         mockParkingSlotRest = new ParkingSlotRest();
         mockParkingSlotRest.setCost(10D);
-        mockParkingSlotRest.setEndDate(1609455600L);
-        mockParkingSlotRest.setStartDate(1577833200L);
+        mockParkingSlotRest.setEndDate(TimeUtils.unixTimestampToString(1609455600L));
+        mockParkingSlotRest.setStartDate(TimeUtils.unixTimestampToString(1577833200L));
         mockParkingSlotRest.setName("Test Parking Slot");
         mockParkingSlotRest.setIsDisabledFriendly(true);
         mockParkingSlotRest.setIsActive(false);

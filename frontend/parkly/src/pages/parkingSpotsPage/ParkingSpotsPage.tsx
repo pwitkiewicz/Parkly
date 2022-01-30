@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField,FormControlLabel,Switch} from "@mui/material";
 import styled from "@emotion/styled";
 
-import {getAllParkingSpots} from "../../queries/queries";
-import {ParkingSpot} from '../../models/models';
+import {getAllParkingSpots, getParkingSpot} from "../../queries/queries";
+import {ParkingSpotFetch} from '../../models/models';
 import ParkingSpotItem from "../../components/parkingSpotItem/ParkingSpotItem";
 import ParkingSpotModal from "./components/ParkingSpotModal";
 
@@ -14,39 +14,50 @@ type ParkingSpotModel = {
 const ParkingSpotsPage = () => {
 
     const [isFetching, setIsFetching] = useState<boolean>(true);
-    const [parkingSpots, setParkingSpots] = useState<ParkingSpot[]>();
-    const [filter, setFilter] = useState("Location");
-    const handleChange = (event: any) => {
-        setFilter(event.target.value);
-    };
+    const [parkingSpots, setParkingSpots] = useState<ParkingSpotFetch[]>();
+    const [filter, setFilter] = useState<string>("ascending");
+    const [city,setCity] = useState<string>("");
+    const [active,setActive] = useState<string>("all");
+
+    const handleSwitch = (event: any) =>{
+        console.log(event);
+        if(active==="all")setActive("active");
+        else setActive("all");
+    }
+
     const [addParkingSpotState, setParkingSpotState] = useState<ParkingSpotModel>({
         isVisible: false
     });
 
     const getParkingSpots = async () => {
-        const parkingSpots = await getAllParkingSpots();
+        const parkingSpots = await getAllParkingSpots(filter,city,active);
         setParkingSpots(parkingSpots);
     }
+
 
     useEffect(() => {
         getParkingSpots().then(() => {
             setIsFetching(false)
         });
-    }, [])
+    }, [filter,city,active])
 
     return (
         <>
             <SearchBarContainer>
                 <ItemsContainer>
-                    <StyledTextField id="standard-basic" label="Search"/>
+                    <StyledTextField id="standard-basic" label="Search" onChange={(event: any) => setCity(event.target.value)}/>
                     <StyledFormControl>
-                        <InputLabel>Filter</InputLabel>
-                        <Select value={filter} label="Filter" onChange={handleChange}>
-                            <MenuItem value="Location">Location</MenuItem>
-                            <MenuItem value="??">??</MenuItem>
-                            <MenuItem value="???">???</MenuItem>
+                        <InputLabel >Sort by city name:</InputLabel>
+                        <Select value={filter} label="Filter" onChange={(event: any) => setFilter(event.target.value)}>
+                            <MenuItem value="ascending">A-Z</MenuItem>
+                            <MenuItem value="descending">Z-A</MenuItem>
                         </Select>
                     </StyledFormControl>
+                    
+                    <FormControlLabel control={<Switch onChange={handleSwitch}/>} label="Only Active"
+/>
+                
+
                 </ItemsContainer>
                 <Button variant="outlined" onClick={() => {
                     setParkingSpotState({isVisible: true})
@@ -61,7 +72,7 @@ const ParkingSpotsPage = () => {
                         isVisible: false,
                     })
                 } parkingPlace={{
-                    id: '',
+                    id: 0,
                     name: '',
                     startDateTime: new Date(),
                     endDateTime: new Date(),
@@ -84,7 +95,7 @@ const ParkingSpotsPage = () => {
                     cost: 0
                 }} getParkingSpots={getParkingSpots}
                 />
-                {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpot) => (
+                {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpotFetch) => (
                     <ParkingSpotItem id={parkingSpot.id} name={parkingSpot.name}
                                      startDateTime={parkingSpot.startDateTime} endDateTime={parkingSpot.endDateTime}
                                      isActive={parkingSpot.isActive} isDisabledFriendly={parkingSpot.isDisabledFriendly}

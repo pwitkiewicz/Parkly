@@ -4,11 +4,13 @@ import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
+import com.parkly.backend.utils.TimeUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParkingSlotMapper {
@@ -25,8 +27,8 @@ public class ParkingSlotMapper {
             final ParkingSlotDTO parkingSlotDTO = new ParkingSlotDTO();
             parkingSlotDTO.setName(parkingSlotRest.getName());
             parkingSlotDTO.setCost(parkingSlotRest.getCost());
-            parkingSlotDTO.setEndDate(parkingSlotRest.getEndDate());
-            parkingSlotDTO.setStartDate(parkingSlotRest.getStartDate());
+            parkingSlotDTO.setEndDate(TimeUtils.stringToUnixTimestamp(parkingSlotRest.getEndDate()));
+            parkingSlotDTO.setStartDate(TimeUtils.stringToUnixTimestamp(parkingSlotRest.getStartDate()));
             parkingSlotDTO.setIsActive(Boolean.TRUE.equals(parkingSlotRest.getIsActive())? 1 : 0);
             parkingSlotDTO.setIsDisabled(Boolean.TRUE.equals(parkingSlotRest.getIsDisabledFriendly())? 1 : 0);
             widthOpt.ifPresent(parkingSlotDTO::setWidth);
@@ -44,17 +46,20 @@ public class ParkingSlotMapper {
         if(Objects.nonNull(parkingSlotDTO))
         {
             final Optional<LocationRest> locationRest = LocationMapper.mapToLocationRest(parkingSlotDTO.getLocation());
-            final Optional<Double> widthOpt = Optional.of(parkingSlotDTO.getWidth());
-            final Optional<Double> heightOpt = Optional.of(parkingSlotDTO.getHeight());
+            final Optional<Double> widthOpt = Optional.ofNullable(parkingSlotDTO.getWidth());
+            final Optional<Double> heightOpt = Optional.ofNullable(parkingSlotDTO.getHeight());
             final Optional<String> descOpt = Optional.ofNullable(parkingSlotDTO.getDescription());
 
             final ParkingSlotRest parkingSlotRest = new ParkingSlotRest();
+            parkingSlotRest.setParkingSlotId(parkingSlotDTO.getParkingSlotId());
             parkingSlotRest.setName(parkingSlotDTO.getName());
             parkingSlotRest.setCost(parkingSlotDTO.getCost());
-            parkingSlotRest.setEndDate(parkingSlotDTO.getEndDate());
-            parkingSlotRest.setStartDate(parkingSlotDTO.getStartDate());
+            parkingSlotRest.setEndDate(TimeUtils.unixTimestampToString(parkingSlotDTO.getEndDate()));
+            parkingSlotRest.setStartDate(TimeUtils.unixTimestampToString(parkingSlotDTO.getStartDate()));
             parkingSlotRest.setIsActive(parkingSlotDTO.getIsActive() == 1);
             parkingSlotRest.setIsDisabledFriendly(parkingSlotDTO.getIsDisabled() == 1);
+            parkingSlotRest.setPhotoRestSet(parkingSlotDTO.getPhotoSet().stream()
+                    .map(PhotoMapper::mapToPhotoRest).collect(Collectors.toSet()));
             widthOpt.ifPresent(parkingSlotRest::setWidth);
             heightOpt.ifPresent(parkingSlotRest::setHeight);
             descOpt.ifPresent(parkingSlotRest::setDescription);

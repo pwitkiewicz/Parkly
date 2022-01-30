@@ -1,11 +1,11 @@
 import React, {FC, useState} from 'react';
 import styled from "@emotion/styled";
-import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 
-import {ParkingSpot} from "../../models/models";
+import {ParkingSpotFetch} from "../../models/models";
 import Theme from "../../constants/Styles";
 import ParkingSpotModal from '../../pages/parkingSpotsPage/components/ParkingSpotModal';
-import {bookParkingSpot, deleteParkingSpot} from "../../queries/queries";
+import { deleteParkingSpot} from "../../queries/queries";
 
 type ParkingSpotEditModal = {
     isVisible: boolean;
@@ -15,11 +15,13 @@ type GetParkingSpotsFunction = {
     getParkingSpots: () => void;
 }
 
-const ParkingSpotItem: FC<ParkingSpot & GetParkingSpotsFunction> = (parkingPlace) => {
+const ParkingSpotItem: FC<ParkingSpotFetch & GetParkingSpotsFunction> = (parkingPlace) => {
 
     const [editParkingSpotState, setParkingSpotState] = useState<ParkingSpotEditModal>({
         isVisible: false
     });
+    console.log(parkingPlace);
+
     return (
         <>
             <ParkingSpotModal visible={editParkingSpotState.isVisible} onCancel={() =>
@@ -27,7 +29,7 @@ const ParkingSpotItem: FC<ParkingSpot & GetParkingSpotsFunction> = (parkingPlace
                     isVisible: false,
                 })} parkingPlace={parkingPlace} editing={true} getParkingSpots={parkingPlace.getParkingSpots}/>
             <StyledCard>
-                <CardMedia component="img" image={parkingPlace.photos[0]?.path} alt="Parking spot image"/>
+                {/*<CardMedia component="img" image={parkingPlace?.photos[0]?.path} alt="Parking spot image"/>*/}
                 <CardContent>
                     <Typography variant="h4">
                         {parkingPlace.name}
@@ -45,13 +47,6 @@ const ParkingSpotItem: FC<ParkingSpot & GetParkingSpotsFunction> = (parkingPlace
                     </TypographyContainer>
                 </CardContent>
                 <CardActions style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <Button style={{color: `${Theme.colors.accept}`, marginRight: '1.5vw'}} onClick={() => {
-                        bookParkingSpot(parkingPlace.id).then(() => {
-                            parkingPlace.getParkingSpots();
-                        });
-                    }}>
-                        Book
-                    </Button>
                     <Button onClick={() => {
                         setParkingSpotState({isVisible: true});
                     }} style={{color: `${Theme.colors.edit}`, marginRight: '1.5vw'}}>

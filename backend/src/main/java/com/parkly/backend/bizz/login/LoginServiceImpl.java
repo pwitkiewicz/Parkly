@@ -15,15 +15,18 @@ public class LoginServiceImpl implements LoginService {
     private final UserRepository userRepository;
 
     @Autowired
-    public LoginServiceImpl(final UserRepository userRepository) {
+    public LoginServiceImpl(final UserRepository userRepository)
+    {
         this.userRepository = userRepository;
     }
 
     @Override
-    public Optional<String> loginToSystem(final LoginFormRest loginForm) {
+    public Optional<String> loginToSystem(final LoginFormRest loginForm)
+    {
         var userOptional = userRepository.findByLoginAndPassword(loginForm.getLogin(), loginForm.getPassword());
 
-        if(userOptional.isEmpty()) {
+        if(userOptional.isEmpty())
+        {
             log.warn("Bad login request for user {}", loginForm.getLogin());
         }
 
