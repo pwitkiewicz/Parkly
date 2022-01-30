@@ -10,4 +10,5 @@ public interface UserRepository extends PagingAndSortingRepository<UserDTO, Long
 {
     Optional<UserDTO> findByLoginAndPassword(String login, String password);
     Optional<UserDTO> findBySecurityToken(String securityToken);
+    Optional<UserDTO> findByLogin(String login);
 }
