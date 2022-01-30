@@ -62,7 +62,7 @@ public class BookingsController {
 
         if(securityService.isAuthenticated(headers))
         {
-            return ResponseEntity.ok(bookingService.getAllBookings(null, null));
+            return ResponseEntity.ok(bookingService.getAllBookings(null, page.longValue()));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singleton(BookingRest.EMPTY_BOOKING));
