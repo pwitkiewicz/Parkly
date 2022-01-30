@@ -10,25 +10,32 @@ import {
 import styled from "@emotion/styled";
 import moment from "moment";
 
-import {Booking, ParkingSpot} from '../../../models/models';
+import {Booking, ParkingSpotFetch} from '../../../models/models';
+import ParkingSpotPicture from "../../../assets/parking-place.jpg";
 
 interface Props {
     visible: boolean;
-    parkingSpot?: ParkingSpot;
+    parkingSpot?: ParkingSpotFetch;
     booking: Booking;
     onCancel: () => void;
 }
 
 const BookingModal: React.FC<Props> = ({visible, parkingSpot, booking, onCancel}) => {
+    console.log(booking);
     return (
         <Dialog open={visible} onClose={onCancel}>
-            <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>
+            {parkingSpot?.photos && parkingSpot?.photos && parkingSpot?.photos.length > 0 &&
+                <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image" sx={{ width: '400px', height: '420px' }}/>
+            }
+            {parkingSpot?.photos && parkingSpot?.photos.length === 0 &&
+                <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image" sx={{ width: '400px', height: '420px' }}/>
+            }
             <TypographyContainer>
                 <StyledTextContainer>
                     <Typography variant="h6" style={{ fontWeight: 600 }}>Information: </Typography>
                     <Typography variant="body1">Booking ID: {booking.id}</Typography>
-                    <Typography variant="body1">Parking Spot ID: {booking.parkingSlotId}</Typography>
-                    <Typography variant="body1">Owner ID: {booking.ownerId}</Typography>
+                    <Typography variant="body1">Parking Spot Name: {parkingSpot?.name}</Typography>
+                    <Typography variant="body1">Owner Name: {`${booking.firstName} ` + booking.lastName}</Typography>
                     <StyledDivider/>
                     <Typography variant="h6" style={{ fontWeight: 600 }}>Location: </Typography>
                     <Typography variant="body1">City: {parkingSpot?.location.city}</Typography>

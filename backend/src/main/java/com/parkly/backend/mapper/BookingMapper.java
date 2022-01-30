@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import static com.parkly.backend.mapper.ParkingSlotMapper.mapToParkingSlotRest;
-import static com.parkly.backend.utils.TimeUtils.timestampsToDuration;
+import static com.parkly.backend.utils.TimeUtils.*;
 
 
 @Slf4j
@@ -32,8 +32,8 @@ public class BookingMapper {
 
                 return Optional.of(new BookingRest(
                         bookingHistoryDTO.getBookingId(),
-                        bookingHistoryDTO.getStartDate(),
-                        bookingHistoryDTO.getEndDate(),
+                        unixTimestampToString(bookingHistoryDTO.getStartDate()),
+                        unixTimestampToString(bookingHistoryDTO.getEndDate()),
                         bookingHistoryDTO.getIsActive() == 1,
                         totalCost,
                         parkingSlotRest.get().getParkingSlotId(),
@@ -54,8 +54,8 @@ public class BookingMapper {
             final int isActive = Boolean.TRUE.equals(bookingRest.getIsActive()) ? 1 : 0;
             final BookingHistoryDTO bookingHistoryDTO = new BookingHistoryDTO();
             bookingHistoryDTO.setOwnerId(bookingRest.getOwnerId());
-            bookingHistoryDTO.setEndDate(bookingRest.getEndDate());
-            bookingHistoryDTO.setStartDate(bookingRest.getStartDate());
+            bookingHistoryDTO.setEndDate(stringToUnixTimestamp(bookingRest.getEndDate()));
+            bookingHistoryDTO.setStartDate(stringToUnixTimestamp(bookingRest.getStartDate()));
             bookingHistoryDTO.setIsActive(isActive);
             bookingHistoryDTO.setParkingSlot(parkingSlotDTO);
             bookingHistoryDTO.setFirstName(bookingRest.getFirstName());

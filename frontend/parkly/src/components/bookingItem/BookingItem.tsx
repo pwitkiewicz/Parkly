@@ -3,22 +3,27 @@ import styled from "@emotion/styled";
 import {Button, Card, CardActions, CardContent, CardMedia, Typography, CircularProgress} from "@mui/material";
 import {Booking} from "../../models/models";
 import Theme from "../../constants/Styles";
-import {ParkingSpot} from '../../models/models';
-import {getParkingSpot} from '../../queries/queries'
+import {ParkingSpotFetch} from '../../models/models';
+import {getParkingSpot, cancelBooking} from '../../queries/queries'
 import BookingModal from '../../pages/bookingsPage/components/BookingModal'
 import moment from "moment";
+import ParkingSpotPicture from "../../assets/parking-place.jpg";
 
 type ParkingSpotDetailsModal = {
     isVisible: boolean;
 }
-const BookingItem: FC<Booking> = (booking) => {
-    const [parkingSpot, setParkingSpot] = useState<ParkingSpot>();
+type GetBookingsFunction = {
+    getBookings: () => void;
+}
+const BookingItem: FC<Booking & GetBookingsFunction> = (booking) => {
+    const [parkingSpot, setParkingSpot] = useState<ParkingSpotFetch>();
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [detailsBookingState, setDetailsBookingState] = useState<ParkingSpotDetailsModal>({
         isVisible: false
     });
     const getParking = async () => {
-        const parking = await getParkingSpot(booking.id);
+        console.log(booking);
+        const parking = await getParkingSpot(booking.parkingSlot);
         setParkingSpot(parking);
     }
     useEffect(() => {
@@ -35,7 +40,14 @@ const BookingItem: FC<Booking> = (booking) => {
             {isFetching ?
                 <CircularProgress/> :
                 <StyledCard>
-                    <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>
+                    {parkingSpot?.photos && parkingSpot?.photos.length > 0 &&
+                        <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"
+                                   sx={{width: '280px', height: '300px'}}/>
+                    }
+                    {parkingSpot?.photos && parkingSpot?.photos.length === 0 &&
+                        <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image"
+                                   sx={{width: '280px', height: '300px'}}/>
+                    }
                     <CardContent>
                         <Typography variant="h4">
                             Booking ID: {booking.id}
@@ -58,7 +70,11 @@ const BookingItem: FC<Booking> = (booking) => {
                         }} style={{color: `${Theme.colors.edit}`, marginRight: '1.5vw'}}>
                             Details
                         </Button>
-                        <Button style={{color: `${Theme.colors.remove}`}}>
+                        <Button style={{color: `${Theme.colors.remove}`}} onClick={() => {
+                            cancelBooking(booking.id).then(() => {
+                                booking.getBookings();
+                            });
+                        }}>
                             Cancel
                         </Button>
                     </CardActions>

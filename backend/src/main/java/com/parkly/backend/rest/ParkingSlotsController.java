@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
@@ -70,8 +68,8 @@ public class ParkingSlotsController {
     @GetMapping
     public ResponseEntity<Collection<ParkingSlotRest>> getAllParkingSlots(@RequestHeader HttpHeaders headers,
                                                                           @RequestParam(defaultValue = "all") String location,
-                                                                          @RequestParam(required = false) Long startDate,
-                                                                          @RequestParam(required = false) Long endDate,
+                                                                          @RequestParam(required = false) String startDate,
+                                                                          @RequestParam(required = false) String endDate,
                                                                           @RequestParam(defaultValue = "all") String filter,
                                                                           @RequestParam(defaultValue = "0") Integer page,
                                                                           @RequestParam(defaultValue = "none") String sort)

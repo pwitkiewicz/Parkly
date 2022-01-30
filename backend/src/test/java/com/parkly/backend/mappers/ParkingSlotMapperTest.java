@@ -5,6 +5,7 @@ import com.parkly.backend.mapper.ParkingSlotMapper;
 import com.parkly.backend.repo.domain.LocationDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
+import com.parkly.backend.utils.TimeUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

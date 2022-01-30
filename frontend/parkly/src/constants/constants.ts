@@ -1,1 +1,1 @@
-export const server = 'http://localhost:3000';
+export const server = 'https://parkly-2022.azurewebsites.net';

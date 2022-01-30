@@ -13,6 +13,7 @@ import com.parkly.backend.rest.domain.BookingRest;
 import com.parkly.backend.rest.domain.LocationRest;
 import com.parkly.backend.rest.domain.ParkingSlotRest;
 import com.parkly.backend.rest.domain.PhotoRest;
+import com.parkly.backend.utils.TimeUtils;
 import com.parkly.backend.utils.domain.FilterEnum;
 import com.parkly.backend.utils.domain.SortEnum;
 import java.util.*;
@@ -68,17 +69,17 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                                                    final Integer page,
                                                    final SortEnum sort,
                                                    final String location,
-                                                   @Nullable Long startDate,
-                                                   @Nullable Long endDate)
+                                                   @Nullable String startDate,
+                                                   @Nullable String endDate)
     {
         final Iterable<ParkingSlotDTO>  parkingSlots = parkingSlotRepository.findAll();
 
         final Predicate<ParkingSlotDTO> filterParkingSlotsByActive =
                 (parkingSlot -> (filter.equals(FilterEnum.ALL)) || (parkingSlot.getIsActive() == filter.getValue() && Objects.nonNull(parkingSlot.getLocation())));
         final Predicate<ParkingSlotDTO> filterParkingSlotsByLocation =
-                (parkingSlot -> (location.equals("all")) || (parkingSlot.getLocation().getCity().equals(location)));
+                (parkingSlot -> (location.equals("all")) || (parkingSlot.getLocation().getCity().toLowerCase().contains(location.toLowerCase())));
         final Predicate<ParkingSlotDTO> filterParkingSlotsByDates =
-                (parkingSlot -> filterByDates(startDate, endDate, parkingSlot));
+                (parkingSlot -> filterByDates(TimeUtils.stringToUnixTimestamp(startDate), TimeUtils.stringToUnixTimestamp(endDate), parkingSlot));
 
         final Comparator<ParkingSlotRest> sortParkingSlots = Comparator.comparing(ParkingSlotRest::getLocationRest,
                 (parking1, parking2) ->  parking1.getCity().compareTo(parking2.getCity()) * sort.getValue());
@@ -147,8 +148,8 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
             parkingSlotDTO.setIsActive(Boolean.TRUE.equals(parkingSlotRest.getIsActive())? 1 : 0);
             parkingSlotDTO.setIsDisabled(Boolean.TRUE.equals(parkingSlotRest.getIsDisabledFriendly())? 1 : 0);
             parkingSlotDTO.setCost(parkingSlotRest.getCost());
-            parkingSlotDTO.setStartDate(parkingSlotRest.getStartDate());
-            parkingSlotDTO.setEndDate(parkingSlotRest.getEndDate());
+            parkingSlotDTO.setStartDate(TimeUtils.stringToUnixTimestamp(parkingSlotRest.getStartDate()));
+            parkingSlotDTO.setEndDate(TimeUtils.stringToUnixTimestamp(parkingSlotRest.getEndDate()));
             widthOpt.ifPresent(parkingSlotDTO::setWidth);
             heightOpt.ifPresent(parkingSlotDTO::setHeight);
             descOpt.ifPresent(parkingSlotDTO::setDescription);
@@ -235,8 +236,8 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
         if(Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
             final Set<BookingRest> bookingHistoryForParking =
                     bookingService.getAllBookings(parkingSlot.getParkingSlotId()).stream()
-                            .filter(bookingRest -> (bookingRest.getStartDate() >= startDate && bookingRest.getStartDate() <= endDate) ||
-                                    (bookingRest.getEndDate() <= endDate && bookingRest.getEndDate() >= startDate))
+                            .filter(bookingRest -> (TimeUtils.stringToUnixTimestamp(bookingRest.getStartDate()) >= startDate && TimeUtils.stringToUnixTimestamp(bookingRest.getStartDate()) <= endDate) ||
+                                    (TimeUtils.stringToUnixTimestamp(bookingRest.getEndDate()) <= endDate && TimeUtils.stringToUnixTimestamp(bookingRest.getEndDate()) >= startDate))
                             .collect(Collectors.toSet());
             return bookingHistoryForParking.isEmpty();
         }

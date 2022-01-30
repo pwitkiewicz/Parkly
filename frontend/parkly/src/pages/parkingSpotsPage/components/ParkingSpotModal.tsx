@@ -1,5 +1,4 @@
 import React, {ChangeEventHandler, useState} from 'react';
-import {Moment} from "moment/moment";
 import {
     Button,
     Dialog,
@@ -13,15 +12,15 @@ import {
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
 import styled from "@emotion/styled";
-import Dropzone, {IDropzoneProps, IMeta} from 'react-dropzone-uploader'
 
-import {addParkingSpot} from "../../../queries/queries";
-import { ParkingSpot } from '../../../models/models';
+import {addParkingSpot, uploadPhoto} from "../../../queries/queries";
+import { ParkingSpotFetch } from '../../../models/models';
+import {Moment} from "moment";
 
 interface Props {
     visible: boolean;
     onCancel: () => void;
-    parkingPlace: ParkingSpot;
+    parkingPlace: ParkingSpotFetch;
     editing?: boolean;
     getParkingSpots?: () => void;
 }
@@ -31,8 +30,8 @@ interface Props {
 
 const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, editing, getParkingSpots}) => {
 
-    const [editedParkingModal, setEditedParkingModal] = useState({
-        id: parkingPlace.id,
+    const [editedParkingModal, setEditedParkingModal] = useState<ParkingSpotFetch>({
+        id: parkingPlace?.id,
         name: parkingPlace.name,
         startDateTime: parkingPlace.startDateTime,
         endDateTime: parkingPlace.endDateTime,
@@ -45,13 +44,7 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
         location: parkingPlace.location,
         cost: parkingPlace.cost
     })
-
-    // TODO: Think how to send these photos
-    const getUploadParams: IDropzoneProps['getUploadParams'] = () => ({ url: 'https://httpbin.org/post' })
-    const handleSubmitPhotos: IDropzoneProps['onSubmit'] = (files, allFiles) => {
-        console.log(files.map(f => f.meta))
-        allFiles.forEach(f => f.remove())
-    }
+    const [photo, setPhoto] = useState<File>();
 
     const handleChangeName: ChangeEventHandler<HTMLInputElement> = event => {
         setEditedParkingModal(prev => ({...prev, name: event.target.value}));
@@ -118,8 +111,9 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
         setEditedParkingModal(prev => ({...prev, location: location}));
     }
     const handleSubmit = () => {
+        console.log(editedParkingModal);
         if (editing) {
-            addParkingSpot(editedParkingModal, parkingPlace.id).then(() => {
+            addParkingSpot(editedParkingModal, parkingPlace?.id).then(() => {
                 if (getParkingSpots) {
                     getParkingSpots();
                 }
@@ -134,22 +128,32 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
         onCancel();
     }
 
+    const fileSelectedHandler = (event: any) => {
+        setPhoto(event.target.files[0]);
+    }
+
+    const fileUploadHandler = async () => {
+        if (photo) {
+            const fd = new FormData();
+            fd.append('file', photo, photo.name);
+            await uploadPhoto(fd, parkingPlace.id);
+            if (getParkingSpots) {
+                getParkingSpots();
+            }
+        }
+    }
+
     return (
         <Dialog open={visible} onClose={onCancel}>
             <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
             <DialogContent>
-                <Dropzone
-                    getUploadParams={getUploadParams}
-                    onSubmit={handleSubmitPhotos}
-                    PreviewComponent={Preview}
-                    accept="image/*,audio/*,video/*"
-                    inputWithFilesContent = "Add photos "
-                    inputContent={(files, extra) => (extra.reject ? 'Image, audio and video files only' : 'Drag Files')}
-                    styles={{
-                        dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
-                        inputLabel: (files, extra) => (extra.reject ? { color: 'red' } : {}),
-                    }}
-                />
+                {editing &&
+                    <>
+                        Upload photo:&nbsp;&nbsp;&nbsp;
+                        <input type="file" onChange={fileSelectedHandler}/>
+                        <button onClick={fileUploadHandler}>Upload</button>
+                    </>
+                }
                 <TextField
                     margin="dense"
                     id="name"
@@ -291,15 +295,6 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
                 <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
             </DialogActions>
         </Dialog>
-    )
-}
-
-const Preview = ({ meta }: {meta: IMeta}) => {
-    const { name, percent, status } = meta
-    return (
-        <div style={{ alignSelf: 'flex-start', marginBottom: '10px' }}>
-            {name}, {Math.round(percent)}%, {status}
-        </div>
     )
 }
 
