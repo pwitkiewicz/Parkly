@@ -85,3 +85,7 @@ export const cancelBooking = async(id: number) => {
     });
     return response.data;
 }
+
+export const changePassword = async (password: string) => {
+    alert('Changed password!');
+}
