@@ -66,10 +66,14 @@ export const deleteParkingSpot = async (id: number) => {
     return response.data;
 }
 
-export const bookParkingSpot = async (id: number) => {
-    alert(`Booked parking place with id ${id}`); //addBooking()
-}
-
 export const changePassword = async (password: string) => {
     alert('Changed password!'); //chuj wie
+}
+export const cancelBooking = async(id: number) => {
+    const response = await axios.delete(`${server}/bookings/${id}`,{
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
+    return response.data;
 }
