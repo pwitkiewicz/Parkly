@@ -3,17 +3,18 @@ import {
     Button,
     CircularProgress,
     FormControl,
+    FormControlLabel,
     Grid,
     InputLabel,
     MenuItem,
+    Pagination,
     Select,
-    TextField,
-    FormControlLabel,
-    Switch
+    Switch,
+    TextField
 } from "@mui/material";
 import styled from "@emotion/styled";
 
-import {getAllParkingSpots} from "../../queries/queries";
+import {getAllParkingSpots, getPagination} from "../../queries/queries";
 import {ParkingSpotFetch} from '../../models/models';
 import ParkingSpotItem from "../../components/parkingSpotItem/ParkingSpotItem";
 import ParkingSpotModal from "./components/ParkingSpotModal";
@@ -29,6 +30,7 @@ const ParkingSpotsPage = () => {
     const [filter, setFilter] = useState<string>("ascending");
     const [city, setCity] = useState<string>("");
     const [active, setActive] = useState<string>("all");
+    const [pagesNumber, setPagesNumber] = useState<number>(10);
 
     const handleSwitch = (event: any) => {
         console.log(event);
@@ -40,17 +42,32 @@ const ParkingSpotsPage = () => {
         isVisible: false
     });
 
-    const getParkingSpots = async () => {
-        const parkingSpots = await getAllParkingSpots(filter, city, active);
+    const getParkingSpots = async (page?: number) => {
+        const parkingSpots = await getAllParkingSpots(filter, city, active, page);
         setParkingSpots(parkingSpots);
     }
 
+    const getPaginationWrapper = async (active: string, city: string) => {
+         const data = await getPagination(active, city);
+         setPagesNumber(data);
+    }
+
+    const handlePageChange = async (event: any, value: number) => {
+        setIsFetching(true);
+        getParkingSpots(value).then(() => {
+            setIsFetching(false);
+        })
+    }
 
     useEffect(() => {
         getParkingSpots().then(() => {
-            setIsFetching(false)
+            setIsFetching(false);
         });
     }, [filter, city, active])
+
+    useEffect(() => {
+        getPaginationWrapper(active, city);
+    }, [parkingSpots])
 
     return (
         <>
@@ -104,7 +121,7 @@ const ParkingSpotsPage = () => {
                     cost: 0
                 }} getParkingSpots={getParkingSpots}
                 />
-                {parkingSpots !== undefined && parkingSpots.map((parkingSpot: ParkingSpotFetch) => (
+                {parkingSpots && parkingSpots.map((parkingSpot: ParkingSpotFetch) => (
                     <ParkingSpotItem id={parkingSpot.id} name={parkingSpot.name}
                                      startDateTime={parkingSpot.startDateTime} endDateTime={parkingSpot.endDateTime}
                                      isActive={parkingSpot.isActive} isDisabledFriendly={parkingSpot.isDisabledFriendly}
@@ -114,6 +131,9 @@ const ParkingSpotsPage = () => {
                                      getParkingSpots={getParkingSpots}/>
                 ))}
             </StyledGrid>
+            <PaginationContainer>
+                <Pagination count={pagesNumber} color="primary" onChange={handlePageChange}/>
+            </PaginationContainer>
         </>
     )
 }
@@ -148,5 +168,13 @@ const SearchBarContainer = styled.div`
 
 const ItemsContainer = styled.div`
 `;
+
+const PaginationContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+`
 
 export default ParkingSpotsPage;
