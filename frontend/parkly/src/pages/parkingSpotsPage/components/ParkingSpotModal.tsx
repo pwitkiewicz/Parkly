@@ -1,5 +1,4 @@
 import React, {ChangeEventHandler, useState} from 'react';
-import {Moment} from "moment/moment";
 import {
     Button,
     Dialog,

@@ -29,11 +29,12 @@ const BookingsPage = () => {
                 {isFetching &&
                     <CircularProgress/>
                 }
+                {console.log(bookings)}
                 {bookings && bookings.map((booking: Booking) => (
                     <BookingItem id={booking.id}
                                  startDateTime={booking.startDateTime} endDateTime={booking.endDateTime}
-                                 isActive={booking.isActive} ownerId={booking.ownerId}
-                                 parkingSlotId={booking.parkingSlotId}/>
+                                 active={booking.active} ownerId={booking.ownerId}
+                                 parkingSlot={booking.parkingSlot} firstName={booking.firstName} lastName={booking.lastName} key={booking.id}/>
                 ))}
             </StyledGrid>
         </>

@@ -18,7 +18,8 @@ const BookingItem: FC<Booking> = (booking) => {
         isVisible: false
     });
     const getParking = async () => {
-        const parking = await getParkingSpot(booking.id);
+        console.log(booking);
+        const parking = await getParkingSpot(booking.parkingSlot);
         setParkingSpot(parking);
     }
     useEffect(() => {
@@ -35,7 +36,7 @@ const BookingItem: FC<Booking> = (booking) => {
             {isFetching ?
                 <CircularProgress/> :
                 <StyledCard>
-                    <CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>
+                    {/*<CardMedia component="img" image={parkingSpot?.photos[0]?.path} alt="Parking spot image"/>*/}
                     <CardContent>
                         <Typography variant="h4">
                             Booking ID: {booking.id}

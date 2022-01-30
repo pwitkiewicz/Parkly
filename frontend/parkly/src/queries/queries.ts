@@ -21,7 +21,7 @@ export const getAllBookings = async () => {
     });
     return response.data;
 }
-export const getBooking = async(id: Number) =>{
+export const getBooking = async(id: number) =>{
     const response = await axios.get(`${server}/bookings/${id}`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
@@ -29,8 +29,8 @@ export const getBooking = async(id: Number) =>{
     });
     return response.data;
 }
-export const getParkingSpot = async(id: Number) =>{
-    const response = await axios.get(`${server}/parking-spots/${id}`, {
+export const getParkingSpot = async(id: number) =>{
+    const response = await axios.get(`${server}/items/${id}`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }

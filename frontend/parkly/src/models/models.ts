@@ -50,8 +50,8 @@ export interface Booking {
     id: number;
     startDateTime: Date;
     endDateTime: Date;
-    isActive: boolean;
-    parkingSlotId: number; 
+    active: boolean;
+    parkingSlot: number;
     ownerId: number;
     firstName: string;
     lastName: string;
