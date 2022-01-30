@@ -55,8 +55,8 @@ public class CommonMockObjects extends AbstractTestConfig
     {
         final ParkingSlotRest mockParkingSlotRest = new ParkingSlotRest();
         mockParkingSlotRest.setCost(100D);
-        mockParkingSlotRest.setEndDate(1609455600L);
-        mockParkingSlotRest.setStartDate(1577833200L);
+        mockParkingSlotRest.setEndDate("2020-12-31T23:00:00.000Z");
+        mockParkingSlotRest.setStartDate("2019-12-31T23:00:00.000Z");
         mockParkingSlotRest.setName("Test Parking Slot REST");
         mockParkingSlotRest.setIsDisabledFriendly(true);
         mockParkingSlotRest.setIsActive(true);
@@ -85,8 +85,8 @@ public class CommonMockObjects extends AbstractTestConfig
         mockBookingHistoryRest.setIsActive(false);
         mockBookingHistoryRest.setLastName("Test last name REST");
         mockBookingHistoryRest.setFirstName("Test first name REST");
-        mockBookingHistoryRest.setStartDate(1641340800L);
-        mockBookingHistoryRest.setEndDate(1641344400L);
+        mockBookingHistoryRest.setStartDate("2022-01-05T00:00:00.000Z");
+        mockBookingHistoryRest.setEndDate("2022-01-05T01:00:00.000Z");
         mockBookingHistoryRest.setOwnerId(1);
         mockBookingHistoryRest.setParkingSlotId(1L);
         return mockBookingHistoryRest;
