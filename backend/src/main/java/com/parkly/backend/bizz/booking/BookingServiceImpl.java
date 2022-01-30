@@ -6,11 +6,11 @@ import com.parkly.backend.repo.ParkingSlotRepository;
 import com.parkly.backend.repo.domain.BookingHistoryDTO;
 import com.parkly.backend.repo.domain.ParkingSlotDTO;
 import com.parkly.backend.rest.domain.BookingRest;
-import io.micrometer.core.lang.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

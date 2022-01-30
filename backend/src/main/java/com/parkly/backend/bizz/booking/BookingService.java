@@ -1,7 +1,7 @@
 package com.parkly.backend.bizz.booking;
 
 import com.parkly.backend.rest.domain.BookingRest;
-import io.micrometer.core.lang.Nullable;
+import org.springframework.lang.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
