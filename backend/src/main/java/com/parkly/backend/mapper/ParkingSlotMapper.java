@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParkingSlotMapper {
@@ -56,6 +57,8 @@ public class ParkingSlotMapper {
             parkingSlotRest.setStartDate(parkingSlotDTO.getStartDate());
             parkingSlotRest.setIsActive(parkingSlotDTO.getIsActive() == 1);
             parkingSlotRest.setIsDisabledFriendly(parkingSlotDTO.getIsDisabled() == 1);
+            parkingSlotRest.setPhotoRestSet(parkingSlotDTO.getPhotoSet().stream()
+                    .map(PhotoMapper::mapToPhotoRest).collect(Collectors.toSet()));
             widthOpt.ifPresent(parkingSlotRest::setWidth);
             heightOpt.ifPresent(parkingSlotRest::setHeight);
             descOpt.ifPresent(parkingSlotRest::setDescription);

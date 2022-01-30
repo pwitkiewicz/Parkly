@@ -7,6 +7,7 @@ import com.parkly.backend.rest.domain.PhotoRest;
 import java.util.Objects;
 import java.util.Optional;
 
+
 public class PhotoMapper {
 
     public static Optional<PhotoDTO> mapToPhotoDTO(final PhotoRest photoRest, final ParkingSlotDTO parkingSlotDTO)
@@ -20,5 +21,9 @@ public class PhotoMapper {
             return Optional.of(photoDTO);
         }
         return Optional.empty();
+    }
+
+    public static PhotoRest mapToPhotoRest(final PhotoDTO photoDTO) {
+        return PhotoRest.of(photoDTO.getPhotoId(), photoDTO.getPath());
     }
 }
