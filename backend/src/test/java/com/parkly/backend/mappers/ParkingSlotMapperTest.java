@@ -70,8 +70,6 @@ public class ParkingSlotMapperTest
         mockLocationDto.setStreet("Test Street");
         mockLocationDto.setStreetNumber("0T");
         mockLocationDto.setZipCode("00-000");
-        mockLocationDto.setLatitude(0D);
-        mockLocationDto.setLongitude(0D);
     }
 
     private void setUpParkingSlotRest()

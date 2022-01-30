@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends PagingAndSortingRepository<LocationDTO, Long>
 {
-    Optional<LocationDTO> findByLatitudeAndLongitude(double latitude, double longitude);
+    Optional<LocationDTO> findByZipCodeAndStreetAndStreetNumber(String zipcode, String street, String streetNumber);
 }

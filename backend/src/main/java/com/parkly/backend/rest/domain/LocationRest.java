@@ -14,30 +14,25 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LocationRest implements Serializable {
 
-    @EqualsAndHashCode.Include
     @JsonProperty("id")
     private long locationId;
 
+    @EqualsAndHashCode.Include
     @JsonProperty("country")
     private String country;
 
+    @EqualsAndHashCode.Include
     @JsonProperty("city")
     private String city;
 
+    @EqualsAndHashCode.Include
     @JsonProperty("street")
     private String street;
 
+    @EqualsAndHashCode.Include
     @JsonProperty("number")
     private String streetNumber;
 
     @JsonProperty("zipcode")
     private String zipCode;
-
-    @EqualsAndHashCode.Include
-    @JsonProperty("latitude")
-    private double latitude;
-
-    @EqualsAndHashCode.Include
-    @JsonProperty("longitude")
-    private double longitude;
 }

@@ -18,11 +18,9 @@ CREATE TABLE IF NOT EXISTS location (
     street 	   	  VARCHAR(35) NOT NULL,
     street_number VARCHAR(5) NOT NULL,
     zipcode 	  VARCHAR(10) NOT NULL,
-    latitude 	  DECIMAL(10,8) NOT NULL,
-    longitude 	  DECIMAL(11,8) NOT NULL,
 
     PRIMARY KEY pk_location (location_id),
-    UNIQUE KEY uk_location (latitude,longitude)
+    UNIQUE KEY uk_location (zipcode, street, street_number)
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS parkingslot (
@@ -67,5 +65,5 @@ CREATE TABLE IF NOT EXISTS bookinghistory (
 
     PRIMARY KEY pk_bookinghistory (booking_id),
     FOREIGN KEY fk_bookinghistory_parkingslot (parking_slot_id) REFERENCES parkingslot(parking_slot_id)
-		ON UPDATE CASCADE ON DELETE RESTRICT,
+		ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE = INNODB;

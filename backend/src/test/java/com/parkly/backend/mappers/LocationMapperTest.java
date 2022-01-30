@@ -23,8 +23,6 @@ public class LocationMapperTest
         mockLocationRest.setStreet("Test Street");
         mockLocationRest.setStreetNumber("0T");
         mockLocationRest.setZipCode("00-000");
-        mockLocationRest.setLatitude(0D);
-        mockLocationRest.setLongitude(0D);
     }
 
     @Test
@@ -34,7 +32,7 @@ public class LocationMapperTest
 
         Assert.assertTrue(retrievedLocation.isPresent());
         Assert.assertEquals("Test City", retrievedLocation.get().getCity());
-        Assert.assertEquals(0D, retrievedLocation.get().getLongitude(), 0);
+        Assert.assertEquals("00-000", retrievedLocation.get().getZipCode());
     }
 
     @Test

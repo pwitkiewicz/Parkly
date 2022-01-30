@@ -40,14 +40,6 @@ public class LocationDTO {
     @Column(name = "zipcode")
     private String zipCode;
 
-    @NotNull
-    @Column(name = "latitude")
-    private double latitude;
-
-    @NotNull
-    @Column(name = "longitude")
-    private double longitude;
-
     @OneToMany(mappedBy = "location")
     private Set<ParkingSlotDTO> parkingSlot;
 
@@ -56,11 +48,11 @@ public class LocationDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LocationDTO that = (LocationDTO) o;
-        return locationId == that.locationId && Double.compare(that.latitude, latitude) == 0 && Double.compare(that.longitude, longitude) == 0;
+        return zipCode.equals(that.zipCode) && street.equals(that.street) && streetNumber.equals(that.streetNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(locationId, latitude, longitude);
+        return Objects.hash(zipCode, street, streetNumber);
     }
 }

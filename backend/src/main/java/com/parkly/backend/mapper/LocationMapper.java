@@ -21,8 +21,6 @@ public class LocationMapper
             locationDTO.setStreet(locationRest.getStreet());
             locationDTO.setStreetNumber(locationRest.getStreetNumber());
             locationDTO.setZipCode(locationRest.getZipCode());
-            locationDTO.setLatitude(locationRest.getLatitude());
-            locationDTO.setLongitude(locationRest.getLongitude());
 
             return Optional.of(locationDTO);
         }
@@ -34,13 +32,12 @@ public class LocationMapper
         if(Objects.nonNull(locationDTO))
         {
             final LocationRest locationRest = new LocationRest();
+            locationRest.setLocationId(locationDTO.getLocationId());
             locationRest.setCountry(locationDTO.getCountry());
             locationRest.setCity(locationDTO.getCity());
             locationRest.setStreet(locationDTO.getStreet());
             locationRest.setStreetNumber(locationDTO.getStreetNumber());
             locationRest.setZipCode(locationDTO.getZipCode());
-            locationRest.setLatitude(locationDTO.getLatitude());
-            locationRest.setLongitude(locationDTO.getLongitude());
 
             return Optional.of(locationRest);
         }

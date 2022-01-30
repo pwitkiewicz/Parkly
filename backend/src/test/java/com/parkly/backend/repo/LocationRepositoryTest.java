@@ -51,8 +51,6 @@ public class LocationRepositoryTest extends AbstractTestConfig {
     private void setUpLocationDtoMock()
     {
         mockLocation = new LocationDTO();
-        mockLocation.setLatitude(0L);
-        mockLocation.setLongitude(0L);
         mockLocation.setZipCode("00-000");
         mockLocation.setCountry("Test Country");
         mockLocation.setStreet("Test Street");
