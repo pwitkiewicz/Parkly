@@ -1,8 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField,FormControlLabel,Switch} from "@mui/material";
+import {
+    Button,
+    CircularProgress,
+    FormControl,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    FormControlLabel,
+    Switch
+} from "@mui/material";
 import styled from "@emotion/styled";
 
-import {getAllParkingSpots, getParkingSpot} from "../../queries/queries";
+import {getAllParkingSpots} from "../../queries/queries";
 import {ParkingSpotFetch} from '../../models/models';
 import ParkingSpotItem from "../../components/parkingSpotItem/ParkingSpotItem";
 import ParkingSpotModal from "./components/ParkingSpotModal";
@@ -16,12 +27,12 @@ const ParkingSpotsPage = () => {
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [parkingSpots, setParkingSpots] = useState<ParkingSpotFetch[]>();
     const [filter, setFilter] = useState<string>("ascending");
-    const [city,setCity] = useState<string>("");
-    const [active,setActive] = useState<string>("all");
+    const [city, setCity] = useState<string>("");
+    const [active, setActive] = useState<string>("all");
 
-    const handleSwitch = (event: any) =>{
+    const handleSwitch = (event: any) => {
         console.log(event);
-        if(active==="all")setActive("active");
+        if (active === "all") setActive("active");
         else setActive("all");
     }
 
@@ -30,7 +41,7 @@ const ParkingSpotsPage = () => {
     });
 
     const getParkingSpots = async () => {
-        const parkingSpots = await getAllParkingSpots(filter,city,active);
+        const parkingSpots = await getAllParkingSpots(filter, city, active);
         setParkingSpots(parkingSpots);
     }
 
@@ -39,25 +50,23 @@ const ParkingSpotsPage = () => {
         getParkingSpots().then(() => {
             setIsFetching(false)
         });
-    }, [filter,city,active])
+    }, [filter, city, active])
 
     return (
         <>
             <SearchBarContainer>
                 <ItemsContainer>
-                    <StyledTextField id="standard-basic" label="Search" onChange={(event: any) => setCity(event.target.value)}/>
+                    <StyledTextField id="standard-basic" label="Search by city"
+                                     onChange={(event: any) => setCity(event.target.value)}/>
                     <StyledFormControl>
-                        <InputLabel >Sort by city name:</InputLabel>
-                        <Select value={filter} label="Filter" onChange={(event: any) => setFilter(event.target.value)}>
+                        <InputLabel htmlFor="filter-select">Sort by city name</InputLabel>
+                        <Select id="filter-select" value={filter} label="Sort by city name:" onChange={(event: any) => setFilter(event.target.value)}>
                             <MenuItem value="ascending">A-Z</MenuItem>
                             <MenuItem value="descending">Z-A</MenuItem>
                         </Select>
                     </StyledFormControl>
-                    
-                    <FormControlLabel control={<Switch onChange={handleSwitch}/>} label="Only Active"
-/>
-                
-
+                    <StyledFormControlLabel control={<Switch onChange={handleSwitch}/>} label="Only Active"
+                    />
                 </ItemsContainer>
                 <Button variant="outlined" onClick={() => {
                     setParkingSpotState({isVisible: true})
@@ -109,6 +118,10 @@ const ParkingSpotsPage = () => {
     )
 }
 
+const StyledFormControlLabel = styled(FormControlLabel)`
+    margin-top: 10px;
+`
+
 const StyledGrid = styled(Grid)`
   margin-top: 4vh;
 `
@@ -121,7 +134,7 @@ const StyledTextField = styled(TextField)`
 
 const StyledFormControl = styled(FormControl)`
   min-width: 24vw;
-  margin-right: 4vw;
+  margin-right: 2vw;
   font-size: 12px;
 `
 
