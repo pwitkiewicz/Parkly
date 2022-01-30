@@ -47,10 +47,13 @@ export interface Location {
     longitude: number;
 }
 export interface Booking {
-    id: number,
-    startDateTime: Date,
-    endDateTime: Date,
-    isActive: boolean,
-    ownerId: number,
-    parkingSlotId: number 
+    id: number;
+    startDateTime: Date;
+    endDateTime: Date;
+    isActive: boolean;
+    parkingSlotId: number; 
+    ownerId: number;
+    firstName: string;
+    lastName: string;
+    
 }

@@ -13,15 +13,28 @@ export const getAllParkingSpots = async () => {
     return response.data;
 }
 export const getAllBookings = async () => {
-    const response = await axios.get(`${server}/bookings`);
+    console.log("XD");
+    const response = await axios.get(`${server}/bookings`, {
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
     return response.data;
 }
 export const getBooking = async(id: Number) =>{
-    const response = await axios.get(`${server}/bookings/${id}`);
+    const response = await axios.get(`${server}/bookings/${id}`, {
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
     return response.data;
 }
 export const getParkingSpot = async(id: Number) =>{
-    const response = await axios.get(`${server}/items/${id}`);
+    const response = await axios.get(`${server}/parking-spots/${id}`, {
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
     return response.data;
 }
 
@@ -34,6 +47,7 @@ export const addParkingSpot = async (parkingSpot: ParkingSpotSend, id?: number) 
             }
         });
     } else {
+        console.log("xD");
         response = await axios.post(`${server}/items`, parkingSpot, {
             headers: {
                 'security-header': sessionStorage.getItem('key') || ''
@@ -44,14 +58,18 @@ export const addParkingSpot = async (parkingSpot: ParkingSpotSend, id?: number) 
 }
 
 export const deleteParkingSpot = async (id: number) => {
-    const response = await axios.delete(`${server}/items/${id}`);
+    const response = await axios.delete(`${server}/items/${id}`,{
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
     return response.data;
 }
 
 export const bookParkingSpot = async (id: number) => {
-    alert(`Booked parking place with id ${id}`);
+    alert(`Booked parking place with id ${id}`); //addBooking()
 }
 
 export const changePassword = async (password: string) => {
-    alert('Changed password!');
+    alert('Changed password!'); //chuj wie
 }
