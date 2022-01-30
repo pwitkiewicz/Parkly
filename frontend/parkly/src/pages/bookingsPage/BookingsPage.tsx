@@ -32,8 +32,9 @@ const BookingsPage = () => {
                 {bookings && bookings.map((booking: Booking) => (
                     <BookingItem id={booking.id}
                                  startDateTime={booking.startDateTime} endDateTime={booking.endDateTime}
-                                 active={booking.active} ownerId={booking.ownerId} getBookings = {getBookings}
-                                 parkingSlot={booking.parkingSlot} firstName={booking.firstName} lastName={booking.lastName} key={booking.id}/>
+                                 active={booking.active} ownerId={booking.ownerId} getBookings={getBookings}
+                                 parkingSlot={booking.parkingSlot} firstName={booking.firstName}
+                                 lastName={booking.lastName} key={booking.id}/>
                 ))}
             </StyledGrid>
         </>
