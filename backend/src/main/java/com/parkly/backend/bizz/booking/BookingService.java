@@ -1,13 +1,17 @@
 package com.parkly.backend.bizz.booking;
 
 import com.parkly.backend.rest.domain.BookingRest;
+import com.parkly.backend.utils.domain.FilterEnum;
 import org.springframework.lang.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
 
-public interface BookingService {
-    Set<BookingRest> getAllBookings(@Nullable Long parkingSlotId);
+public interface BookingService
+{
+    Long getPageNumber();
+
+    Set<BookingRest> getAllBookings(@Nullable Long parkingSlotId, Long page);
 
     Optional<BookingRest> getBookingByBookingId(Long bookingId);
 

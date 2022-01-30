@@ -45,7 +45,7 @@ public class BookingServiceTest extends CommonMockObjects
     public void getAllBookingsPresentParkingSlotIdAndParkingSlotPresent()
     {
         final Long mockParkingSlotId = 1L;
-        final Set<BookingRest> retrievedBookingSet = bookingService.getAllBookings(mockParkingSlotId);
+        final Set<BookingRest> retrievedBookingSet = bookingService.getAllBookings(mockParkingSlotId, null);
         Assert.assertEquals(1L, retrievedBookingSet.size());
         Assert.assertEquals(1L, retrievedBookingSet.iterator().next().getBookingId().longValue());
     }
@@ -55,14 +55,14 @@ public class BookingServiceTest extends CommonMockObjects
     {
         final Long mockParkingSlotId = 2L;
         Mockito.doReturn(mockBookingHistoryParking1).when(mockBookingHistoryRepository).findAll();
-        final Set<BookingRest> retrievedBookingSet = bookingService.getAllBookings(mockParkingSlotId);
+        final Set<BookingRest> retrievedBookingSet = bookingService.getAllBookings(mockParkingSlotId, null);
         Assert.assertEquals(0L, retrievedBookingSet.size());
     }
 
     @Test
     public void getAllBookingsWithoutParkingSlotId()
     {
-        final Set<BookingRest> retrievedBookingSet = bookingService.getAllBookings(null);
+        final Set<BookingRest> retrievedBookingSet = bookingService.getAllBookings(null, null);
         final Optional<BookingRest> bookingParking2 =
                 retrievedBookingSet.stream().filter(bookingRest -> bookingRest.getParkingSlotId() == 2).findFirst();
         Assert.assertEquals(2L, retrievedBookingSet.size());
