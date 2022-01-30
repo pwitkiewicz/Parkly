@@ -1,32 +1,22 @@
-import React, {ChangeEventHandler, useCallback, useState} from 'react';
-import {Moment} from "moment/moment";
-/* import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControlLabel,
-    Switch,
-    TextField
-} from "@mui/material"; */
+import { ChangeEventHandler, useCallback, useState } from 'react';
+import { Moment } from "moment/moment";
+import { Dialog, Portal, Provider } from "react-native-paper"
 import {
+    StyleSheet,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControlLabel,
+    Modal,
     Switch,
     Text,
-    TextInput
+    TextInput,
+    View
 } from "react-native";
-import DateAdapter from '@mui/lab/AdapterMoment';
-import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
-import styled from "@emotion/styled";
+import {
+    FormControl
+} from "native-base";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import {addParkingSpot} from "../../../queries/queries";
-import { ParkingSpot } from '../../../models/models';
+import { addParkingSpot } from "../queries/queries";
+import { ParkingSpot } from '../models/models';
 
 interface Props {
     visible: boolean;
@@ -41,7 +31,7 @@ interface Props {
 
 // TODO 2: Fix date pickers warnings
 
-const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, editing}) => {
+const ParkingSpotModal: React.FC<Props> = ({ visible, onCancel, parkingPlace, editing }) => {
 
     const [editedParkingModal, setEditedParkingModal] = useState({
         id: parkingPlace.id,
@@ -59,39 +49,39 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
     })
 
     const handleChangeName: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, name: event.target.value}));
+        setEditedParkingModal(prev => ({ ...prev, name: event.target.value }));
     }
     const handleChangeStartDate = (date: Moment | null) => {
         const startDate = date?.toDate() || new Date();
-        setEditedParkingModal(prev => ({...prev, startDateTime: startDate}));
+        setEditedParkingModal(prev => ({ ...prev, startDateTime: startDate }));
     }
     const handleChangeEndDate = (date: Moment | null) => {
         const endDate = date?.toDate() || new Date();
-        setEditedParkingModal(prev => ({...prev, endDateTime: endDate}));
+        setEditedParkingModal(prev => ({ ...prev, endDateTime: endDate }));
     }
     const handleChangeIsActive: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, isActive: event.target.checked}));
+        setEditedParkingModal(prev => ({ ...prev, isActive: event.target.checked }));
     }
     const handleChangeIsDisabledFriendly: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, isDisabledFriendly: event.target.checked}));
+        setEditedParkingModal(prev => ({ ...prev, isDisabledFriendly: event.target.checked }));
     }
     const handleChangePhotos: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev}));
+        setEditedParkingModal(prev => ({ ...prev }));
     }
     const handleChangeDescription: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, description: event.target.value}));
+        setEditedParkingModal(prev => ({ ...prev, description: event.target.value }));
     }
     const handleChangeHeight: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, height: Number(event.target.value)}));
+        setEditedParkingModal(prev => ({ ...prev, height: Number(event.target.value) }));
     }
     const handleChangeWidth: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, width: Number(event.target.value)}));
+        setEditedParkingModal(prev => ({ ...prev, width: Number(event.target.value) }));
     }
     const handleChangeLocation: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, id: event.target.value}));
+        setEditedParkingModal(prev => ({ ...prev, id: event.target.value }));
     }
     const handleChangeCost: ChangeEventHandler<HTMLInputElement> = event => {
-        setEditedParkingModal(prev => ({...prev, cost: Number(event.target.value)}));
+        setEditedParkingModal(prev => ({ ...prev, cost: Number(event.target.value) }));
     }
 
     const handleSubmit = useCallback(() => {
@@ -99,97 +89,106 @@ const ParkingSpotModal: React.FC<Props> = ({visible, onCancel, parkingPlace, edi
     }, []);
 
     return (
-        <Dialog open={visible} onClose={onCancel}>
-            <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
-            <DialogContent>
-                <Text
-                   // margin="dense"
-                    id="name"
-                    label="Name"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeName}
-                    value={editedParkingModal.name}
-                />
-                <LocalizationProvider dateAdapter={DateAdapter}>
-                    <DatePickerContainer>
-                        <DatePickerWrapper>
-                            <DesktopDatePicker
-                                label="Start Date"
-                                inputFormat="DD/MM/yyyy"
-                                value={editedParkingModal.startDateTime}
-                                onChange={handleChangeStartDate}
-                                renderInput={(params) => <Text {...params} />}
+        <Provider>
+            <View>
+                <Button onPress={showDialog}>Show Dialog</Button>
+                <Portal>
+                    <Dialog open={visible} onClose={onCancel}>
+                        <DialogTitle>{editing ? 'Edit parking spot details' : 'Add parking spot details'}</DialogTitle>
+                        <DialogContent>
+                            <Text
+                                // margin="dense"
+                                id="name"
+                                label="Name"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChangeName}
+                                value={editedParkingModal.name}
                             />
-                        </DatePickerWrapper>
-                        <DesktopDatePicker
-                            label="End Date"
-                            inputFormat="DD/MM/yyyy"
-                            value={editedParkingModal.endDateTime}
-                            onChange={handleChangeEndDate}
-                            renderInput={(params) => <Text {...params} />}
-                        />
-                    </DatePickerContainer>
-                </LocalizationProvider>
-                <CheckBoxesContainer>
-                    <FormControlLabel control={<Switch onChange={handleChangeIsActive}/>} label="Active"
-                                      checked={editedParkingModal.isActive}/>
-                    <FormControlLabel control={<Switch onChange={handleChangeIsDisabledFriendly}/>}
-                                      label="Disabled friendly"
-                                      checked={editedParkingModal.isDisabledFriendly}/>
-                </CheckBoxesContainer>
-                <Text
-                    //margin="dense"
-                    id="description"
-                    label="Description"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    multiline
-                    rows={4}
-                    onChange={handleChangeDescription}
-                    value={editedParkingModal.description}
-                />
-                <Text
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="length"
-                    label="Length"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeHeight}
-                    value={editedParkingModal.height}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="width"
-                    label="Width"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeWidth}
-                    value={editedParkingModal.width}
-                />
-                <TextField
-                    inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                    margin="dense"
-                    id="cost"
-                    label="Cost"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onChange={handleChangeCost}
-                    value={editedParkingModal.cost}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onCancel}>Cancel</Button>
-                <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
-            </DialogActions>
-        </Dialog>
+                            <LocalizationProvider dateAdapter={DateAdapter}>
+                                <DatePickerContainer>
+                                    <DatePickerWrapper>
+                                        <DesktopDatePicker
+                                            label="Start Date"
+                                            inputFormat="DD/MM/yyyy"
+                                            value={editedParkingModal.startDateTime}
+                                            onChange={handleChangeStartDate}
+                                            renderInput={(params) => <Text {...params} />}
+                                        />
+                                    </DatePickerWrapper>
+                                    <DesktopDatePicker
+                                        label="End Date"
+                                        inputFormat="DD/MM/yyyy"
+                                        value={editedParkingModal.endDateTime}
+                                        onChange={handleChangeEndDate}
+                                        renderInput={(params) => <Text {...params} />}
+                                    />
+                                </DatePickerContainer>
+                            </LocalizationProvider>
+                            <CheckBoxesContainer>
+                                <FormControlLabel control={<Switch onChange={handleChangeIsActive} />} label="Active"
+                                    checked={editedParkingModal.isActive} />
+                                <FormControlLabel control={<Switch onChange={handleChangeIsDisabledFriendly} />}
+                                    label="Disabled friendly"
+                                    checked={editedParkingModal.isDisabledFriendly} />
+                            </CheckBoxesContainer>
+                            <Text
+                                //margin="dense"
+                                id="description"
+                                label="Description"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                multiline
+                                rows={4}
+                                onChange={handleChangeDescription}
+                                value={editedParkingModal.description}
+                            />
+                            <Text
+                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                margin="dense"
+                                id="length"
+                                label="Length"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChangeHeight}
+                                value={editedParkingModal.height}
+                            />
+                            <TextField
+                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                margin="dense"
+                                id="width"
+                                label="Width"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChangeWidth}
+                                value={editedParkingModal.width}
+                            />
+                            <TextField
+                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                margin="dense"
+                                id="cost"
+                                label="Cost"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChangeCost}
+                                value={editedParkingModal.cost}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={onCancel}>Cancel</Button>
+                            <Button onClick={handleSubmit}>{editing ? 'Edit' : 'Add'}</Button>
+                        </DialogActions>
+                    </Dialog>
+                </Portal>
+            </View>
+        </Provider>
+
+
     )
 }
 
