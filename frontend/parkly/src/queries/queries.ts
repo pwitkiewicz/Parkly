@@ -13,7 +13,6 @@ export const getAllParkingSpots = async () => {
     return response.data;
 }
 export const getAllBookings = async () => {
-    console.log("XD");
     const response = await axios.get(`${server}/bookings`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
@@ -47,7 +46,6 @@ export const addParkingSpot = async (parkingSpot: ParkingSpotSend, id?: number) 
             }
         });
     } else {
-        console.log("xD");
         response = await axios.post(`${server}/items`, parkingSpot, {
             headers: {
                 'security-header': sessionStorage.getItem('key') || ''
@@ -70,6 +68,12 @@ export const bookParkingSpot = async (id: number) => {
     alert(`Booked parking place with id ${id}`); //addBooking()
 }
 
-export const changePassword = async (password: string) => {
-    alert('Changed password!'); //chuj wie
+export const uploadPhoto = async (fd: FormData, id: number) => {
+    await axios.post(`${server}/photos/${id}`, fd, {
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    }).then(response => {
+        return response.data;
+    });
 }

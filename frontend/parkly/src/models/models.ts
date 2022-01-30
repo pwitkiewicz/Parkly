@@ -6,8 +6,8 @@ export interface LoginInformation {
 export interface ParkingSpotFetch {
     id: number;
     name: string;
-    startDateTime: number;
-    endDateTime: number;
+    startDateTime: Date;
+    endDateTime: Date;
     isActive: boolean;
     isDisabledFriendly: boolean;
     photos: PhotosList[];
@@ -20,8 +20,8 @@ export interface ParkingSpotFetch {
 
 export interface ParkingSpotSend {
     name: string;
-    startDateTime: number;
-    endDateTime: number;
+    startDateTime: Date;
+    endDateTime: Date;
     isActive: boolean;
     isDisabledFriendly: boolean;
     description: string;

@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import styled from "@emotion/styled";
-import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 
 import {ParkingSpotFetch} from "../../models/models";
 import Theme from "../../constants/Styles";

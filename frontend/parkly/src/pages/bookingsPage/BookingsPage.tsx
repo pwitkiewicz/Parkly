@@ -29,7 +29,6 @@ const BookingsPage = () => {
                 {isFetching &&
                     <CircularProgress/>
                 }
-                {console.log(bookings)}
                 {bookings && bookings.map((booking: Booking) => (
                     <BookingItem id={booking.id}
                                  startDateTime={booking.startDateTime} endDateTime={booking.endDateTime}

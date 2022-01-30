@@ -6,7 +6,6 @@ import {getAllParkingSpots} from "../../queries/queries";
 import {ParkingSpotFetch} from '../../models/models';
 import ParkingSpotItem from "../../components/parkingSpotItem/ParkingSpotItem";
 import ParkingSpotModal from "./components/ParkingSpotModal";
-import moment from "moment";
 
 type ParkingSpotModel = {
     isVisible: boolean;
@@ -64,8 +63,8 @@ const ParkingSpotsPage = () => {
                 } parkingPlace={{
                     id: 0,
                     name: '',
-                    startDateTime: moment().unix(),
-                    endDateTime: moment().unix(),
+                    startDateTime: new Date(),
+                    endDateTime: new Date(),
                     isActive: false,
                     isDisabledFriendly: false,
                     photos: [],
