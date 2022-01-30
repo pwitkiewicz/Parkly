@@ -39,10 +39,10 @@ public class ParkingSlotDTO {
     private String description;
 
     @Column(name = "width")
-    private double width;
+    private Double width;
 
     @Column(name = "height")
-    private double height;
+    private Double height;
 
     @NotNull
     @Column(name = "cost")
