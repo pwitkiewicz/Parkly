@@ -10,9 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import static com.parkly.backend.mapper.BookingMapper.mapToBookingHistoryDTO;
@@ -35,10 +39,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Set<BookingRest> getAllBookings()
+    public Set<BookingRest> getAllBookings(final @Nullable Long parkingSlotId)
     {
+        final Predicate<BookingHistoryDTO> filterByParkingSlot =
+                (parkingSlot -> (Objects.nonNull(parkingSlotId) && parkingSlot.getParkingSlot().getParkingSlotId() == parkingSlotId) || (Objects.isNull(parkingSlotId)));
+
         return StreamSupport
                 .stream(bookingHistoryRepository.findAll().spliterator(), false)
+                .filter(filterByParkingSlot)
                 .map(BookingMapper::mapToBookingRest)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
