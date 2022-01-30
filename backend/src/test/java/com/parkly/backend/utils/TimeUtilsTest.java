@@ -19,6 +19,6 @@ class TimeUtilsTest {
         var timestamp = 1643551965L;
         var localDateTimeString = TimeUtils.unixTimestampToString(timestamp);
 
-        assertThat(localDateTimeString).isEqualTo("Sun Jan 30 2022 15:12:45 GMT+0100 (CET)");
+        assertThat(localDateTimeString).isEqualTo("Sun Jan 30 2022 14:12:45 GMT+0000");
     }
 }

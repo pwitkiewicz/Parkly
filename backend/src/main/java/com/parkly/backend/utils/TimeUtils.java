@@ -2,15 +2,13 @@ package com.parkly.backend.utils;
 
 import lombok.experimental.UtilityClass;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
-import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 @UtilityClass
 public class TimeUtils {
@@ -26,6 +24,11 @@ public class TimeUtils {
             .appendLiteral(')')
             .toFormatter(Locale.ENGLISH);
 
+    private static final DateTimeFormatter formatter2 = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .appendPattern("E MMM d uuuu HH:mm:ss 'GMT'Z")
+            .toFormatter(Locale.ENGLISH);
+
     public static Duration timestampsToDuration(final Long startTime, final Long endTime)
     {
         final Instant startInstant = Instant.ofEpochSecond(startTime);
@@ -34,13 +37,23 @@ public class TimeUtils {
     }
 
     public static Long stringToUnixTimestamp(final String dateTimeString) {
-        final OffsetDateTime dateTime = OffsetDateTime.parse(dateTimeString, formatter);
-        return dateTime.atZoneSameInstant(ZoneOffset.UTC).toInstant().getEpochSecond();
+        if(Objects.isNull(dateTimeString)) {
+            return null;
+        }
+        try {
+            final OffsetDateTime dateTime = OffsetDateTime.parse(dateTimeString, formatter);
+            return dateTime.atZoneSameInstant(ZoneOffset.UTC).toInstant().getEpochSecond();
+        } catch (DateTimeParseException e) {
+            final OffsetDateTime dateTime = OffsetDateTime.parse(dateTimeString, formatter2);
+            return dateTime.atZoneSameInstant(ZoneOffset.UTC).toInstant().getEpochSecond();
+        }
     }
 
     public static String unixTimestampToString(final Long timestamp) {
-        final OffsetDateTime dateTime = OffsetDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneOffset.UTC);
-
-        return dateTime.format(formatter).toString();
+        if(Objects.isNull(timestamp)) {
+            return null;
+        }
+        final ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneOffset.UTC);
+        return dateTime.format(formatter2);
     }
 }
