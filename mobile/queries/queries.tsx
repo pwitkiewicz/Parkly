@@ -1,10 +1,12 @@
 import axios from "axios";
-import {sha256} from 'crypto-hash';
+//import {sha256} from 'crypto-hash';
+import { sha256 } from 'react-native-sha256';
 
 import {server} from "../constants/constants"
 import {LoginInformation} from "../models/models";
 import {ParkingSpot} from "../models/models";
 import {Booking} from "../models/models";
+import { sessionStorage } from "../components/Storage";
 // TODO: Update this queries when BE is ready
 
 export const sendLoginRequest = async (loginInfo: LoginInformation) => {
@@ -16,7 +18,13 @@ export const sendLoginRequest = async (loginInfo: LoginInformation) => {
 }
 
 export const getAllParkingSpots = async () => {
-    const response = await axios.get(`${server}/items`);
+    let response;
+   
+        response = await axios.get(`${server}/items`, {
+            headers: {
+                'security-header': sessionStorage.getItem('key') || ''
+            }
+        });
     return response.data;
 }
 export const getAllBookings = async () => {
