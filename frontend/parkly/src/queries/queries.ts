@@ -20,12 +20,22 @@ export const getAllParkingSpots = async (filter: string, city: string, active: s
     }
     return response.data;
 }
-export const getAllBookings = async () => {
-    const response = await axios.get(`${server}/bookings`, {
+export const getAllBookings = async (page?: number) => {
+    let response;
+    if(!page){
+     response = await axios.get(`${server}/bookings`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
     });
+}
+else{
+    response = await axios.get(`${server}/bookings?page=${page - 1}`, {
+        headers: {
+            'security-header': sessionStorage.getItem('key') || ''
+        }
+    });
+}
     return response.data;
 }
 export const getBooking = async(id: number) =>{
@@ -97,12 +107,21 @@ export const cancelBooking = async (id: number) => {
     return response.data;
 }
 
-export const getPagination = async (filter: string, location: string) => {
-    const response = await axios.get(`${server}/items/pages?filter=${filter}&location=${location}`, {
+export const getPagination = async (filter?: string, location?: string) => {
+    let response;
+    if(!filter && !location){
+        response = await axios.get(`${server}/bookings/pages`, {
+            headers: {
+                'security-header': sessionStorage.getItem('key') || ''
+            }
+        });
+    }else{
+     response = await axios.get(`${server}/items/pages?filter=${filter}&location=${location}`, {
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
         }
     });
+}
     return response.data;
 }
 
