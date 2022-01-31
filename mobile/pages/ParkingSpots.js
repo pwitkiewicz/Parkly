@@ -29,7 +29,7 @@ class ParkingSpots extends Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.data.filter(data => data.name.first.includes(this.props.filter))}
+                    data={this.state.data.filter(data => data.location.city.includes(this.props.filter))}
                     keyExtractor={(x, i) => i}
                     renderItem={({ item }) =>
                         <ParkingSpot item={item}></ParkingSpot>
