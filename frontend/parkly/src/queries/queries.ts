@@ -79,13 +79,6 @@ export const addParkingSpot = async (parkingSpot: ParkingSpotSend, id?: number) 
 
 export const deleteParkingSpot = async (spot: ParkingSpotFetch) => {
     let errorCom = '';
-    for (let i = 0; i < spot.photos.length; i++) {
-        await axios.delete(`${server}/photos/${spot.photos[i].id}`,{
-            headers: {
-                'security-header': sessionStorage.getItem('key') || ''
-            }
-        });
-    }
     await axios.delete(`${server}/items/${spot.id}`,{
         headers: {
             'security-header': sessionStorage.getItem('key') || ''
