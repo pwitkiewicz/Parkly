@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS location (
 
 CREATE TABLE IF NOT EXISTS parkingslot (
 	parking_slot_id INT(20) NOT NULL AUTO_INCREMENT,
-    name 		    VARCHAR(30) NOT NULL,
+    name 		    VARCHAR(50) NOT NULL,
     start_date 	    INT(20) NOT NULL,
     end_date 	    INT(20) NOT NULL,
     is_active 	    BINARY(1) NOT NULL DEFAULT 1,
