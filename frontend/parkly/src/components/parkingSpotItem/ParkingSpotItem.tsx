@@ -55,10 +55,10 @@ const ParkingSpotItem: FC<ParkingSpotFetch & GetParkingSpotsFunction> = (parking
                 })} parkingPlace={parkingPlace} editing={true} getParkingSpots={parkingPlace.getParkingSpots}/>
             <StyledCard>
                 {parkingPlace?.photos && parkingPlace?.photos.length > 0 &&
-                    <CardMedia component="img" image={parkingPlace?.photos[0]?.path} alt="Parking spot image" sx={{ width: '280px', height: '300px' }}/>
+                    <CardMedia component="img" image={parkingPlace?.photos[0]?.path} alt="Parking spot image" sx={{ width: '320px', height: '300px' }}/>
                 }
                 {parkingPlace?.photos && parkingPlace?.photos.length === 0 &&
-                    <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image" sx={{ width: '280px', height: '300px' }}/>
+                    <CardMedia component="img" image={ParkingSpotPicture} alt="Parking spot image" sx={{ width: '320px', height: '300px' }}/>
                 }
                 <CardContent>
                     <Typography variant="h4">
