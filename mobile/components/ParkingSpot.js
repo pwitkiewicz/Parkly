@@ -16,13 +16,13 @@ function ParkingSpot(props) {
 
 
     return (<View style={styles.rowContainer}>
-        <Image style={styles.image} source={{uri:'https://images.unsplash.com/photo-1561389881-0dc69054475b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80'}}/>
+        <Image style={styles.image} source={{uri:'https://cdn.abcotvs.com/dip/images/5896174_013120-kgo-parking-spot-img_Image_00-00-59,06.jpg?w=1600'}}/>
         <View style={styles.colContainer}> 
         <Text style={styles.text}>
-            {`name: ${props.item.name.first}`}
+            {`Location: ${props.item.location.city}`}
         </Text>
         <Text style={styles.text}>
-            {`surname:  ${props.item.name.last}`}
+            {`Available`}
         </Text>
       <Icon type="antdesign" name="car" onPress={showModal} />
         </View>
@@ -31,10 +31,10 @@ function ParkingSpot(props) {
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
         <Icon type="antdesign" name="car" onPress={hideModal} />
         <Text style={styles.modaltext}>
-            {`name: ${props.item.name.first}`}
+            {`Size: ${props.item.dob.age}`}
         </Text>
         <Text style={styles.modaltext}>
-            {`surname:  ${props.item.name.last}`}
+            {`Cost:  ${props.item.location.street.number}`}
         </Text>
         </Modal>
       </Portal>
