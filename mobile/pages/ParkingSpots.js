@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FlatList, StyleSheet, Text, View, Button } from "react-native";
-//import { getAllParkingSpots } from "../queries/queries";
+import { getAllParkingSpots } from "../queries/queries";
 import ParkingSpot from "../components/ParkingSpot";
 import { withNavigation } from 'react-navigation';
 class ParkingSpots extends Component {
@@ -20,7 +20,7 @@ class ParkingSpots extends Component {
     }
 
     fetchData = async () => {
-        const response = await fetch("https://randomuser.me/api?results=50");//getAllParkingSpots();//
+        const response = await fetch("https://randomuser.me/api?results=10");//getAllParkingSpots();
         const json = await response.json();
         this.setState({ data: json.results });
     };
@@ -29,7 +29,7 @@ class ParkingSpots extends Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.data.filter(data => data.name.first.includes(this.props.filter))}
+                    data={this.state.data.filter(data => data.location.city.includes(this.props.filter))}
                     keyExtractor={(x, i) => i}
                     renderItem={({ item }) =>
                         <ParkingSpot item={item}></ParkingSpot>
