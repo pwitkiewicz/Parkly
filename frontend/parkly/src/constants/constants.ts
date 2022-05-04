@@ -1,1 +1,1 @@
-export const server = 'https://parkly-2022.azurewebsites.net';
+export const server = 'https://parkly-backen.azurewebsites.net';
